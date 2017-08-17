@@ -5,9 +5,11 @@
   "main": "index.js",
   "dependencies": {
     "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.1",
     "babel-preset-latest": "^6.24.1",
     "babel-preset-react": "^6.24.1",
-    "react": "^15.6.1"
+    "react": "^15.6.1",
+    "webpack": "^3.5.5"
   },
   "devDependencies": {},
   "scripts": {
