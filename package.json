@@ -4,6 +4,9 @@
   "description": "A small webpage with a login system to submit fangames",
   "main": "index.js",
   "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-latest": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
     "react": "^15.6.1"
   },
   "devDependencies": {},
