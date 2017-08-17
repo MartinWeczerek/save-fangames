@@ -1,2 +1,29 @@
-# save-fangames
-A small webpage with a login system to submit fangames
+My Project
+---
+
+Welcome.
+
+Usage
+---
+
+Start the development server with this command:
+
+```
+npm start
+```
+
+Setup
+---
+
+```
+npm install
+```
+
+
+
+Compile
+---
+
+```
+npm run compile
+```
