@@ -5,6 +5,9 @@ module.exports = {
   entry: [
     './main.js',
   ],
+  node: {
+    fs: "empty"
+  },
   output: {
     path: path.join(__dirname, 'www'),
     filename: 'bundle.js',
