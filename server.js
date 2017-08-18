@@ -7,7 +7,9 @@ const app = express();
 const compiler = webpack(webpackConfig);
 
 // Host static webpages
-app.use(express.static(__dirname + '/www'));
+app.use(express.static(__dirname + '/www', {
+  extensions: ['html'] // so "/submit" works as well as "/submit.html"
+}));
 
 // Configure body-parser for POST parameters
 var bodyParser = require('body-parser');
