@@ -8,6 +8,7 @@
     "babel-loader": "^7.1.1",
     "babel-preset-latest": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "body-parser": "^1.17.2",
     "express": "^4.15.4",
     "file-system": "^2.2.2",
     "fs-es6": "0.0.2",

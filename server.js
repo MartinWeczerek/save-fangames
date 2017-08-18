@@ -6,8 +6,37 @@ const app = express();
 
 const compiler = webpack(webpackConfig);
 
+// Host static webpages
 app.use(express.static(__dirname + '/www'));
 
+// Configure body-parser for POST parameters
+var bodyParser = require('body-parser');
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+
+// Submit game endpoint
+// POST /submitgame
+// Params: gamename, gamelink
+app.post('/submitgame', function(req, res){
+  var gamename = req.body.gamename
+  var gamelink = req.body.gamelink
+
+  if (!gamename) {
+    res.status(400).send({Message: "Game name cannot be empty."})
+    return
+
+  } else if (!gamelink) {
+    res.status(400).send({Message: "Game link cannot be empty."})
+    return
+  }
+
+  // TODO: store the submitted game info somewhere
+  // also possibly 400 if game name (link?) is already in the list
+
+  res.status(200).send({Message: "Success!"})
+});
+
+// Hook up webpack middleware
 app.use(webpackDevMiddleware(compiler, {
   hot: true,
   filename: 'bundle.js',
@@ -18,6 +47,7 @@ app.use(webpackDevMiddleware(compiler, {
   historyApiFallback: true,
 }));
 
+// Start the server
 const server = app.listen(3000, function() {
   const host = server.address().address;
   const port = server.address().port;

@@ -1,15 +1,14 @@
-console.log('Hello World!');
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Counter from './Counter';
-import Submit from './Submit';
+import Counter from './counter';
+import Submit from './submit';
 
 document.addEventListener('DOMContentLoaded', function() {
-  ReactDOM.render(
-    <div>
-      <Counter/>
-      <Submit/>
-    </div>,
-    document.getElementById('mount')
-  );
+  var submitroot = document.getElementById('submitroot')
+  if (submitroot) {
+    ReactDOM.render(
+      <Submit/>,
+      submitroot
+    );
+  }
 });
