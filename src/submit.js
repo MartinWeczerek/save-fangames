@@ -78,13 +78,17 @@ class Submit extends React.Component {
       inner = (
         <div>
           <form onSubmit={this.handleSubmit}>
-              <label>Name of your fangame:</label>
+              <p>
+              <label>Name of your fangame: </label>
               <textarea value={this.state.gamename} onChange={this.handleChange} spellcheck="false" />
-              <br></br>
-              <label>Link to your fangame:</label>
+              </p>
+              <p>
+              <label>Link to your fangame: </label>
               <textarea value={this.state.gamelink} onChange={this.handleChange2} spellcheck="false" />
-              <br></br>
+              </p>
+              <p>
               <input type="submit" value="Submit" />
+              </p>
               <p>{this.state.errormsg}</p>
           </form>
         </div>
