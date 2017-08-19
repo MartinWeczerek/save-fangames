@@ -6,18 +6,22 @@ const app = express();
 
 const compiler = webpack(webpackConfig);
 
+var dao = require('./dao.js');
+// Create tables if don't exist already.
+dao.ensureTablesCreated()
+
 var bcrypt = require('bcrypt');
 const saltRounds = 10;
+var jwt = require('jsonwebtoken');
+var fs = require('fs');
 
-// Open SQLite database.
-const sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('sf.db');
-// Create tables if don't exist already.
-db.run(`CREATE TABLE IF NOT EXISTS users (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  email TEXT,
-  passwordhash TEXT,
-  salt TEXT)`);
+// Load config.
+var content = JSON.parse(fs.readFileSync('config/config.json'));
+if (!content.jwt_secret) {
+  console.log('jwt_secret not defined in config');
+  return
+}
+const jwt_secret = content.jwt_secret;
 
 // Host static webpages
 app.use(express.static(__dirname + '/www', {
@@ -29,9 +33,9 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
-// Submit game endpoint
-// POST /submitgame
+// Submit game endpoint.
 // Params: gamename, gamelink
+// Successful response: {}
 app.post('/submitgame', function(req, res){
   var gamename = req.body.gamename
   var gamelink = req.body.gamelink
@@ -51,9 +55,9 @@ app.post('/submitgame', function(req, res){
   res.status(200).send({Message: "Success!"})
 });
 
-// Register endpoint
-// POST /register
+// Register endpoint.
 // Params: email, password
+// Successful response: {Email, Token}
 app.post('/register', function(req, res){
   // Sanitize input.
   var email = req.body.email;
@@ -69,8 +73,7 @@ app.post('/register', function(req, res){
   }
 
   // Check if email is already in use.
-  db.get('SELECT 1 FROM users WHERE email = ($email)',
-    {'$email':email},
+  dao.getUserByEmail(email,
     function(err, row){
       if (err) {
         console.log('SQLite error:');
@@ -78,7 +81,6 @@ app.post('/register', function(req, res){
         res.status(500).send({Message: 'Database error.'});
         return;
       }
-      // row is {'1':1} if found, or undefined if not found
       if (row) {
         res.status(400).send({Message: 'Email already in use.'});
         return;
@@ -89,23 +91,54 @@ app.post('/register', function(req, res){
       // Add user to the database.
       var salt = bcrypt.genSaltSync(saltRounds);
       var hash = bcrypt.hashSync(password, salt);
-
-      db.run('INSERT INTO users (email, passwordhash, salt) VALUES ($email, $hash, $salt)', 
-        {'$email':email, '$hash':hash, '$salt':salt},
+      dao.insertUser(email, hash, salt,
         function(err){
           if (err) {
             console.log('SQLite error:');
             console.log(err);
             res.status(500).send({Message: 'Database error.'});
           } else {
-            res.status(200).send({Message: 'User added to DB.'});
+            var id = this.lastID; // set by sqlite3
+            var token = generateToken({email:'email', 'id':id});
+            res.status(200).send({Email: email, Token: token});
           }
       });
   });
 });
 
-// Verify email endpoint
-// GET /verify/[token]
+// Login endpoint.
+// Params: email, password
+// Successful response: {Email, Token}
+app.post('/login', function(req, res){
+  var email = req.body.email;
+  var password = req.body.password;
+  dao.getUserByEmail(email, function(err, row){
+    // TODO: check: does throwing here work?
+    if (err) {
+      throw err
+    }
+    var valid = bcrypt.compareSync(password, row.passwordhash);
+    if (valid) {
+      var token = generateToken(row);
+      res.status(200).send({Email: email, Token: token});
+    } else {
+      res.status(401).send({Message: 'Unauthorized.'});
+    }
+  });
+});
+
+function generateToken(user) {
+  var u = {
+    email: user.email,
+    id: user.id.toString()
+  };
+
+  return token = jwt.sign(u, jwt_secret, {
+    expiresIn: 60 * 60 * 24 // 24 hours
+  });
+}
+
+// Verify email endpoint.
 app.get('/verify/:token', function(req, res){
   var token = req.params.token;
   // TODO: verify token and activate account

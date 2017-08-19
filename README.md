@@ -17,10 +17,18 @@ Setup
 
 Install Node.js 8.x by following [this](https://nodejs.org/en/download/package-manager/).
 
-Install sqlite3. (Database file sf.db and tables will be created on server start.)
-
 ```
 npm install
+```
+
+Install sqlite3. (The database itself gets set up by the server)
+
+Create file config/config.json:
+
+```
+{
+"jwt_secret": "Put something here!!!"
+}
 ```
 
 Compile
