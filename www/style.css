@@ -5,13 +5,16 @@
 body {
     background-color:#334467;
     background-image:url("images/bgcherry.png");
-    background-position:center 10%;
+    background-position:center 15%;
     background-repeat:no-repeat;
     color:white;
     font-size:1.25em;
 }
 
 #wrapper { text-align:center; margin:0 auto;max-width:100%; width:1000px; }
+
+#account { background-color:#3E527A; height:3em; line-height: 3em;
+    padding: 0 1em; text-align:right; vertical-align:middle; }
 
 a { color: #C6C2C4; }
     a:hover { text-decoration:none; }

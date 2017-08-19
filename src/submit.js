@@ -80,11 +80,11 @@ class Submit extends React.Component {
           <form onSubmit={this.handleSubmit}>
               <p>
               <label>Name of your fangame: </label>
-              <textarea value={this.state.gamename} onChange={this.handleChange} spellcheck="false" />
+              <textarea value={this.state.gamename} onChange={this.handleChange} spellCheck="false" />
               </p>
               <p>
               <label>Link to your fangame: </label>
-              <textarea value={this.state.gamelink} onChange={this.handleChange2} spellcheck="false" />
+              <textarea value={this.state.gamelink} onChange={this.handleChange2} spellCheck="false" />
               </p>
               <p>
               <input type="submit" value="Submit" />
@@ -110,7 +110,7 @@ class Submit extends React.Component {
     }
 
     return(
-      <div id="wrapper">
+      <div>
         <p>Submit a game</p>
         <div id="gamesubmit">
           {inner}
