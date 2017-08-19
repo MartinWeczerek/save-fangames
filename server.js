@@ -3,6 +3,7 @@ const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpack = require('webpack');
 const webpackConfig = require('./webpack.config.js');
 const app = express();
+const mail = require('./mail.js');
 
 const compiler = webpack(webpackConfig);
 
@@ -72,6 +73,7 @@ app.post('/submitgame', function(req, res){
 // Successful response: {Email, Token}
 app.post('/register', function(req, res){
   // Sanitize input.
+  mail.test();
   var email = req.body.email;
   var password = req.body.password;
   if (!email) {
