@@ -13,8 +13,12 @@ body {
 
 #wrapper { text-align:center; margin:0 auto;max-width:100%; width:1000px; }
 
-#account { background-color:#3E527A; height:3em; line-height: 3em;
+#account { height:3em; line-height: 3em;
     padding: 0 1em; text-align:right; vertical-align:middle; }
+
+#account-inputbox { position:absolute; margin-left:-300px;
+    width:300px; height:400px; background-color:#3E527A; 
+    text-align:center; }
 
 a { color: #C6C2C4; }
     a:hover { text-decoration:none; }

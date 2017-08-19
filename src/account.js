@@ -8,8 +8,11 @@ class Account extends React.Component {
     this.state = {
       loggedin: false,
       loggingin: false,
+      loginbox: false,
       errormsg: '',
-      email: ''
+      email: '',
+      typedemail: '',
+      typedpassword: ''
     };
     // At start, decode already existing JWT, and if not expired,
     // set state to logged in.
@@ -23,10 +26,16 @@ class Account extends React.Component {
     }
     this.handleLogin = this.handleLogin.bind(this)
     this.handleLogout = this.handleLogout.bind(this)
+    this.handleOpenLoginBox = this.handleOpenLoginBox.bind(this)
+    this.handleCloseBox = this.handleCloseBox.bind(this)
+    this.handleOpenLoginBox = this.handleOpenLoginBox.bind(this)
+    this.handleText1Change = this.handleText1Change.bind(this)
+    this.handleText2Change = this.handleText2Change.bind(this)
+    this.handleText3Change = this.handleText3Change.bind(this)
   }
 
   handleLogin(event) {
-    this.setState({loggingin: true});
+    this.setState({loggingin:true, errormsg:''});
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', '/login', true);
@@ -40,33 +49,51 @@ class Account extends React.Component {
         if (this.status == 200) {
           var json = JSON.parse(xhr.responseText);
           Auth.authenticateUser(json.Token);
-          accountObj.setState({loggedin: true, email: json.Email});
+          accountObj.setState({loggedin: true, loginbox: false, email: json.Email});
 
         } else {
           accountObj.setState({
-            state: SubmitState.INPUT,
             errormsg: xhr.status.toString()+" "+xhr.statusText
           });
           try {
             var json = JSON.parse(xhr.responseText);
-            accountObj.setState({errormsg: submitObj.state.errormsg+" - "+json.Message});
+            accountObj.setState({errormsg: accountObj.state.errormsg+" - "+json.Message});
           } catch(e) {
           }
         }
       }
     };
 
-    // TODO: textareas to specify email and password.
     var fd = new FormData();
     xhr.send(JSON.stringify({
-      email: "a",
-      password: "b"
+      email: this.state.typedemail,
+      password: this.state.typedpassword
     }));
+  }
+
+  handleOpenLoginBox(event) {
+    this.setState({loginbox: true});
+  }
+
+  handleCloseBox(event) {
+    this.setState({loginbox: false});
+  }
+
+  handleText1Change(event) {
+    this.setState({typedemail: event.target.value});
+  }
+
+  handleText2Change(event) {
+    this.setState({typedpassword: event.target.value});
+  }
+
+  handleText3Change(event) {
+    
   }
 
   handleLogout(event) {
     Auth.deauthenticateUser();
-    this.setState({loggedin: false});
+    this.setState({loggedin: false, typedemail: '', typedpassword: ''});
   }
 
   render() {
@@ -81,18 +108,43 @@ class Account extends React.Component {
     if (this.state.loggedin) {
       return (
         <div id="account">
-          {this.state.email}
-          <form>
-            <input type="submit" value="Log out" onClick={this.handleLogout}/>
-          </form>
+          {this.state.email}&nbsp;
+          <input type="submit" value="Log out" onClick={this.handleLogout}/>
         </div>
       )
     } else {
-      return (
-        <div id="account">
-          <input type="submit" value="Log in" onClick={this.handleLogin}/>
-        </div>
-      )
+      if (this.state.loginbox) {
+        // this dummy positioning div is kinda messy
+        var divStyle = {position:'relative', width:'0', height:'0', top:'100%', float:'right'}
+        return (
+          <div id="account">
+            {this.state.errormsg}
+            <input type="submit" value="X" onClick={this.handleCloseBox}/>
+            <div style={divStyle}>
+              <div id="account-inputbox">
+                <p>
+                <label>Email: </label>
+                <textarea value={this.state.typedemail} onChange={this.handleText1Change} spellCheck="false" />
+                </p>
+                <p>
+                <label>Password: </label>
+                <input type="password" value={this.state.typedpassword} onChange={this.handleText2Change} spellCheck="false" />
+                </p>
+                <p>
+                <input type="submit" value="Log in" onClick={this.handleLogin}/>
+                </p>
+              </div>
+            </div>
+          </div>
+        )
+      } else {
+        return (
+          <div id="account">
+            {this.state.errormsg}
+            <input type="submit" value="Log in" onClick={this.handleOpenLoginBox}/>
+          </div>
+        )
+      }
     }
   }
 }
