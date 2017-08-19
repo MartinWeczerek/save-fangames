@@ -39,6 +39,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.post('/submitgame', function(req, res){
   var gamename = req.body.gamename
   var gamelink = req.body.gamelink
+  var token = req.header('Authorization');
 
   if (!gamename) {
     res.status(400).send({Message: "Game name cannot be empty."})
@@ -47,12 +48,23 @@ app.post('/submitgame', function(req, res){
   } else if (!gamelink) {
     res.status(400).send({Message: "Game link cannot be empty."})
     return
+
+  } else if (!token) {
+    res.status(400).send({Message: "Must set Authorization header."})
+    return
   }
 
-  // TODO: store the submitted game info somewhere
-  // also possibly 400 if game name (link?) is already in the list
-
-  res.status(200).send({Message: "Success!"})
+  token = token.replace('Bearer ', '');
+  jwt.verify(token, jwt_secret, function(err, user) {
+    if (err) {
+      res.status(401).send({Message: 'Unauthorized.'});
+    } else {
+      console.log(`User ${user.email} submitted game ${gamename} link ${gamelink}`);
+      res.status(200).send({Message: "Success!"})
+      // TODO: store the submitted game info somewhere
+      // also possibly 400 if game name (link?) is already in the list
+    }
+  });
 });
 
 // Register endpoint.

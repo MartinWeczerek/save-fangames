@@ -2,6 +2,10 @@
 class Auth {
   static authenticateUser(token) {
     localStorage.setItem('jwtToken', token);
+
+    if (Auth.authenticateUser.callback) {
+      Auth.authenticateUser.callback();
+    }
   }
 
   static isUserAuthenticated() {
@@ -10,6 +14,10 @@ class Auth {
 
   static deauthenticateUser() {
     localStorage.removeItem('jwtToken');
+
+    if (Auth.deauthenticateUser.callback) {
+      Auth.deauthenticateUser.callback();
+    }
   }
 
   static getToken() {

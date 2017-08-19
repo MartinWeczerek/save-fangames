@@ -1,10 +1,12 @@
 import React from 'react';
 import fs from 'fs';
+import Auth from './auth';
 
 var SubmitState = {
   INPUT: 1,
   SENDING: 2,
   SUCCESS: 3,
+  NOAUTH: 4,
 }
 
 class Submit extends React.Component {
@@ -20,6 +22,19 @@ class Submit extends React.Component {
     this.handleChange = this.handleNameChange.bind(this);
     this.handleChange2 = this.handleLinkChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    Auth.authenticateUser.callback = this.handleOnAuth.bind(this);
+    Auth.deauthenticateUser.callback = this.handleOnDeauth.bind(this);
+    if (!Auth.isUserAuthenticated()) {
+      this.state.state = SubmitState.NOAUTH;
+    }
+  }
+
+  handleOnAuth() {
+    this.setState({state: SubmitState.INPUT, errormsg: ''});
+  }
+
+  handleOnDeauth() {
+    this.setState({state: SubmitState.NOAUTH});
   }
 
   handleNameChange(event) {
@@ -33,11 +48,17 @@ class Submit extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
 
+    if (!Auth.isUserAuthenticated()) {
+      this.setState({errormsg: 'Must be logged in to submit games.'});
+      return;
+    }
+
     this.setState({state: SubmitState.SENDING});
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', '/submitgame', true);
     xhr.setRequestHeader("Content-type", "application/json");
+    xhr.setRequestHeader("Authorization", `Bearer ${Auth.getToken()}`);
 
     var submitObj = this;
     xhr.onreadystatechange = function () {
@@ -107,6 +128,10 @@ class Submit extends React.Component {
           <p>Your game {this.state.gamename} with link {this.state.gamelink} has been successfully submitted!</p>
         </div>
       );
+    } else if (this.state.state == SubmitState.NOAUTH) {
+      inner = (
+        <p>You must register an account and log in to submit a game.</p>
+      )
     }
 
     return(
