@@ -117,6 +117,10 @@ app.post('/login', function(req, res){
     if (err) {
       throw err
     }
+    if (!row) {
+      res.status(401).send({Message: 'Unauthorized.'});
+      return;
+    }
     var valid = bcrypt.compareSync(password, row.passwordhash);
     if (valid) {
       var token = generateToken(row);

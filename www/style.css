@@ -17,7 +17,7 @@ body {
     padding: 0 1em; text-align:right; vertical-align:middle; }
 
 #account-inputbox { position:absolute; margin-left:-300px;
-    width:300px; height:400px; background-color:#3E527A; 
+    width:300px; height:500px; background-color:#3E527A;
     text-align:center; }
 
 a { color: #C6C2C4; }
