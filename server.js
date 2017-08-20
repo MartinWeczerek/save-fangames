@@ -70,10 +70,9 @@ app.post('/submitgame', function(req, res){
 
 // Register endpoint.
 // Params: email, password
-// Successful response: {Email, Token}
+// Successful response: {}
 app.post('/register', function(req, res){
   // Sanitize input.
-  mail.test();
   var email = req.body.email;
   var password = req.body.password;
   if (!email) {
@@ -100,22 +99,18 @@ app.post('/register', function(req, res){
         return;
       }
 
-      // TODO: send verification email instead of just adding user.
+      // TODO: generate and record verification string in the database.
+      var verifyUrl = 'www.klazen.com';
 
-      // Add user to the database.
-      var salt = bcrypt.genSaltSync(saltRounds);
-      var hash = bcrypt.hashSync(password, salt);
-      dao.insertUser(email, hash, salt,
-        function(err){
-          if (err) {
-            console.log('SQLite error:');
-            console.log(err);
-            res.status(500).send({Message: 'Database error.'});
-          } else {
-            var id = this.lastID; // set by sqlite3
-            var token = generateToken({email:'email', 'id':id});
-            res.status(200).send({Email: email, Token: token});
-          }
+      // Send verification email.
+      mail.sendAccountVerificationMail(email, verifyUrl, function(error, info) {
+        if (error) {
+          console.log(error);
+          res.status(500).send({Message: 'Failed to send email.'});
+        } else {
+          console.log('Email sent: ' + info.response);
+          res.status(200).send({Message: 'Sent verification email. Please click the link in it.'});
+        }
       });
   });
 });
@@ -157,9 +152,26 @@ function generateToken(user) {
 }
 
 // Verify email endpoint.
+// Successful response: {Email, Token}
 app.get('/verify/:token', function(req, res){
   var token = req.params.token;
   // TODO: verify token and activate account
+
+  // Add user to the database.
+  /*var salt = bcrypt.genSaltSync(saltRounds);
+  var hash = bcrypt.hashSync(password, salt);
+  dao.insertUser(email, hash, salt,
+    function(err){
+      if (err) {
+        console.log('SQLite error:');
+        console.log(err);
+        res.status(500).send({Message: 'Database error.'});
+      } else {
+        var id = this.lastID; // set by sqlite3
+        var token = generateToken({email:'email', 'id':id});
+        res.status(200).send({Email: email, Token: token});
+      }
+  });*/
   res.status(501).send({Message: 'Email verification not yet implemented.'});
 });
 

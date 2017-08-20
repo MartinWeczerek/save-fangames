@@ -20,11 +20,14 @@ class Account extends React.Component {
     // At start, decode already existing JWT, and if not expired,
     // set state to logged in.
     if (Auth.isUserAuthenticated()) {
-      var decoded = jwt_decode(Auth.getToken());
-      var expired = decoded.exp < (new Date().getTime()/1000);
-      if (!expired) {
-        this.state.loggedin = true;
-        this.state.email = decoded.email;
+      try {
+        var decoded = jwt_decode(Auth.getToken());
+        var expired = decoded.exp < (new Date().getTime()/1000);
+        if (!expired) {
+          this.state.loggedin = true;
+          this.state.email = decoded.email;
+        }
+      } catch(e) {
       }
     }
     this.handleLogin = this.handleLogin.bind(this)
@@ -95,8 +98,7 @@ class Account extends React.Component {
 
         if (this.status == 200) {
           var json = JSON.parse(xhr.responseText);
-          Auth.authenticateUser(json.Token);
-          accountObj.setState({loggedin: true, registerbox: false, email: json.Email});
+          accountObj.setState({errormsg: 'Verification email sent. Check your email.'});
 
         } else {
           accountObj.setState({
