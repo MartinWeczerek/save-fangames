@@ -2,7 +2,9 @@
 
 // Open SQLite database.
 const sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('sf.db');
+var dbFile = 'sf.db'
+var db = new sqlite3.Database(dbFile);
+console.log('Connected to database '+dbFile);
 
 module.exports.ensureTablesCreated = function() {
   db.run(`CREATE TABLE IF NOT EXISTS users (

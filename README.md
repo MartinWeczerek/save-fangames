@@ -27,13 +27,15 @@ Create file config/config.json:
 
 ```
 {
+"port": 3000,
 "jwt_secret": "Put something here!!!",
 "mail": {
     "options": {
         "host": "127.0.0.1",
         "port": 25,
         "auth": null
-    }
+    },
+    "from": "test@test.com"
 }
 }
 ```

@@ -3,14 +3,23 @@ const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpack = require('webpack');
 const webpackConfig = require('./webpack.config.js');
 const app = express();
-const mail = require('./mail.js');
-
 const compiler = webpack(webpackConfig);
 
+// Hook up webpack middleware.
+app.use(webpackDevMiddleware(compiler, {
+  hot: true,
+  filename: 'bundle.js',
+  publicPath: '/',
+  stats: {
+    colors: true,
+  },
+  historyApiFallback: true,
+}));
 
-var dao = require('./dao.js');
-// Create tables if don't exist already.
-dao.ensureTablesCreated()
+// Configure body-parser for POST parameters.
+var bodyParser = require('body-parser');
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 // Various requires.
 var bcrypt = require('bcrypt');
@@ -18,6 +27,13 @@ const saltRounds = 10;
 var jwt = require('jsonwebtoken');
 var fs = require('fs');
 const uuidv4 = require('uuid/v4'); // Version 4 is Random
+const mail = require('./mail.js');
+
+var dao = require('./dao.js');
+// Create tables if don't exist already.
+dao.ensureTablesCreated()
+
+// Parse DoT template files.
 var dots = require('dot').process({path: './dot_views'});
 
 // Load config.
@@ -31,16 +47,15 @@ if (!config.jwt_secret) {
   console.log('jwt_secret not defined in config.');
   return;
 }
+if (!config.port) {
+  console.log('port not defined in config.');
+  return;
+}
 
 // Host static webpages
 app.use(express.static(__dirname + '/www', {
   extensions: ['html'] // so "/submit" works as well as "/submit.html"
 }));
-
-// Configure body-parser for POST parameters
-var bodyParser = require('body-parser');
-app.use(bodyParser.json()); // support json encoded bodies
-app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 // Submit game endpoint.
 // Params: gamename, gamelink
@@ -107,12 +122,10 @@ app.post('/register', function(req, res){
     }
 
     var verifyHash = uuidv4();
-    // TODO: load url base from config
-    var verifyUrl = 'localhost:3000'+'/verify/'+verifyHash;
+    var verifyUrl = req.headers.host+'/verify/'+verifyHash;
 
     // Add user to the database.
-    var salt = bcrypt.genSaltSync(saltRounds);
-    var hash = bcrypt.hashSync(password, salt);
+    var hash = bcrypt.hashSync(password, saltRounds);
     dao.insertUser(email, hash, verifyHash, function(err){
       if (err) {
         console.log('SQLite error:');
@@ -142,14 +155,15 @@ app.post('/login', function(req, res){
   var email = req.body.email;
   var password = req.body.password;
   dao.getUserByEmail(email, function(err, row){
-    // TODO: check: does throwing here work?
     if (err) {
-      throw err
+      console.log(err);
+      res.status(500).send({Message: 'Database error.'});
     }
     if (!row) {
       res.status(401).send({Message: 'Unauthorized.'});
       return;
     }
+
     var valid = bcrypt.compareSync(password, row.passwordhash);
     if (valid) {
       var token = generateToken(row);
@@ -195,19 +209,8 @@ app.get('/verify/:token', function(req, res){
   });
 });
 
-// Hook up webpack middleware
-app.use(webpackDevMiddleware(compiler, {
-  hot: true,
-  filename: 'bundle.js',
-  publicPath: '/',
-  stats: {
-    colors: true,
-  },
-  historyApiFallback: true,
-}));
-
 // Start the server
-const server = app.listen(3000, function() {
+const server = app.listen(config.port, function() {
   const host = server.address().address;
   const port = server.address().port;
   console.log('Example app listening at http://%s:%s', host, port);
