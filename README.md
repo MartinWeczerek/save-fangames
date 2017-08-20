@@ -27,9 +27,18 @@ Create file config/config.json:
 
 ```
 {
-"jwt_secret": "Put something here!!!"
+"jwt_secret": "Put something here!!!",
+"mail": {
+    "options": {
+        "host": "127.0.0.1",
+        "port": 25,
+        "auth": null
+    }
+}
 }
 ```
+
+For mail options, see https://nodemailer.com/smtp/#authentication
 
 Compile
 ---

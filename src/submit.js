@@ -140,7 +140,6 @@ class Submit extends React.Component {
         <div id="gamesubmit">
           {inner}
         </div>
-        <a href="/">Return to home page</a>
       </div>
     )
   }

@@ -2,15 +2,15 @@
 
 const nodemailer = require('nodemailer');
 
-var transporter = nodemailer.createTransport({
-  // TODO: load from config
-  host: '192.168.56.1',
-  port: 25,
-  auth: null/*{
-    user: 'youremail@example.com',
-    pass: 'yourpassword'
-  }*/
-});
+// Load config.
+var fs = require('fs');
+var config = JSON.parse(fs.readFileSync('config/config.json'));
+if (!config.mail || !config.mail.options) {
+  console.log('mail.options not defined in config.');
+  return;
+}
+
+var transporter = nodemailer.createTransport(config.mail.options);
 
 transporter.verify(function(error, success) {
   if (error) {

@@ -1,12 +1,16 @@
 <html>
 <head>
-  <script src="/bundle.js" ></script>
+  <script>
+    localStorage.setItem('jwtToken', '{{=it.token}}');
+  </script>
+  <script src="/bundle.js"></script>
   <link rel="stylesheet" type="text/css" href="/style.css">
 </head>
 <body>
   <div id="wrapper">
     <div id="accountroot"></div>
-    <div id="submitroot"></div>
+    <p>Success! Your account is now activated!</p>
+    <p></p>
     <a href="/">Return to home page</a>
   </div>
 </body>

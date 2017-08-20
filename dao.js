@@ -9,20 +9,57 @@ module.exports.ensureTablesCreated = function() {
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     email TEXT,
     passwordhash TEXT,
-    salt TEXT)`);
+    active BOOLEAN DEFAULT 0,
+    verifyhash TEXT)`);
 }
 
 module.exports.getUserByEmail = function(email, callback) {
-  db.get('SELECT * FROM users WHERE email = ($email)',
-    {'$email':email},
+  db.get('SELECT * FROM users WHERE active = 1 AND email = ($email)',
+    {$email:email},
     callback
   );
 }
 
-module.exports.insertUser = function(email, hash, salt, callback) {
-  db.run('INSERT INTO users (email, passwordhash, salt) VALUES ($email, $hash, $salt)', 
-    {'$email':email, '$hash':hash, '$salt':salt},
+module.exports.getUserById = function(id, callback) {
+  db.get('SELECT * FROM users WHERE active = 1 AND id = ($id)',
+    {$id:id},
     callback
+  );
+}
+
+module.exports.insertUser = function(email, hash, verifyhash, callback) {
+  db.run('UPDATE users SET verifyhash = ($verifyhash), passwordhash = ($hash) WHERE active = 0 and email = ($email)',
+    {$verifyhash:verifyhash, $hash:hash, $email:email},
+    function(err) {
+      if (err) {
+        callback(err);
+      } else {
+        if (this.changes) { // set by sqlite3
+          callback();
+        } else {
+          db.run('INSERT INTO users (email, passwordhash, active, verifyhash) VALUES ($email, $hash, 0, $verifyhash)',
+            {$verifyhash: verifyhash,$email: email,$hash: hash},
+            callback);
+        }
+      }
+    }
+  );
+}
+
+module.exports.verifyUser = function(verifyhash, callback) {
+  db.run('UPDATE users SET verifyhash = (""), active = 1 WHERE active = 0 AND verifyhash = ($verifyhash)',
+    {$verifyhash:verifyhash},
+    function(err) {
+      if (err) {
+        callback(err);
+      } else {
+        if (this.changes) { // set by sqlite3
+          callback(err, this.lastID);
+        } else {
+          callback('verifyUser no rows updated');
+        }
+      }
+    }
   );
 }
 

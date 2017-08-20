@@ -11,6 +11,7 @@ class Account extends React.Component {
       registering: false,
       loginbox: false,
       registerbox: false,
+      sentverification: false,
       errormsg: '',
       email: '',
       typedemail: '',
@@ -98,7 +99,7 @@ class Account extends React.Component {
 
         if (this.status == 200) {
           var json = JSON.parse(xhr.responseText);
-          accountObj.setState({errormsg: 'Verification email sent. Check your email.'});
+          accountObj.setState({sentverification: true});
 
         } else {
           accountObj.setState({
@@ -150,6 +151,14 @@ class Account extends React.Component {
   }
 
   render() {
+    if (this.state.sentverification) {
+      return (
+        <div id="account">
+          Verification email sent to {this.state.typedemail}. Click the link in the email.
+        </div>
+      )
+    }
+
     if (this.state.loggingin) {
       return (
         <div id="account">

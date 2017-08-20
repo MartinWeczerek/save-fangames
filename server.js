@@ -7,22 +7,30 @@ const mail = require('./mail.js');
 
 const compiler = webpack(webpackConfig);
 
+
 var dao = require('./dao.js');
 // Create tables if don't exist already.
 dao.ensureTablesCreated()
 
+// Various requires.
 var bcrypt = require('bcrypt');
 const saltRounds = 10;
 var jwt = require('jsonwebtoken');
 var fs = require('fs');
+const uuidv4 = require('uuid/v4'); // Version 4 is Random
+var dots = require('dot').process({path: './dot_views'});
 
 // Load config.
-var content = JSON.parse(fs.readFileSync('config/config.json'));
-if (!content.jwt_secret) {
-  console.log('jwt_secret not defined in config');
-  return
+const configPath = 'config/config.json';
+if (!fs.existsSync(configPath)) {
+  console.log(configPath+' does not exist.');
+  return;
 }
-const jwt_secret = content.jwt_secret;
+var config = JSON.parse(fs.readFileSync(configPath));
+if (!config.jwt_secret) {
+  console.log('jwt_secret not defined in config.');
+  return;
+}
 
 // Host static webpages
 app.use(express.static(__dirname + '/www', {
@@ -56,7 +64,7 @@ app.post('/submitgame', function(req, res){
   }
 
   token = token.replace('Bearer ', '');
-  jwt.verify(token, jwt_secret, function(err, user) {
+  jwt.verify(token, config.jwt_secret, function(err, user) {
     if (err) {
       res.status(401).send({Message: 'Unauthorized.'});
     } else {
@@ -86,21 +94,32 @@ app.post('/register', function(req, res){
   }
 
   // Check if email is already in use.
-  dao.getUserByEmail(email,
-    function(err, row){
+  dao.getUserByEmail(email, function(err, row){
+    if (err) {
+      console.log('SQLite error:');
+      console.log(err);
+      res.status(500).send({Message: 'Database error.'});
+      return;
+    }
+    if (row) {
+      res.status(400).send({Message: 'Email already in use.'});
+      return;
+    }
+
+    var verifyHash = uuidv4();
+    // TODO: load url base from config
+    var verifyUrl = 'localhost:3000'+'/verify/'+verifyHash;
+
+    // Add user to the database.
+    var salt = bcrypt.genSaltSync(saltRounds);
+    var hash = bcrypt.hashSync(password, salt);
+    dao.insertUser(email, hash, verifyHash, function(err){
       if (err) {
         console.log('SQLite error:');
         console.log(err);
         res.status(500).send({Message: 'Database error.'});
         return;
       }
-      if (row) {
-        res.status(400).send({Message: 'Email already in use.'});
-        return;
-      }
-
-      // TODO: generate and record verification string in the database.
-      var verifyUrl = 'www.klazen.com';
 
       // Send verification email.
       mail.sendAccountVerificationMail(email, verifyUrl, function(error, info) {
@@ -112,6 +131,7 @@ app.post('/register', function(req, res){
           res.status(200).send({Message: 'Sent verification email. Please click the link in it.'});
         }
       });
+    });
   });
 });
 
@@ -143,36 +163,36 @@ app.post('/login', function(req, res){
 function generateToken(user) {
   var u = {
     email: user.email,
-    id: user.id.toString()
   };
 
-  return token = jwt.sign(u, jwt_secret, {
+  return token = jwt.sign(u, config.jwt_secret, {
     expiresIn: 60 * 60 * 24 // 24 hours
   });
 }
 
 // Verify email endpoint.
-// Successful response: {Email, Token}
+// Successful response: Webpage
 app.get('/verify/:token', function(req, res){
   var token = req.params.token;
-  // TODO: verify token and activate account
-
-  // Add user to the database.
-  /*var salt = bcrypt.genSaltSync(saltRounds);
-  var hash = bcrypt.hashSync(password, salt);
-  dao.insertUser(email, hash, salt,
-    function(err){
-      if (err) {
-        console.log('SQLite error:');
-        console.log(err);
-        res.status(500).send({Message: 'Database error.'});
-      } else {
-        var id = this.lastID; // set by sqlite3
-        var token = generateToken({email:'email', 'id':id});
-        res.status(200).send({Email: email, Token: token});
-      }
-  });*/
-  res.status(501).send({Message: 'Email verification not yet implemented.'});
+  if (!token) {
+    res.status(400).send({Message: 'Must provide token in url.'});
+  }
+  dao.verifyUser(token, function(err, lastID) {
+    if (err) {
+      console.log(err);
+      res.status(400).send({Message: 'Database error.'});
+    } else {
+      dao.getUserById(lastID, function(err, row) {
+        if (err) {
+          console.log(err);
+          res.status(400).send({Message: 'Database error.'});
+        } else {
+          var token = generateToken(row);
+          res.status(200).send(dots.verified({token: token}));
+        }
+      });
+    }
+  });
 });
 
 // Hook up webpack middleware
