@@ -57,6 +57,17 @@ app.use(express.static(__dirname + '/www', {
   extensions: ['html'] // so "/submit" works as well as "/submit.html"
 }));
 
+app.get('/games',function(req,res){
+  dao.getGames(req.query.mindate,function(err,games){
+    if (err) {
+      console.log(err)
+      res.status(500).send({Message:"Failed to load games: "+err});
+    } else {
+      res.status(200).send(games);
+    }
+  });
+});
+
 // Submit game endpoint.
 // Params: gamename, gamelink
 // Successful response: {}
@@ -83,11 +94,19 @@ app.post('/submitgame', function(req, res){
     if (err) {
       res.status(401).send({Message: 'Unauthorized.'});
     } else {
-      console.log(`User ${user.email} submitted game ${gamename} link ${gamelink}`);
-      res.status(200).send({Message: "Success!"})
-      // TODO: store the submitted game info somewhere
-      // also possibly 400 if game name (link?) is already in the list
-    }
+      dao.insertGame(user.id, gamename, gamelink, function(err){
+        if (err) {
+          console.log('SQLite error:');
+          console.log(err);
+          res.status(500).send({Message: 'Database error.'});
+          return;
+        }
+        console.log(`User ${user.email} submitted game ${gamename} link ${gamelink}`);
+        res.status(200).send({Message: "Success!"})
+        // TODO: store the submitted game info somewhere
+        // also possibly 400 if game name (link?) is already in the list
+      });
+    }      
   });
 });
 
