@@ -29,6 +29,7 @@ Create file config/config.json:
 {
 "port": 3000,
 "jwt_secret": "Put something here!!!",
+"discord_webhook_url": "https://discordapp.com/api/webhooks/AAAAA",
 "mail": {
     "options": {
         "host": "127.0.0.1",

@@ -28,6 +28,7 @@ var jwt = require('jsonwebtoken');
 var fs = require('fs');
 const uuidv4 = require('uuid/v4'); // Version 4 is Random
 const mail = require('./mail.js');
+const webhooks = require('./webhooks.js');
 
 var dao = require('./dao.js');
 // Create tables if don't exist already.
@@ -72,6 +73,7 @@ app.get('/games',function(req,res){
 // Params: gamename, gamelink
 // Successful response: {}
 app.post('/submitgame', function(req, res){
+
   var gamename = req.body.gamename
   var gamelink = req.body.gamelink
   var token = req.header('Authorization');
@@ -102,6 +104,7 @@ app.post('/submitgame', function(req, res){
           return;
         }
         console.log(`User ${user.email} submitted game ${gamename} link ${gamelink}`);
+        webhooks.sendGameSubmitted(user.email, gamename, '[authors TODO]', gamelink);
         res.status(200).send({Message: "Success!"})
         // TODO: store the submitted game info somewhere
         // also possibly 400 if game name (link?) is already in the list
