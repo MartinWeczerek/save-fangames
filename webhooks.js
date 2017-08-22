@@ -1,7 +1,6 @@
 (function() {
 
-const http = require('http');
-const { URL } = require('url');
+const request = require('request');
 
 // Load config.
 var fs = require('fs');
@@ -11,34 +10,19 @@ if (!config.discord_webhook_url) {
   return;
 }
 
-var url = new URL(config.discord_webhook_url);
-var options = {
-  host: url.host,
-  path: url.pathname,
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  }
-};
-
 module.exports = {
   sendGameSubmitted: function(email, gamename, gameauthors, gamelink) {
-    var message = `{email} submitted:\n{gamename}\nby {gameauthors}\ngamelink`;
-    var content = JSON.stringify({'content': message});
-    console.log(content);
-    console.log(options);
-
-    const req = http.request(options, function(res) {
-      console.log(res.statusCode);
-      console.log(res.statusMessage);
-      console.log(res.headers);
-      // console.log('Successful post to discord webhook');
-    });
-    req.write(content);
-    req.on('error', function(e) {
-      console.log(`problem with discord webhook request: ${e.message}`);
-    });
-    req.end();
+    var message = `${email} submitted:\n${gamename}\nby ${gameauthors}\n${gamelink}`;
+    
+    request.post(
+      config.discord_webhook_url,
+      {json: {content:message}},
+      function(err,rsp,body) {
+        if (err || rsp.statusCode != 200) {
+          console.log("webhook error: "+err);
+        }
+      }
+    );
   }
 }
 
