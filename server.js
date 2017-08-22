@@ -181,7 +181,7 @@ app.post('/register', function(req, res){
     }
 
     var verifyHash = uuidv4();
-    var verifyUrl = req.headers.host+'/verify/'+verifyHash;
+    var verifyUrl = req.protocol+'://'+req.headers.host+'/verify/'+verifyHash;
 
     // Add user to the database.
     var hash = bcrypt.hashSync(password, saltRounds);
