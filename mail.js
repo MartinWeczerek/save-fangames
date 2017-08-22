@@ -6,16 +6,13 @@ const nodemailer = require('nodemailer');
 var fs = require('fs');
 var config = JSON.parse(fs.readFileSync('config/config.json'));
 if (!config.mail) {
-  console.log('mail defined in config.');
-  return;
+  throw('mail defined in config.');
 }
 if (!config.mail.options) {
-  console.log('mail.options not defined in config.');
-  return;
+  throw('mail.options not defined in config.');
 }
 if (!config.mail.from) {
-  console.log('mail.from not defined in config.');
-  return;
+  throw('mail.from not defined in config.');
 }
 
 var transporter = nodemailer.createTransport(config.mail.options);

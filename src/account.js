@@ -178,35 +178,33 @@ class Account extends React.Component {
     if (this.state.loggedin) {
       return (
         <div id="account">
-          {this.state.email}&nbsp;&nbsp;
+          {this.state.email}
           <input type="submit" value="Log out" onClick={this.handleLogout}/>
         </div>
       )
 
     }
 
-    // TODO: get rid of tabs when improving the CSS.
     if (this.state.loginbox) {
       // this dummy positioning div is kinda messy
       var divStyle = {position:'relative', width:'0', height:'0', top:'100%', float:'right'}
       return (
         <div id="account">
-          {this.state.errormsg}
           &nbsp;
+          <span className="error">{this.state.errormsg}</span>
           <input type="submit" value="X" onClick={this.handleCloseBox}/>
           <div style={divStyle}>
             <div id="account-inputbox">
-              <p>
-              <label>Email: </label>
-              <textarea value={this.state.typedemail} onChange={this.handleText1Change} spellCheck="false" />
-              </p>
-              <p>
-              <label>Password: </label>
-              <input type="password" value={this.state.typedpassword} onChange={this.handleText2Change} spellCheck="false" />
-              </p>
-              <p>
-              <input type="submit" value="Log in" onClick={this.handleLogin}/>
-              </p>
+              <form onSubmit={this.handleLogin}>
+                <label>Email: </label>
+                <input type="text" autoFocus value={this.state.typedemail} onChange={this.handleText1Change} spellCheck="false" />
+                <br/>
+                <label>Password: </label>
+                <input type="password" value={this.state.typedpassword} onChange={this.handleText2Change} spellCheck="false" />
+                <br/>
+                <br/>
+                <input type="submit" value="Log in"/>
+              </form>
             </div>
           </div>
         </div>
@@ -217,26 +215,24 @@ class Account extends React.Component {
       var divStyle = {position:'relative', width:'0', height:'0', top:'100%', float:'right'}
       return (
         <div id="account">
-          {this.state.errormsg}
           &nbsp;
+          <span className="error">{this.state.errormsg}</span>
           <input type="submit" value="X" onClick={this.handleCloseBox}/>
           <div style={divStyle}>
             <div id="account-inputbox">
-              <p>
-              <label>Email: </label>
-              <textarea value={this.state.typedemail} onChange={this.handleText1Change} spellCheck="false" />
-              </p>
-              <p>
-              <label>Password: </label>
-              <input type="password" value={this.state.typedpassword} onChange={this.handleText2Change} spellCheck="false" />
-              </p>
-              <p>
-              <label>Re-enter password: </label>
-              <input type="password" value={this.state.typedpassword2} onChange={this.handleText3Change} spellCheck="false" />
-              </p>
-              <p>
-              <input type="submit" value="Register" onClick={this.handleRegister}/>
-              </p>
+              <form onSubmit={this.handleRegister}>
+                <label>Email: </label>
+                <input type="text" autoFocus value={this.state.typedemail} onChange={this.handleText1Change} spellCheck="false" />
+                <br/>
+                <label>Password: </label>
+                <input type="password" value={this.state.typedpassword} onChange={this.handleText2Change} spellCheck="false" />
+                <br/>
+                <label>Re-enter password: </label>
+                <input type="password" value={this.state.typedpassword2} onChange={this.handleText3Change} spellCheck="false" />
+                <br/>
+                <br/>
+                <input type="submit" value="Register"/>
+              </form>
             </div>
           </div>
         </div>
@@ -244,9 +240,8 @@ class Account extends React.Component {
     } else {
       return (
         <div id="account">
-          {this.state.errormsg}
+          &nbsp;
           <input type="submit" value="Log in" onClick={this.handleOpenLoginBox}/>
-          &nbsp;&nbsp;
           <input type="submit" value="Register" onClick={this.handleOpenRegisterBox}/>
         </div>
       )

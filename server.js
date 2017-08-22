@@ -41,17 +41,14 @@ var dots = require('dot').process({path: './dot_views'});
 // Load config.
 const configPath = 'config/config.json';
 if (!fs.existsSync(configPath)) {
-  console.log(configPath+' does not exist.');
-  return;
+  throw(configPath+' does not exist.');
 }
 var config = JSON.parse(fs.readFileSync(configPath));
 if (!config.jwt_secret) {
-  console.log('jwt_secret not defined in config.');
-  return;
+  throw('jwt_secret not defined in config.');
 }
 if (!config.port) {
-  console.log('port not defined in config.');
-  return;
+  throw('port not defined in config.');
 }
 
 // Host static webpages
@@ -104,6 +101,7 @@ app.get('/games',function(req,res){
 app.post('/submitgame', function(req, res){
   var gamename = req.body.gamename
   var gamelink = req.body.gamelink
+  var gameauthors = req.body.gameauthors
   var token = req.header('Authorization');
 
   if (!gamename) {
@@ -112,6 +110,10 @@ app.post('/submitgame', function(req, res){
 
   } else if (!gamelink) {
     res.status(400).send({Message: "Game link cannot be empty."})
+    return
+
+  } else if (!gameauthors) {
+    res.status(400).send({Message: "Game authors cannot be empty."})
     return
 
   } else if (!token) {
@@ -131,15 +133,15 @@ app.post('/submitgame', function(req, res){
     if (err) {
       res.status(401).send({Message: 'Unauthorized.'});
     } else {
-      dao.insertGame(user.id, gamename, gamelink, function(err){
+      dao.insertGame(user.id, gamename, gamelink, gameauthors, function(err){
         if (err) {
           console.log('SQLite error:');
           console.log(err);
           res.status(500).send({Message: 'Database error.'});
           return;
         }
-        console.log(`User ${user.email} submitted game ${gamename} link ${gamelink}`);
-        webhooks.sendGameSubmitted(user.email, gamename, '[authors TODO]', gamelink);
+        console.log(`User ${user.email} submitted game ${gamename} by ${gameauthors} link ${gamelink}`);
+        webhooks.sendGameSubmitted(user.email, gamename, gameauthors, gamelink);
         res.status(200).send({Message: "Success!"})
         // TODO: store the submitted game info somewhere
         // also possibly 400 if game name (link?) is already in the list

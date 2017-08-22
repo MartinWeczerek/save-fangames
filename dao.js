@@ -20,6 +20,7 @@ module.exports = {
       userid INTEGER,
       name TEXT,
       link TEXT,
+      authors TEXT,
       private BOOLEAN DEFAULT 0,
       createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`);
   },
@@ -57,9 +58,9 @@ module.exports = {
     );
   },
 
-  insertGame: function(userid,gamename,gamelink,callback) {
-    db.run('INSERT INTO games (userid,name,link) VALUES ($userid,$name,$link)',
-      {$userid:userid,$name:gamename,$link:gamelink},
+  insertGame: function(userid,gamename,gamelink,gameauthors,callback) {
+    db.run('INSERT INTO games (userid,name,link,authors) VALUES ($userid,$name,$link,$authors)',
+      {$userid:userid,$name:gamename,$link:gamelink,$authors:gameauthors},
       function(err) {
         if (err) callback(err);
         else if (this.changes) callback();

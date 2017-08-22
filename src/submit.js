@@ -15,12 +15,14 @@ class Submit extends React.Component {
     super();
     this.state = {
         gamename: '',
+        gameauthors: '',
         gamelink: '',
         state: SubmitState.INPUT,
         errormsg: ''
     };
     this.handleChange = this.handleNameChange.bind(this);
-    this.handleChange2 = this.handleLinkChange.bind(this);
+    this.handleChange2 = this.handleAuthorsChange.bind(this);
+    this.handleChange3 = this.handleLinkChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     Auth.authenticateUser.callback = this.handleOnAuth.bind(this);
     Auth.deauthenticateUser.callback = this.handleOnDeauth.bind(this);
@@ -34,11 +36,17 @@ class Submit extends React.Component {
   }
 
   handleOnDeauth() {
-    this.setState({state: SubmitState.NOAUTH});
+    if (this.state.state != SubmitState.SUCCESS) {
+      this.setState({state: SubmitState.NOAUTH});
+    }
   }
 
   handleNameChange(event) {
       this.setState({gamename: event.target.value});
+  }
+
+  handleAuthorsChange(event) {
+      this.setState({gameauthors: event.target.value});
   }
 
   handleLinkChange(event) {
@@ -83,36 +91,29 @@ class Submit extends React.Component {
     var fd = new FormData();
     xhr.send(JSON.stringify({
       gamename: this.state.gamename,
+      gameauthors: this.state.gameauthors,
       gamelink: this.state.gamelink
     }));
-
-    /*console.log("Im doing something")
-    fs.writeFile('mynewfile3.txt', 'Hello content!', function (err) {
-      if (err) throw err;
-      console.log('Saved!');
-    });*/
   }
 
   render(){
     var inner = "";
     if (this.state.state == SubmitState.INPUT) {
       inner = (
-        <div>
-          <form onSubmit={this.handleSubmit}>
-              <p>
-              <label>Name of your fangame: </label>
-              <textarea value={this.state.gamename} onChange={this.handleChange} spellCheck="false" />
-              </p>
-              <p>
-              <label>Link to your fangame: </label>
-              <textarea value={this.state.gamelink} onChange={this.handleChange2} spellCheck="false" />
-              </p>
-              <p>
-              <input type="submit" value="Submit" />
-              </p>
-              <p>{this.state.errormsg}</p>
-          </form>
-        </div>
+        <form onSubmit={this.handleSubmit}>
+          <label>Name of your fangame: </label>
+          <input type="text" autoFocus value={this.state.gamename} onChange={this.handleChange} spellCheck="false" />
+          <br/>
+          <label>Creator name(s): </label>
+          <input type="text" value={this.state.gameauthors} onChange={this.handleChange2} spellCheck="false" />
+          <br/>
+          <label>Link to your fangame: </label>
+          <input type="text" value={this.state.gamelink} onChange={this.handleChange3} spellCheck="false" />
+          <br/>
+          <br/>
+          <input type="submit" value="Submit" />
+          <p><div className="error">{this.state.errormsg}</div></p>
+        </form>
       )
 
     } else if (this.state.state == SubmitState.SENDING) {
@@ -125,7 +126,7 @@ class Submit extends React.Component {
     } else if (this.state.state == SubmitState.SUCCESS) {
       inner = (
         <div>
-          <p>Your game {this.state.gamename} with link {this.state.gamelink} has been successfully submitted!</p>
+          <p>Your game {this.state.gamename} by {this.state.gameauthors} with link {this.state.gamelink} has been successfully submitted!</p>
         </div>
       );
     } else if (this.state.state == SubmitState.NOAUTH) {
@@ -136,7 +137,6 @@ class Submit extends React.Component {
 
     return(
       <div>
-        <p>Submit a game</p>
         <div id="gamesubmit">
           {inner}
         </div>

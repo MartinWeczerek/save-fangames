@@ -13,7 +13,7 @@
         <th>Released</th>
       </tr>
       {{~it.games :value:index}}
-      <tr><td><a href="{{=value.link}}">{{=value.name}}</a></td><td>{{=value.creators}}</td><td>{{=value.createdAt}}</td></tr>
+      <tr><td><a href="{{=value.link}}">{{=value.name}}</a></td><td>{{=value.authors}}</td><td>{{=value.createdAt}}</td></tr>
       {{~}}
     </table>
     <p>{{=it.other_sort_link}}</p>

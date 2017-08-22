@@ -13,21 +13,23 @@ body {
 
 #wrapper { text-align:center; margin:0 auto;max-width:100%; width:1000px; }
 
-#account { height:3em; line-height: 3em;
-    padding: 0 1em; text-align:right; vertical-align:middle; }
+#account { height:3em; padding: 0 1em; text-align:right;
+    vertical-align:middle; line-height:3em; }
+#account input[type=submit], button { margin-left: 0.5em; }
 
-#account-inputbox { position:absolute; margin-left:-300px;
-    width:300px; height:500px; background-color:#3E527A;
-    text-align:center; }
+#account-inputbox { position:absolute; margin-left:-17em;
+    width:15em; background-color:#3E527A;
+    text-align:center; padding:0.5em 1em 1em; line-height: 1.25em; }
 
 table.games { width: 80%; margin-left:auto; margin-right:auto; }
 table.games tr { width:100%; }
-table.games td:nth-child(1) { width:60%; }
 table.games td a { color:white; text-decoration:none; }
 table.games td a:hover { text-decoration:underline; }
 table.games td a:visited { color:#B79BE0; }
-table.games td:nth-child(2) { width:20%; }
-table.games td { width:auto; }
+table.games td:nth-child(1) { width:50%; }
+table.games td:nth-child(2) { width:25%; }
+table.games td:nth-child(3) { width:25%; }
+table.games td { width:auto; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; max-width:0; }
 table.games th { text-align:left; }
 
 a { color: #C6C2C4; }
@@ -35,20 +37,23 @@ a { color: #C6C2C4; }
 
 p { margin-top:2em; }
 
-textarea { height:1.7em; padding:0.3em; resize:horizontal; overflow:hidden; 
-    font-family:monospace;
-}
+#gamesubmit { width:60%; margin-left:auto; margin-right:auto; }
 
-input[type=submit] {
+label { display:block; text-align:left; padding:0.4em 0 0.1em; }
+
+input[type=text], input[type=password] { padding:0.1em; resize:none;
+    overflow:hidden; width:100%; font-size:1em; }
+
+input[type=submit], button {
     background:#3E5A99;
     color:white;
     padding: 0.3em 0.75em;
     border:0 none;
     cursor:pointer;
-    font-size:1.25em;
+    font-size:1em;
 }
 
-#gamesubmit {
-    height:300px; display:block; overflow:hidden;
-}
+/*#gamesubmit { height:500px; display:block; overflow:hidden; }*/
+
+.error { color:red; }
 
