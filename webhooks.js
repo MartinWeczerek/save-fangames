@@ -18,7 +18,7 @@ module.exports = {
       config.discord_webhook_url,
       {json: {content:message}},
       function(err,rsp,body) {
-        if (err || rsp.statusCode != 200) {
+        if (err || rsp.statusCode != 204) {
           console.log("webhook error: "+err);
         }
       }

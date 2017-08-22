@@ -29,6 +29,7 @@ var fs = require('fs');
 const uuidv4 = require('uuid/v4'); // Version 4 is Random
 const mail = require('./mail.js');
 const webhooks = require('./webhooks.js');
+const { URL } = require('url');
 
 var dao = require('./dao.js');
 // Create tables if don't exist already.
@@ -58,11 +59,39 @@ app.use(express.static(__dirname + '/www', {
   extensions: ['html'] // so "/submit" works as well as "/submit.html"
 }));
 
+app.get('/list/:order',function(req,res){
+  var daoFunc;
+  var otherSortLink;
+  if (req.params.order == 'new') {
+    daoFunc = dao.getPublicListGamesNewest;
+    otherSortLink = '<a href="/list/alpha">Sort alphabetically</a>';
+  } else if (req.params.order == 'alpha') {
+    daoFunc = dao.getPublicListGamesAlphabetical;
+    otherSortLink = '<a href="/list/new">Sort by release date</a>';
+  } else {
+    res.status(400).send({Message:'Supported orderings are /list/new and /list/alpha.'});
+    return;
+  }
+
+  daoFunc(function(err,games){
+    if (err) {
+      console.log(err);
+      res.status(500).send({Message:"Database error."});
+    } else {
+      res.status(200).send(dots.fulllist({"games":games,"other_sort_link":otherSortLink}));
+    }
+  });
+});
+
+app.get('/list',function(req,res){
+  res.redirect('/list/new');
+});
+
 app.get('/games',function(req,res){
   dao.getGames(req.query.mindate,function(err,games){
     if (err) {
       console.log(err)
-      res.status(500).send({Message:"Failed to load games: "+err});
+      res.status(500).send({Message:"Database error."});
     } else {
       res.status(200).send(games);
     }
@@ -73,7 +102,6 @@ app.get('/games',function(req,res){
 // Params: gamename, gamelink
 // Successful response: {}
 app.post('/submitgame', function(req, res){
-
   var gamename = req.body.gamename
   var gamelink = req.body.gamelink
   var token = req.header('Authorization');
@@ -89,6 +117,13 @@ app.post('/submitgame', function(req, res){
   } else if (!token) {
     res.status(400).send({Message: "Must set Authorization header."})
     return
+  }
+
+  try {
+    new URL(gamelink);
+  }catch(e){
+    res.status(400).send({Message: `Invalid URL: ${gamelink}.`});
+    return;
   }
 
   token = token.replace('Bearer ', '');

@@ -1,0 +1,23 @@
+<html>
+<head>
+  <script src="/bundle.js"></script>
+  <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+<body>
+  <div id="wrapper">
+    <div id="accountroot"></div>
+    <table class="games">
+      <tr>
+        <th>Name</th>
+        <th>Creator(s)</th>
+        <th>Released</th>
+      </tr>
+      {{~it.games :value:index}}
+      <tr><td><a href="{{=value.link}}">{{=value.name}}</a></td><td>{{=value.creators}}</td><td>{{=value.createdAt}}</td></tr>
+      {{~}}
+    </table>
+    <p>{{=it.other_sort_link}}</p>
+    <p><a href="/">Return to home page</a></p>
+  </div>
+</body>
+</html>

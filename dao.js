@@ -75,6 +75,23 @@ module.exports = {
     );
   },
 
+  getPublicListGamesNewest: function(callback) {
+    // TODO: return approval date instead of submit date
+    db.all('SELECT * FROM games WHERE private = 0 ORDER BY createdAt DESC',
+      {},
+      callback
+    );
+  },
+
+  getPublicListGamesAlphabetical: function(callback) {
+    // TODO: return approval date instead of submit date
+    // TODO: Better alphabetical ordering, e.g. I wanna Cat shows up next to I wanna be the Cat
+    db.all('SELECT * FROM games WHERE private = 0 ORDER BY name COLLATE NOCASE ASC',
+      {},
+      callback
+    );
+  },
+
   verifyUser: function(verifyhash, callback) {
     db.run('UPDATE users SET verifyhash = (""), active = 1 WHERE active = 0 AND verifyhash = ($verifyhash)',
       {$verifyhash:verifyhash},

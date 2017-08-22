@@ -20,6 +20,16 @@ body {
     width:300px; height:500px; background-color:#3E527A;
     text-align:center; }
 
+table.games { width: 80%; margin-left:auto; margin-right:auto; }
+table.games tr { width:100%; }
+table.games td:nth-child(1) { width:60%; }
+table.games td a { color:white; text-decoration:none; }
+table.games td a:hover { text-decoration:underline; }
+table.games td a:visited { color:#B79BE0; }
+table.games td:nth-child(2) { width:20%; }
+table.games td { width:auto; }
+table.games th { text-align:left; }
+
 a { color: #C6C2C4; }
     a:hover { text-decoration:none; }
 
