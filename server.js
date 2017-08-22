@@ -50,6 +50,9 @@ if (!config.jwt_secret) {
 if (!config.port) {
   throw('port not defined in config.');
 }
+if (!config.root_url) {
+  throw('root_url not defined in config.');
+}
 
 // Host static webpages
 app.use(express.static(__dirname + '/www', {
@@ -181,7 +184,7 @@ app.post('/register', function(req, res){
     }
 
     var verifyHash = uuidv4();
-    var verifyUrl = req.protocol+'://'+req.headers.host+'/verify/'+verifyHash;
+    var verifyUrl = config.root_url+'/verify/'+verifyHash;
 
     // Add user to the database.
     var hash = bcrypt.hashSync(password, saltRounds);
