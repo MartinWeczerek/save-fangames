@@ -53,6 +53,24 @@ if (!config.port) {
 if (!config.root_url) {
   throw('root_url not defined in config.');
 }
+if (!config.approval_check_schedule) {
+  throw('approval_check_schedule not defined in config.');
+}
+
+// Schedule periodic tasks.
+const schedule = require('node-schedule');
+schedule.scheduleJob(config.approval_check_schedule,function(){
+  dao.approveMaturedGames(function(err,games){
+    if (err) {
+      console.log(err);
+      return;
+    }
+    if (games.length > 0) {
+      console.log(`${games.length} games approved`);
+      webhooks.sendGamesApproved(games);
+    }
+  });
+});
 
 // Host static webpages
 app.use(express.static(__dirname + '/www', {

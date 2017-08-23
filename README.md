@@ -31,6 +31,9 @@ Create file config/config.json:
 "port": 3000,
 "jwt_secret": "Put something here!!!",
 "discord_webhook_url": "https://discordapp.com/api/webhooks/AAAAA",
+"discord_webhook_url_approved": "https://discordapp.com/api/webhooks/BBBBB",
+"approval_game_wait_seconds": "15",
+"approval_check_schedule": "*/5 * * * * *",
 "mail": {
     "options": {
         "host": "127.0.0.1",
@@ -42,7 +45,11 @@ Create file config/config.json:
 }
 ```
 
-Discord webhook URL may be omitted.
+Discord webhook URLs may be omitted.
+
+For approval check schedule, see https://www.npmjs.com/package/node-schedule. "0 0 * * * *" is at 00:00 every hour, "*/5 * * * * *" is every 5 seconds.
+
+For approval game wait seconds, 12*60*60 is 43200.
 
 For mail options, see https://nodemailer.com/smtp/#authentication
 

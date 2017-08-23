@@ -6,6 +6,15 @@ var dbFile = 'sf.db'
 var db = new sqlite3.Database(dbFile);
 console.log('Connected to database '+dbFile);
 
+// Load config.
+var fs = require('fs');
+var config = JSON.parse(fs.readFileSync('config/config.json'));
+if (!config.approval_game_wait_seconds) {
+  throw('approval_game_wait_seconds not defined in config.');
+}
+
+var moment = require('moment');
+
 module.exports = {
   ensureTablesCreated: function() {
     db.run(`CREATE TABLE IF NOT EXISTS users (
@@ -22,7 +31,10 @@ module.exports = {
       link TEXT,
       authors TEXT,
       private BOOLEAN DEFAULT 0,
-      createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`);
+      createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+      approved BOOLEAN DEFAULT 0,
+      approvedAt DATETIME,
+      rejected BOOLEAN DEFAULT 0)`);
   },
 
   getUserByEmail: function(email, callback) {
@@ -69,8 +81,26 @@ module.exports = {
     );
   },
 
+  approveMaturedGames: function(callback) {
+    var now = moment().utc().format('YYYY-MM-DD HH:mm:ss');
+    var cutoff = moment.utc().subtract(config.approval_game_wait_seconds, 'seconds').format('YYYY-MM-DD HH:mm:ss');
+    db.all('SELECT * FROM games WHERE approved = 0 AND createdAt < ($cutoff) AND rejected = 0',
+    {$cutoff:cutoff},
+    function(err,rows){
+      if (err) {
+        callback(err);
+        return;
+      }
+      db.run('UPDATE games SET approved = 1, approvedAt = ($now) WHERE approved = 0 AND createdAt < ($cutoff) AND rejected = 0',
+      {$now:now, $cutoff:cutoff},
+      function(err){
+        callback(err,rows);
+      });
+    });
+  },
+
   getGames: function(mindate,callback) {
-    db.all('SELECT * FROM games WHERE private = 0 AND createdAt >= $mindate',
+    db.all('SELECT * FROM games WHERE approved = 1 AND private = 0 AND approvedAt >= $mindate',
       {$mindate:mindate},
       callback
     );
@@ -78,7 +108,7 @@ module.exports = {
 
   getPublicListGamesNewest: function(callback) {
     // TODO: return approval date instead of submit date
-    db.all('SELECT * FROM games WHERE private = 0 ORDER BY createdAt DESC',
+    db.all('SELECT * FROM games WHERE approved = 1 AND private = 0 ORDER BY createdAt DESC',
       {},
       callback
     );
@@ -87,7 +117,7 @@ module.exports = {
   getPublicListGamesAlphabetical: function(callback) {
     // TODO: return approval date instead of submit date
     // TODO: Better alphabetical ordering, e.g. I wanna Cat shows up next to I wanna be the Cat
-    db.all('SELECT * FROM games WHERE private = 0 ORDER BY name COLLATE NOCASE ASC',
+    db.all('SELECT * FROM games WHERE approved = 1 AND private = 0 ORDER BY name COLLATE NOCASE ASC',
       {},
       callback
     );
