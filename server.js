@@ -77,6 +77,30 @@ app.use(express.static(__dirname + '/www', {
   extensions: ['html'] // so "/submit" works as well as "/submit.html"
 }));
 
+app.post('/myprofile',function(req,res){
+  var token = req.header('Authorization');
+  if (!token) {
+    res.status(400).send({Message: "Must set Authorization header."})
+    return
+  }
+  token = token.replace('Bearer ', '');
+
+  jwt.verify(token, config.jwt_secret, function(err, user) {
+    if (err) {
+      res.status(401).send({Message: 'Unauthorized.'});
+    } else {
+      dao.getGamesByUser(user.id,function(err,games){
+        if (err) {
+          console.log(err);
+          res.status(500).send({Message:"Database error."});
+        } else {
+          res.status(200).send(dots.mygames({"games":games}));
+        }
+      });
+    }
+  });
+});
+
 app.get('/list/:order',function(req,res){
   var daoFunc;
   var otherSortLink;
@@ -257,6 +281,7 @@ app.post('/login', function(req, res){
 function generateToken(user) {
   var u = {
     email: user.email,
+    id: user.id,
   };
 
   return token = jwt.sign(u, config.jwt_secret, {

@@ -1,0 +1,18 @@
+<table class="games mygames">
+  <tr>
+    <th>Name</th>
+    <th>Creator(s)</th>
+    <th>Submitted</th>
+    <th>Approved</th>
+  </tr>
+  {{~it.games :value:index}}
+  <tr>
+    <td><a href="{{=value.link}}">{{=value.name}}</a></td>
+    <td>{{=value.authors}}</td>
+    <td>{{=value.createdAt}}</td>
+    <td>{{? value.approvedAt}}{{=value.approvedAt}}
+        {{?? value.rejected}}Rejected
+        {{??}}in progress
+        {{?}}</td></tr>
+  {{~}}
+</table>

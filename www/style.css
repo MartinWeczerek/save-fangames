@@ -26,11 +26,14 @@ table.games tr { width:100%; }
 table.games td a { color:white; text-decoration:none; }
 table.games td a:hover { text-decoration:underline; }
 table.games td a:visited { color:#B79BE0; }
-table.games td:nth-child(1) { width:50%; }
-table.games td:nth-child(2) { width:25%; }
-table.games td:nth-child(3) { width:25%; }
-table.games td { width:auto; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; max-width:0; }
+table.games td { width:auto;max-width:0; }
 table.games th { text-align:left; }
+table.publicgames td:nth-child(1) { width:50%; }
+table.publicgames td:nth-child(2) { width:25%; }
+table.publicgames td:nth-child(3) { width:25%; }
+table.publicgames td { height:1.25em; overflow:hidden; white-space:nowrap;
+    text-overflow:ellipsis; }
+table.publicgames tr { line-height:1.25em; }
 
 a { color: #C6C2C4; }
     a:hover { text-decoration:none; }

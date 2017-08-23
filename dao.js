@@ -106,6 +106,13 @@ module.exports = {
     );
   },
 
+  getGamesByUser: function(userid,callback) {
+    db.all('SELECT * FROM games WHERE userid = $userid',
+      {$userid:userid},
+      callback
+    );
+  },
+
   getPublicListGamesNewest: function(callback) {
     // TODO: return approval date instead of submit date
     db.all('SELECT * FROM games WHERE approved = 1 AND private = 0 ORDER BY createdAt DESC',

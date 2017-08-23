@@ -150,6 +150,10 @@ class Account extends React.Component {
     this.setState({loggedin: false, typedemail: '', typedpassword: '', typedpassword2: ''});
   }
 
+  handleNameClicked(event) {
+    window.location.href = '/account';
+  }
+
   render() {
     if (this.state.sentverification) {
       return (
@@ -178,7 +182,8 @@ class Account extends React.Component {
     if (this.state.loggedin) {
       return (
         <div id="account">
-          {this.state.email}
+          &nbsp;
+          <input type="submit" value={this.state.email} onClick={this.handleNameClicked}/>
           <input type="submit" value="Log out" onClick={this.handleLogout}/>
         </div>
       )

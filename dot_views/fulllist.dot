@@ -6,14 +6,14 @@
 <body>
   <div id="wrapper">
     <div id="accountroot"></div>
-    <table class="games">
+    <table class="games publicgames">
       <tr>
         <th>Name</th>
         <th>Creator(s)</th>
         <th>Released</th>
       </tr>
       {{~it.games :value:index}}
-      <tr><td><a href="{{=value.link}}">{{=value.name}}</a></td><td>{{=value.authors}}</td><td>{{=value.createdAt}}</td></tr>
+      <tr><td><a href="{{=value.link}}">{{=value.name}}</a></td><td>{{=value.authors}}</td><td>{{=value.approvedAt}}</td></tr>
       {{~}}
     </table>
     <p>{{=it.other_sort_link}}</p>
