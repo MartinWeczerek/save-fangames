@@ -5,27 +5,15 @@ import Submit from './submit';
 import Account from './account';
 import MyProfile from './myprofile';
 
+function addComponent(elt, component) {
+  var root = document.getElementById(elt)
+  if (root) {
+    ReactDOM.render(component, root);
+  }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-  // TODO: there's gotta be a better way to do this
-  var submitroot = document.getElementById('submitroot')
-  if (submitroot) {
-    ReactDOM.render(
-      <Submit/>,
-      submitroot
-    );
-  }
-  var accountroot = document.getElementById('accountroot')
-  if (accountroot) {
-    ReactDOM.render(
-      <Account/>,
-      accountroot
-    );
-  }
-  var myprofileroot = document.getElementById('myprofileroot')
-  if (myprofileroot) {
-    ReactDOM.render(
-      <MyProfile/>,
-      myprofileroot
-    );
-  }
+  addComponent('submitroot', <Submit/>);
+  addComponent('accountroot', <Account/>);
+  addComponent('myprofileroot', <MyProfile/>);
 });

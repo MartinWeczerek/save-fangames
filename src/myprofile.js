@@ -5,39 +5,26 @@ class MyProfile extends React.Component {
   constructor() {
     super();
     this.state = {
-      authenticated:true,
+      authenticated:false,
       errormsg:'',
       loading:true,
       content:'',
     };
+
+    // Request profile data on startup if authenticated.
     if (Auth.isUserAuthenticated()) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('POST', '/myprofile', true);
-      xhr.setRequestHeader("Content-type", "application/json");
-      xhr.setRequestHeader("Authorization", `Bearer ${Auth.getToken()}`);
-
-      var accountObj = this;
-      xhr.onreadystatechange = function () {
-        if (this.readyState == 4) {
-          accountObj.setState({loading:false});
-          if (this.status == 200) {
-            accountObj.setState({content:xhr.responseText})
-          } else {
-            accountObj.setState({
-              errormsg: xhr.status.toString()+" "+xhr.statusText
-            });
-            try {
-              var json = JSON.parse(xhr.responseText);
-              accountObj.setState({errormsg: accountObj.state.errormsg+" - "+json.Message});
-            } catch(e) {
-            }
-          }
+      var component = this;
+      Auth.sendAuthedPost('/myprofile',{},function(xhr){
+        component.setState({loading:false});
+        if (xhr.status == 200) {
+          component.setState({content:xhr.responseText,
+            authenticated:true});
+        } else {
+          component.setState({
+            errormsg: Auth.parseErrorMsg(xhr)
+          });
         }
-      };
-      xhr.send();
-
-    } else {
-      this.state.authenticated = false;
+      });
     }
   }
 

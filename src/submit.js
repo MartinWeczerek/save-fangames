@@ -62,57 +62,38 @@ class Submit extends React.Component {
     }
 
     this.setState({state: SubmitState.SENDING});
-
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', '/submitgame', true);
-    xhr.setRequestHeader("Content-type", "application/json");
-    xhr.setRequestHeader("Authorization", `Bearer ${Auth.getToken()}`);
-
-    var submitObj = this;
-    xhr.onreadystatechange = function () {
-      if (this.readyState == 4) {
-        // Success changes to success state
-        if (this.status == 200) {
-          submitObj.setState({state: SubmitState.SUCCESS});
-        // Failure goes back to input state and displays error message (if any)
-        } else {
-          submitObj.setState({
-            state: SubmitState.INPUT,
-            errormsg: xhr.status.toString()+" "+xhr.statusText
-          });
-          try {
-            var json = JSON.parse(xhr.responseText);
-            submitObj.setState({errormsg: submitObj.state.errormsg+" - "+json.Message});
-          } catch(e) {
-          }
-        }
-      }
-    }
-    var fd = new FormData();
-    xhr.send(JSON.stringify({
-      gamename: this.state.gamename,
+    var component = this;
+    Auth.sendAuthedPost('/submitgame',
+      {gamename: this.state.gamename,
       gameauthors: this.state.gameauthors,
-      gamelink: this.state.gamelink
-    }));
+      gamelink: this.state.gamelink},
+      function(xhr){
+        if (xhr.status == 200) {
+          component.setState({state: SubmitState.SUCCESS});
+        } else {
+          component.setState({state: SubmitState.INPUT,
+            errormsg: Auth.parseErrorMessage(xhr)});
+        }
+    });
   }
 
-  render(){
-    var inner = "";
-    if (this.state.state == SubmitState.INPUT) {
-      inner = (
-        <form onSubmit={this.handleSubmit}>
-          <label>Name of your fangame: </label>
-          <input type="text" autoFocus value={this.state.gamename} onChange={this.handleChange} spellCheck="false" />
-          <br/>
-          <label>Creator name(s): </label>
-          <input type="text" value={this.state.gameauthors} onChange={this.handleChange2} spellCheck="false" />
-          <br/>
-          <label>Link to your fangame: </label>
-          <input type="text" value={this.state.gamelink} onChange={this.handleChange3} spellCheck="false" />
-          <br/>
-          <br/>
-          <input type="submit" value="Submit" />
-          <p><div className="error">{this.state.errormsg}</div></p>
+render(){
+  var inner = "";
+  if (this.state.state == SubmitState.INPUT) {
+    inner = (
+      <form onSubmit={this.handleSubmit}>
+        <label>Name of your fangame: </label>
+        <input type="text" autoFocus value={this.state.gamename} onChange={this.handleChange} spellCheck="false" />
+        <br/>
+        <label>Creator name(s): </label>
+        <input type="text" value={this.state.gameauthors} onChange={this.handleChange2} spellCheck="false" />
+        <br/>
+        <label>Link to your fangame: </label>
+        <input type="text" value={this.state.gamelink} onChange={this.handleChange3} spellCheck="false" />
+        <br/>
+        <br/>
+        <input type="submit" value="Submit" />
+        <div className="error"><p>{this.state.errormsg}</p></div>
         </form>
       )
 

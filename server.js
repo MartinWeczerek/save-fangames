@@ -77,11 +77,11 @@ app.use(express.static(__dirname + '/www', {
   extensions: ['html'] // so "/submit" works as well as "/submit.html"
 }));
 
-app.post('/myprofile',function(req,res){
+function verifyAuth(req, adminonly,callback){
   var token = req.header('Authorization');
   if (!token) {
-    res.status(400).send({Message: "Must set Authorization header."})
-    return
+    res.status(400).send({Message: "Must set Authorization header."});
+    return;
   }
   token = token.replace('Bearer ', '');
 
@@ -89,15 +89,21 @@ app.post('/myprofile',function(req,res){
     if (err) {
       res.status(401).send({Message: 'Unauthorized.'});
     } else {
-      dao.getGamesByUser(user.id,function(err,games){
-        if (err) {
-          console.log(err);
-          res.status(500).send({Message:"Database error."});
-        } else {
-          res.status(200).send(dots.mygames({"games":games}));
-        }
-      });
+      callback(user);
     }
+  });
+}
+
+app.post('/myprofile',function(req,res){
+  verifyAuth(req,false,function(user){
+    dao.getGamesByUser(user.id,function(err,games){
+      if (err) {
+        console.log(err);
+        res.status(500).send({Message:"Database error."});
+      } else {
+        res.status(200).send(dots.mygames({"games":games}));
+      }
+    });
   });
 });
 
@@ -160,10 +166,6 @@ app.post('/submitgame', function(req, res){
   } else if (!gameauthors) {
     res.status(400).send({Message: "Game authors cannot be empty."})
     return
-
-  } else if (!token) {
-    res.status(400).send({Message: "Must set Authorization header."})
-    return
   }
 
   try {
@@ -173,25 +175,20 @@ app.post('/submitgame', function(req, res){
     return;
   }
 
-  token = token.replace('Bearer ', '');
-  jwt.verify(token, config.jwt_secret, function(err, user) {
-    if (err) {
-      res.status(401).send({Message: 'Unauthorized.'});
-    } else {
-      dao.insertGame(user.id, gamename, gamelink, gameauthors, function(err){
-        if (err) {
-          console.log('SQLite error:');
-          console.log(err);
-          res.status(500).send({Message: 'Database error.'});
-          return;
-        }
-        console.log(`User ${user.email} submitted game ${gamename} by ${gameauthors} link ${gamelink}`);
-        webhooks.sendGameSubmitted(user.email, gamename, gameauthors, gamelink);
-        res.status(200).send({Message: "Success!"})
-        // TODO: store the submitted game info somewhere
-        // also possibly 400 if game name (link?) is already in the list
-      });
-    }      
+  verifyAuth(req,false,function(user){
+    dao.insertGame(user.id, gamename, gamelink, gameauthors, function(err){
+      if (err) {
+        console.log('SQLite error:');
+        console.log(err);
+        res.status(500).send({Message: 'Database error.'});
+        return;
+      }
+      console.log(`User ${user.email} submitted game ${gamename} by ${gameauthors} link ${gamelink}`);
+      webhooks.sendGameSubmitted(user.email, gamename, gameauthors, gamelink);
+      res.status(200).send({Message: "Success!"})
+      // TODO: store the submitted game info somewhere
+      // also possibly 400 if game name (link?) is already in the list
+    });
   });
 });
 

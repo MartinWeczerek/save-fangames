@@ -46,38 +46,20 @@ class Account extends React.Component {
   handleLogin(event) {
     this.setState({loggingin:true, errormsg:''});
 
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', '/login', true);
-    xhr.setRequestHeader("Content-type", "application/json");
-
-    var accountObj = this;
-    xhr.onreadystatechange = function () {
-      if (this.readyState == 4) {
-        accountObj.setState({loggingin: false});
-
-        if (this.status == 200) {
+    var component = this;
+    Auth.sendAuthedPost('/login',
+      {email: this.state.typedemail,
+      password: this.state.typedpassword},
+      function(xhr){
+        component.setState({loggingin: false});
+        if (xhr.status == 200) {
           var json = JSON.parse(xhr.responseText);
           Auth.authenticateUser(json.Token);
-          accountObj.setState({loggedin: true, loginbox: false, email: json.Email});
-
+          component.setState({loggedin: true, loginbox: false, email: json.Email});
         } else {
-          accountObj.setState({
-            errormsg: xhr.status.toString()+" "+xhr.statusText
-          });
-          try {
-            var json = JSON.parse(xhr.responseText);
-            accountObj.setState({errormsg: accountObj.state.errormsg+" - "+json.Message});
-          } catch(e) {
-          }
+          component.setState({errormsg: Auth.parseErrorMessage(xhr)});
         }
-      }
-    };
-
-    var fd = new FormData();
-    xhr.send(JSON.stringify({
-      email: this.state.typedemail,
-      password: this.state.typedpassword
-    }));
+    });
   }
 
   handleRegister(event) {
