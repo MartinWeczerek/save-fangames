@@ -194,8 +194,7 @@ app.post('/submitgame', function(req, res){
       console.log(`User ${user.email} submitted game ${gamename} by ${gameauthors} link ${gamelink}`);
       webhooks.sendGameSubmitted(user.email, gamename, gameauthors, gamelink);
       res.status(200).send({Message: "Success!"})
-      // TODO: store the submitted game info somewhere
-      // also possibly 400 if game name (link?) is already in the list
+      // TODO: possibly 400 if game name (link?) is already in the list
     });
   });
 });

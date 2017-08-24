@@ -70,37 +70,19 @@ class Account extends React.Component {
 
     this.setState({registering:true, errormsg:''});
 
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', '/register', true);
-    xhr.setRequestHeader("Content-type", "application/json");
-
-    var accountObj = this;
-    xhr.onreadystatechange = function () {
-      if (this.readyState == 4) {
-        accountObj.setState({registering: false});
-
-        if (this.status == 200) {
+    var component = this;
+    Auth.sendAuthedPost('/register',
+      {email: this.state.typedemail,
+      password: this.state.typedpassword},
+      function(xhr){
+        component.setState({registering: false});
+        if (xhr.status == 200) {
           var json = JSON.parse(xhr.responseText);
-          accountObj.setState({sentverification: true});
-
+          component.setState({sentverification: true});
         } else {
-          accountObj.setState({
-            errormsg: xhr.status.toString()+" "+xhr.statusText
-          });
-          try {
-            var json = JSON.parse(xhr.responseText);
-            accountObj.setState({errormsg: accountObj.state.errormsg+" - "+json.Message});
-          } catch(e) {
-          }
+          component.setState({errormsg: Auth.parseErrorMessage(xhr)});
         }
-      }
-    };
-
-    var fd = new FormData();
-    xhr.send(JSON.stringify({
-      email: this.state.typedemail,
-      password: this.state.typedpassword
-    }));
+    });
   }
 
   handleOpenLoginBox(event) {
@@ -141,94 +123,79 @@ class Account extends React.Component {
 
   render() {
     if (this.state.sentverification) {
-      return (<div id="account">
+      return (<span id="account">
           Verification email sent to {this.state.typedemail}. Click the link in the email.
-        </div>);
+        </span>);
     }
 
     if (this.state.loggingin) {
-      return (<div id="account">Logging in...</div>);
+      return (<span id="account">Logging in...</span>);
     }
 
     if (this.state.registering) {
-      return (<div id="account">Registering...</div>);
+      return (<span id="account">Registering...</span>);
     }
 
     if (this.state.loggedin) {
       var adminButton = "";
       if (Auth.isAdmin()) {
-        adminButton = (<input type="submit" value="Admin panel"
-          onClick={this.handleAdminClicked}/>);
+        adminButton = (<a onClick={this.handleAdminClicked}>
+          <span className="navItem">Admin panel</span></a>);
       }
       return (
-        <div id="account">
+        <span id="account">
           &nbsp;
-          <input type="submit" value={this.state.email} onClick={this.handleNameClicked}/>
+          <a onClick={this.handleNameClicked}>
+            <span className="navItem">Account</span></a>
           {adminButton}
+          <span className="email">{this.state.email}</span>
           <input type="submit" value="Log out" onClick={this.handleLogout}/>
-        </div>);
+        </span>);
     }
 
-    if (this.state.loginbox) {
-      // this dummy positioning div is kinda messy
-      var divStyle = {position:'relative', width:'0', height:'0', top:'100%', float:'right'}
+    if (this.state.loginbox || this.state.registerbox) {
+      var divStyle = {position:'absolute', width:'0', height:'0'}
+      var extraBox = "";
+      var submitFunc = this.handleLogin;
+      var buttonText = "Log in";
+      if (this.state.registerbox) {
+        extraBox = (<span><br/><label>Re-enter password: </label>
+          <input type="password" value={this.state.typedpassword2}
+            onChange={this.handleText3Change} spellCheck="false" /></span>);
+        submitFunc = this.handleRegister;
+        buttonText = "Register";
+      }
       return (
-        <div id="account">
+        <span id="account">
           &nbsp;
           <span className="error">{this.state.errormsg}</span>
           <input type="submit" value="X" onClick={this.handleCloseBox}/>
-          <div style={divStyle}>
+          <span style={divStyle}>
             <div id="account-inputbox">
-              <form onSubmit={this.handleLogin}>
+              <form onSubmit={submitFunc}>
                 <label>Email: </label>
                 <input type="text" autoFocus value={this.state.typedemail} onChange={this.handleText1Change} spellCheck="false" />
                 <br/>
                 <label>Password: </label>
                 <input type="password" value={this.state.typedpassword} onChange={this.handleText2Change} spellCheck="false" />
+                {extraBox}
                 <br/>
                 <br/>
-                <input type="submit" value="Log in"/>
+                <input type="submit" value={buttonText}/>
               </form>
             </div>
-          </div>
-        </div>
-      )
-
-    } else if (this.state.registerbox) {
-      // this dummy positioning div is kinda messy
-      var divStyle = {position:'relative', width:'0', height:'0', top:'100%', float:'right'}
-      return (
-        <div id="account">
-          &nbsp;
-          <span className="error">{this.state.errormsg}</span>
-          <input type="submit" value="X" onClick={this.handleCloseBox}/>
-          <div style={divStyle}>
-            <div id="account-inputbox">
-              <form onSubmit={this.handleRegister}>
-                <label>Email: </label>
-                <input type="text" autoFocus value={this.state.typedemail} onChange={this.handleText1Change} spellCheck="false" />
-                <br/>
-                <label>Password: </label>
-                <input type="password" value={this.state.typedpassword} onChange={this.handleText2Change} spellCheck="false" />
-                <br/>
-                <label>Re-enter password: </label>
-                <input type="password" value={this.state.typedpassword2} onChange={this.handleText3Change} spellCheck="false" />
-                <br/>
-                <br/>
-                <input type="submit" value="Register"/>
-              </form>
-            </div>
-          </div>
-        </div>
+          </span>
+        </span>
       )
 
     } else {
       return (
-        <div id="account">
+        <span id="account">
           &nbsp;
           <input type="submit" value="Log in" onClick={this.handleOpenLoginBox}/>
           <input type="submit" value="Register" onClick={this.handleOpenRegisterBox}/>
-        </div>);
+          <span style={{clear:'both'}} />
+        </span>);
     }
   }
 }
