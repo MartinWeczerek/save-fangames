@@ -1,7 +1,7 @@
 import React from 'react';
 import Auth from './auth';
 
-class MyProfile extends React.Component {
+class Admin extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -14,7 +14,7 @@ class MyProfile extends React.Component {
     if (Auth.isUserAuthenticated()) {
       var component = this;
       this.state.loading = true;
-      Auth.sendAuthedPost('/myprofile',{},function(xhr){
+      Auth.sendAuthedPost('/admin',{},function(xhr){
         component.setState({loading:false});
         if (xhr.status == 200) {
           component.setState({content:xhr.responseText,
@@ -34,13 +34,10 @@ class MyProfile extends React.Component {
     } else if (!this.state.authenticated) {
       return (<div><p>Not logged in.</p></div>);
     } else {
-      return (
-        <div>
-          <div dangerouslySetInnerHTML={{__html: this.state.content}}></div>
-          <p>Games are approved approximately 12 hours after submission.</p>
-        </div>);
+      return (<div dangerouslySetInnerHTML=
+        {{__html: this.state.content}}></div>);
     }
   }
 }
 
-export default MyProfile;
+export default Admin;

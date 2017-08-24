@@ -22,7 +22,8 @@ module.exports = {
       email TEXT,
       passwordhash TEXT,
       active BOOLEAN DEFAULT 0,
-      verifyhash TEXT)`);
+      verifyhash TEXT,
+      admin BOOLEAN DEFAULT 0)`);
 
     db.run(`CREATE TABLE IF NOT EXISTS games (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -34,7 +35,9 @@ module.exports = {
       createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
       approved BOOLEAN DEFAULT 0,
       approvedAt DATETIME,
-      rejected BOOLEAN DEFAULT 0)`);
+      rejected BOOLEAN DEFAULT 0,
+      rejectedAt DATETIME,
+      rejectedBy INTEGER)`);
   },
 
   getUserByEmail: function(email, callback) {

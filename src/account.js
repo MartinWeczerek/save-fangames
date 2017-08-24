@@ -135,41 +135,38 @@ class Account extends React.Component {
   handleNameClicked(event) {
     window.location.href = '/account';
   }
+  handleAdminClicked(event) {
+    window.location.href = '/admin';
+  }
 
   render() {
     if (this.state.sentverification) {
-      return (
-        <div id="account">
+      return (<div id="account">
           Verification email sent to {this.state.typedemail}. Click the link in the email.
-        </div>
-      )
+        </div>);
     }
 
     if (this.state.loggingin) {
-      return (
-        <div id="account">
-          Logging in...
-        </div>
-      )
+      return (<div id="account">Logging in...</div>);
     }
 
     if (this.state.registering) {
-      return (
-        <div id="account">
-          Registering...
-        </div>
-      )
+      return (<div id="account">Registering...</div>);
     }
 
     if (this.state.loggedin) {
+      var adminButton = "";
+      if (Auth.isAdmin()) {
+        adminButton = (<input type="submit" value="Admin panel"
+          onClick={this.handleAdminClicked}/>);
+      }
       return (
         <div id="account">
           &nbsp;
           <input type="submit" value={this.state.email} onClick={this.handleNameClicked}/>
+          {adminButton}
           <input type="submit" value="Log out" onClick={this.handleLogout}/>
-        </div>
-      )
-
+        </div>);
     }
 
     if (this.state.loginbox) {
@@ -224,14 +221,14 @@ class Account extends React.Component {
           </div>
         </div>
       )
+
     } else {
       return (
         <div id="account">
           &nbsp;
           <input type="submit" value="Log in" onClick={this.handleOpenLoginBox}/>
           <input type="submit" value="Register" onClick={this.handleOpenRegisterBox}/>
-        </div>
-      )
+        </div>);
     }
   }
 }

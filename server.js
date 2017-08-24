@@ -77,7 +77,7 @@ app.use(express.static(__dirname + '/www', {
   extensions: ['html'] // so "/submit" works as well as "/submit.html"
 }));
 
-function verifyAuth(req, adminonly,callback){
+function verifyAuth(req,res,adminonly,callback){
   var token = req.header('Authorization');
   if (!token) {
     res.status(400).send({Message: "Must set Authorization header."});
@@ -88,14 +88,22 @@ function verifyAuth(req, adminonly,callback){
   jwt.verify(token, config.jwt_secret, function(err, user) {
     if (err) {
       res.status(401).send({Message: 'Unauthorized.'});
+    } else if (adminonly && !user.admin) {
+      res.status(401).send({Message: 'Unauthorized.'});
     } else {
       callback(user);
     }
   });
 }
 
+app.post('/admin',function(req,res){
+  verifyAuth(req,res,true,function(user){
+    res.status(200).send('TODO: admin panel here');
+  });
+});
+
 app.post('/myprofile',function(req,res){
-  verifyAuth(req,false,function(user){
+  verifyAuth(req,res,false,function(user){
     dao.getGamesByUser(user.id,function(err,games){
       if (err) {
         console.log(err);
@@ -175,7 +183,7 @@ app.post('/submitgame', function(req, res){
     return;
   }
 
-  verifyAuth(req,false,function(user){
+  verifyAuth(req,res,false,function(user){
     dao.insertGame(user.id, gamename, gamelink, gameauthors, function(err){
       if (err) {
         console.log('SQLite error:');
@@ -279,6 +287,7 @@ function generateToken(user) {
   var u = {
     email: user.email,
     id: user.id,
+    admin: user.admin,
   };
 
   return token = jwt.sign(u, config.jwt_secret, {

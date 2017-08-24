@@ -1,3 +1,5 @@
+require('./jwt-decode.min');
+
 // https://vladimirponomarev.com/blog/authentication-in-react-apps-jwt
 class Auth {
   static authenticateUser(token) {
@@ -22,6 +24,15 @@ class Auth {
 
   static getToken() {
     return localStorage.getItem('jwtToken');
+  }
+
+  static isAdmin() {
+   try {
+      var decoded = jwt_decode(Auth.getToken());
+      return decoded.admin;
+    } catch(e) {
+      return false;
+    }
   }
 
   static sendAuthedPost(url, data, callback) {
