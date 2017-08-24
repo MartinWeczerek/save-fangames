@@ -14,10 +14,14 @@ body {
 #wrapper { text-align:center; margin:0 auto; max-width:100%; width:1000px; }
 
 nav { min-height:3em; padding: 0 1em; text-align:left;
-    vertical-align:middle; line-height:3em; background-color:#202A40; }
+    vertical-align:middle; line-height:3em; background-color:#1D263B; }
 nav:after { content:" "; display:block; height:0; clear:both; }
 nav .navItem { display:inline-block; min-width: 4em; height:3em;
     text-align:center; padding: 0 0.5em; float:left; }
+nav .navHome { font-size:1.25em; overflow:hidden; line-height:2.4em;
+    height:2.4em; color:#CFE6FF; }
+.navHome img { margin-right:0.4em; vertical-align:middle;
+    margin-bottom:0.2em; margin-right:0.1em; }
 
 #account { float:right; }
 nav .email { text-align:right; margin-left:0.5em; }
@@ -31,7 +35,8 @@ nav a { cursor:pointer; }
     text-align:center; padding:0.5em 1em 1em; line-height: 1.25em; 
     margin-top:3em; }
 
-table.games { width: 80%; margin-left:auto; margin-right:auto; }
+table.games { width: 80%; margin-left:auto; margin-right:auto;
+    margin-top:2em; }
 table.games tr { width:100%; }
 table.games td a { color:white; text-decoration:none; }
 table.games td a:hover { text-decoration:underline; }
@@ -50,7 +55,7 @@ a { color: #C6C2C4; }
 
 p { margin-top:2em; }
 
-#gamesubmit { width:60%; margin-left:auto; margin-right:auto; }
+#gamesubmit { width:40%; margin-left:auto; margin-right:auto; }
 
 label { display:block; text-align:left; padding:0.4em 0 0.1em; }
 

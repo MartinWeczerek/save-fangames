@@ -77,6 +77,30 @@ app.use(express.static(__dirname + '/www', {
   extensions: ['html'] // so "/submit" works as well as "/submit.html"
 }));
 
+app.get('/',function(req,res){
+  res.status(200).send(dots.base({
+    content:'<p>Welcome to fangame submission site!</p>',
+    navSelector:'.navHome'}));
+});
+
+app.get('/account',function(req,res){
+  res.status(200).send(dots.base({
+    content:'<div id="myprofileroot"></div>',
+    navSelector:'.navAccount'}));
+});
+
+app.get('/admin',function(req,res){
+  res.status(200).send(dots.base({
+    content:'<div id="adminroot"></div>',
+    navSelector:'.navAdmin'}));
+});
+
+app.get('/submit',function(req,res){
+  res.status(200).send(dots.base({
+    content:'<div id="submitroot"></div>',
+    navSelector:'.navSubmit'}));
+});
+
 function verifyAuth(req,res,adminonly,callback){
   var token = req.header('Authorization');
   if (!token) {
@@ -117,13 +141,13 @@ app.post('/myprofile',function(req,res){
 
 app.get('/list/:order',function(req,res){
   var daoFunc;
-  var otherSortLink;
+  var toplinks;
   if (req.params.order == 'new') {
     daoFunc = dao.getPublicListGamesNewest;
-    otherSortLink = '<a href="/list/alpha">Sort alphabetically</a>';
+    toplinks = '<a href="/list/alpha">Alphabetical</a> | Date';
   } else if (req.params.order == 'alpha') {
     daoFunc = dao.getPublicListGamesAlphabetical;
-    otherSortLink = '<a href="/list/new">Sort by release date</a>';
+    toplinks = 'Alphabetical | <a href="/list/new">Date</a>';
   } else {
     res.status(400).send({Message:'Supported orderings are /list/new and /list/alpha.'});
     return;
@@ -134,13 +158,16 @@ app.get('/list/:order',function(req,res){
       console.log(err);
       res.status(500).send({Message:"Database error."});
     } else {
-      res.status(200).send(dots.fulllist({"games":games,"other_sort_link":otherSortLink}));
+      var content = dots.fulllist({games:games,
+        toplinks:toplinks})
+      res.status(200).send(dots.base({content:content,
+        navSelector:'.navList'}));
     }
   });
 });
 
 app.get('/list',function(req,res){
-  res.redirect('/list/new');
+  res.redirect('/list/alpha');
 });
 
 app.get('/games',function(req,res){
@@ -312,7 +339,9 @@ app.get('/verify/:token', function(req, res){
           res.status(400).send({Message: 'Database error.'});
         } else {
           var token = generateToken(row);
-          res.status(200).send(dots.verified({token: token}));
+          res.status(200).send(dots.base({setToken: token,
+            content:'<p>Success! Your account is now activated!</p>',
+            navSelector:'.nothing'}));
         }
       });
     }

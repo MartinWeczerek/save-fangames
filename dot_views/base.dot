@@ -1,0 +1,21 @@
+<html>
+<head>
+  <script src="/bundle.js"></script>
+  <link rel="stylesheet" type="text/css" href="/style.css">
+  <script>
+    document.styleSheets[0].insertRule('{{=it.navSelector}} { background-color:#3E517A; }', 1);
+    {{? it.setToken}}
+    localStorage.setItem('jwtToken', '{{=it.setToken}}');
+    {{?}}
+  </script>
+</head>
+<body>
+  <div id="wrapper">
+    <nav id=nav>
+      <a href="/"><span class="navItem navHome"><img src='/images/logocherry.png'></img>Blue</span></a><a href="/list"><span class="navItem navList">List</span></a><a href="/submit"><span class="navItem navSubmit">Submit</span></a>
+      <span id="accountroot"></span>
+    </nav>
+    {{=it.content}}
+  </div>
+</body>
+</html>
