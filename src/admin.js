@@ -8,22 +8,88 @@ class Admin extends React.Component {
       loading:false,
       authenticated:false,
       errormsg:'',
-      content:'',
+
+      reports:[],
+      order:'DESC',
+      type:'all',
+      answered:0,
+      reportsuccessmsg:'',
+      reporterrormsg:'',
     };
 
     if (Auth.isUserAuthenticated()) {
-      var component = this;
       this.state.loading = true;
-      Auth.sendAuthedPost('/admin',{},function(xhr){
-        component.setState({loading:false});
+      this.filter(null);
+    }
+
+    this.filter = this.filter.bind(this);
+    this.filterChange = this.filterChange.bind(this);
+  }
+
+  filter(event) {
+    if (event) {
+      event.preventDefault();
+    }
+
+    var component = this;
+    Auth.sendAuthedPost('/admin',
+      {order:this.state.order,type:this.state.type,answered:this.state.answered},
+      function(xhr){
+      component.setState({loading:false});
+      if (xhr.status == 200) {
+        component.setState({authenticated:true,
+          reports:JSON.parse(xhr.responseText)});
+      } else {
+        component.setState({errormsg: Auth.parseErrorMessage(xhr)});
+      }
+    });
+  }
+
+  filterChange(event) {
+    const name = event.target.name;
+    const value = event.target.value;
+    this.setState({[name]:value,loading:true},function(){
+      this.filter(null);
+    });
+  }
+
+  rejectGame(gameid, reportindex) {
+    if (window.confirm("Are you sure you want to reject the game?")) {
+      var component = this;
+      Auth.sendAuthedPost('/admin/rejectgame',
+      {gameid:gameid},
+      function(xhr){
         if (xhr.status == 200) {
-          component.setState({content:xhr.responseText,
-            authenticated:true});
+          var newReports = component.state.reports.slice();
+          newReports.splice(reportindex, 1);
+          component.setState({reportsuccessmsg:`Game #${gameid} rejected.`,
+            reporterrormsg:'',
+            reports:newReports});
         } else {
-          component.setState({errormsg: Auth.parseErrorMessage(xhr)});
+          component.setState({reportsuccessmsg:'',
+            reporterrormsg:Auth.parseErrorMessage(xhr)});
         }
       });
     }
+  }
+
+  reportJSX(r, i) {
+    console.log(i);
+    var actionButton = '';
+    if (r.type == 'game_submit') {
+      actionButton = <span><br/><br/>
+        <input type="submit" onClick={() => this.rejectGame(r.target_id, i)} value="Reject Game" />
+      </span>;
+    }
+    return (
+    <div className="report" key={r.id}>
+      <div className="reportid">{r.id}</div>
+      <div className="reportcontents">
+        {r.created_at}<br/>{r.type}<br/><br/>{r.report}
+        {actionButton}
+      </div>
+    </div>
+    );
   }
 
   render() {
@@ -34,8 +100,25 @@ class Admin extends React.Component {
     } else if (!this.state.authenticated) {
       return (<div><p>Not logged in.</p></div>);
     } else {
-      return (<div dangerouslySetInnerHTML=
-        {{__html: this.state.content}}></div>);
+      return (<div id="adminpanel">
+          <form onSubmit={this.filter}>
+            <label>Type: </label>
+            <select name="type" value={this.state.type} onChange={this.filterChange}>
+              <option value="all">All</option>
+              <option value="game_submit">game_submit</option>
+            </select>
+            <br/>
+            <label>Order: </label>
+            <select name="order" value={this.state.order} onChange={this.filterChange}>
+              <option value="DESC">Newest</option>
+              <option value="ASC">Oldest</option>
+            </select>
+          </form>
+          <span>{this.state.reportsuccessmsg}</span>
+          <span className="error">{this.state.reporterrormsg}</span>
+          <p></p>
+          {this.state.reports.map((r, i) => this.reportJSX(r, i))}
+        </div>);
     }
   }
 }

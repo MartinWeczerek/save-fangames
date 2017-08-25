@@ -15,7 +15,7 @@ if (!config.approval_game_wait_seconds) {
 
 var moment = require('moment');
 
-module.exports = {
+var self = module.exports = {
   ensureTablesCreated: function() {
     db.run(`CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -38,6 +38,44 @@ module.exports = {
       rejected BOOLEAN DEFAULT 0,
       rejectedAt DATETIME,
       rejectedBy INTEGER)`);
+
+    db.run(`CREATE TABLE IF NOT EXISTS reports (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      type TEXT,
+      target_id INTEGER,
+      report TEXT,
+      reporter_id INTEGER,
+      answered BOOLEAN DEFAULT 0,
+      answered_by_id INTEGER,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      answered_at DATETIME)`);
+  },
+
+  insertReport: function(type, target_id, report, reporter_id, callback) {
+    db.run('INSERT INTO reports (type,target_id,report,reporter_id) VALUES ($type,$target_id,$report,$reporter_id)',
+      {$type:type, $target_id:target_id, $report:report, $reporter_id:reporter_id},
+      callback);
+  },
+
+  getReports: function(type, order, answered, callback) {
+    if (order != 'ASC' && order != 'DESC') {
+      callback('Invalid order given to getReports: '+order);
+    }
+    if (type == 'all') {
+      db.all(`SELECT * FROM reports WHERE answered = $answered ORDER BY id ${order}`,
+        {$answered:answered},
+        callback);
+    } else {
+      db.all(`SELECT * FROM reports WHERE type = $type AND answered = $answered ORDER BY id ${order}`,
+        {$type:type, $answered:answered},
+        callback);
+    }
+  },
+
+  rejectGame: function(gameid, callback) {
+    db.run('UPDATE games SET rejected = 1, approved = 0 WHERE id = $gameid',
+      {$gameid:gameid},
+      callback);
   },
 
   getUserByEmail: function(email, callback) {
@@ -73,12 +111,15 @@ module.exports = {
     );
   },
 
-  insertGame: function(userid,gamename,gamelink,gameauthors,callback) {
+  insertGame: function(user,gamename,gamelink,gameauthors,callback) {
     db.run('INSERT INTO games (userid,name,link,authors) VALUES ($userid,$name,$link,$authors)',
-      {$userid:userid,$name:gamename,$link:gamelink,$authors:gameauthors},
+      {$userid:user.id,$name:gamename,$link:gamelink,$authors:gameauthors},
       function(err) {
         if (err) callback(err);
-        else if (this.changes) callback();
+        else if (this.changes) {
+          var report = `${user.email} submitted game ${gamename} by ${gameauthors} link ${gamelink}`
+          self.insertReport('game_submit', this.lastID, report, user.id, callback);
+        }
         else callback("Database error: insert failed to change");
       }
     );

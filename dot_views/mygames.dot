@@ -13,6 +13,7 @@
     <td>{{? value.approvedAt}}{{=value.approvedAt}}
         {{?? value.rejected}}Rejected
         {{??}}in progress
-        {{?}}</td></tr>
+        {{?}}</td>
+    <td>{{? value.rejected}}Rejected{{?}}</td></tr>
   {{~}}
 </table>

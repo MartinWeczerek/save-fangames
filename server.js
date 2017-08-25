@@ -72,7 +72,7 @@ schedule.scheduleJob(config.approval_check_schedule,function(){
   });
 });
 
-// Host static webpages
+// Host static content.
 app.use(express.static(__dirname + '/www', {
   extensions: ['html'] // so "/submit" works as well as "/submit.html"
 }));
@@ -122,7 +122,29 @@ function verifyAuth(req,res,adminonly,callback){
 
 app.post('/admin',function(req,res){
   verifyAuth(req,res,true,function(user){
-    res.status(200).send('TODO: admin panel here');
+    dao.getReports(req.body.type,req.body.order,req.body.answered,
+      function(err,reports){
+        if (err) {
+          console.log(err);
+          res.status(500).send({Message:"Database error."});
+        } else {
+          res.status(200).send(reports);
+        }
+      });
+  });
+});
+
+app.post('/admin/rejectgame',function(req,res){
+  verifyAuth(req,res,true,function(user){
+    res.status(200).send({Message:"hi"});
+    dao.rejectGame(req.body.gameid,function(err){
+        if (err) {
+          console.log(err);
+          res.status(500).send({Message:"Database error."});
+        } else {
+          res.status(200).send();
+        }
+      });
   });
 });
 
@@ -211,14 +233,13 @@ app.post('/submitgame', function(req, res){
   }
 
   verifyAuth(req,res,false,function(user){
-    dao.insertGame(user.id, gamename, gamelink, gameauthors, function(err){
+    dao.insertGame(user, gamename, gamelink, gameauthors, function(err){
       if (err) {
         console.log('SQLite error:');
         console.log(err);
         res.status(500).send({Message: 'Database error.'});
         return;
       }
-      console.log(`User ${user.email} submitted game ${gamename} by ${gameauthors} link ${gamelink}`);
       webhooks.sendGameSubmitted(user.email, gamename, gameauthors, gamelink);
       res.status(200).send({Message: "Success!"})
       // TODO: possibly 400 if game name (link?) is already in the list

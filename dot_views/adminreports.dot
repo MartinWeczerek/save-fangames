@@ -1,0 +1,5 @@
+{{~it.reports :value:index}}
+<div>
+{{=value.id}}
+</div>
+{{~}}

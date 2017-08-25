@@ -13,6 +13,13 @@ body {
 
 #wrapper { text-align:center; margin:0 auto; max-width:100%; width:1000px; }
 
+#adminpanel { text-align:left; font-size:0.85em; }
+.report { width:100%; min-height:4em; margin-top:0.5em;
+    background-color:hsla(0,0%,0%, 0.2); text-align:left; display:flex; }
+.reportid { display:inline-block; height:4em; width:4em; font-size:1.75em; 
+    text-align:center; vertical-align:middle; line-height:4em; }
+.reportcontents { display:inline-block; flex:1; padding:0.5em 0; }
+
 nav { min-height:3em; padding: 0 1em; text-align:left;
     vertical-align:middle; line-height:3em; background-color:#1D263B; }
 nav:after { content:" "; display:block; height:0; clear:both; }
@@ -49,6 +56,8 @@ table.publicgames td:nth-child(3) { width:25%; }
 table.publicgames td { height:1.25em; overflow:hidden; white-space:nowrap;
     text-overflow:ellipsis; }
 table.publicgames tr { line-height:1.25em; }
+table.mygames table.mygames th, table.mygames td { border:1px solid #aaa; padding: 0.4em; }
+table.mygames { border-collapse:collapse; }
 
 a { color: #C6C2C4; }
     a:hover { text-decoration:none; }
@@ -70,8 +79,7 @@ input[type=submit], button {
     cursor:pointer;
     font-size:1em;
 }
-
-/*#gamesubmit { height:500px; display:block; overflow:hidden; }*/
+select { font-size:1em; padding:0.1em; }
 
 .error { color:red; }
 

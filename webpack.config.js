@@ -11,6 +11,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'www'),
     filename: 'bundle.js',
+    library: 'BundleEntry', // Let non-bundled client JS can access Auth class.
   },
   module: {
     rules: [
