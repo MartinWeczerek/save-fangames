@@ -53,33 +53,46 @@ class Admin extends React.Component {
     });
   }
 
+  sendAdminCommand(url, data, successmsg, reportindex) {
+    var component = this;
+    Auth.sendAuthedPost(url, data, function(xhr){
+      if (xhr.status == 200) {
+        var newReports = component.state.reports.slice();
+        //newReports.splice(reportindex, 1);
+        component.setState({reportsuccessmsg:successmsg,
+          reporterrormsg:'',
+          reports:newReports});
+      } else {
+        component.setState({reportsuccessmsg:'',
+          reporterrormsg:Auth.parseErrorMessage(xhr)});
+      }
+    });
+  }
+
   rejectGame(gameid, reportindex) {
-    if (window.confirm("Are you sure you want to reject the game?")) {
-      var component = this;
-      Auth.sendAuthedPost('/admin/rejectgame',
-      {gameid:gameid},
-      function(xhr){
-        if (xhr.status == 200) {
-          var newReports = component.state.reports.slice();
-          newReports.splice(reportindex, 1);
-          component.setState({reportsuccessmsg:`Game #${gameid} rejected.`,
-            reporterrormsg:'',
-            reports:newReports});
-        } else {
-          component.setState({reportsuccessmsg:'',
-            reporterrormsg:Auth.parseErrorMessage(xhr)});
-        }
-      });
+    if (window.confirm('Are you sure you want to reject the game?')) {
+      this.sendAdminCommand('/admin/rejectgame', {gameid:gameid},
+        `Game #${gameid} rejected.`, reportindex);
+    }
+  }
+
+  banUser(userid, reportindex) {
+    if (window.confirm('Are you sure you want to ban this user?')) {
+      this.sendAdminCommand('/admin/banuser', {userid:userid},
+        `User #${userid} banned.`, reportindex);
     }
   }
 
   reportJSX(r, i) {
-    console.log(i);
     var actionButton = '';
     if (r.type == 'game_submit') {
       actionButton = <span><br/><br/>
-        <input type="submit" onClick={() => this.rejectGame(r.target_id, i)} value="Reject Game" />
-      </span>;
+        <input type="submit" onClick={() => this.rejectGame(r.target_id, i)}
+        value="Reject Game" /></span>;
+    } else if (r.type == 'user_verify') {
+      actionButton = <span><br/><br/>
+        <input type="submit" onClick={() => this.banUser(r.target_id, i)}
+        value="Ban User" /></span>;
     }
     return (
     <div className="report" key={r.id}>
@@ -106,6 +119,8 @@ class Admin extends React.Component {
             <select name="type" value={this.state.type} onChange={this.filterChange}>
               <option value="all">All</option>
               <option value="game_submit">game_submit</option>
+              <option value="user_verify">user_verify</option>
+              <option value="admin">admin</option>
             </select>
             <br/>
             <label>Order: </label>

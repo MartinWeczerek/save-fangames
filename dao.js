@@ -23,7 +23,8 @@ var self = module.exports = {
       passwordhash TEXT,
       active BOOLEAN DEFAULT 0,
       verifyhash TEXT,
-      admin BOOLEAN DEFAULT 0)`);
+      admin BOOLEAN DEFAULT 0,
+      banned BOOLEAN DEFAULT 0)`);
 
     db.run(`CREATE TABLE IF NOT EXISTS games (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -72,10 +73,34 @@ var self = module.exports = {
     }
   },
 
-  rejectGame: function(gameid, callback) {
-    db.run('UPDATE games SET rejected = 1, approved = 0 WHERE id = $gameid',
-      {$gameid:gameid},
-      callback);
+  rejectGame: function(gameid, adminuser, callback) {
+    self.getGameById(gameid, function(err,game){
+      if (err) callback(err);
+      else db.run('UPDATE games SET rejected = 1, approved = 0 WHERE id = $gameid',
+        {$gameid:game.id},
+        function(err){
+        if (err) callback(err);
+        else {
+          var report = `Game ${game.name} was rejected by ${adminuser.email}`;
+          self.insertReport('admin', game.id, report, adminuser.id, callback);
+        }
+      });
+    })
+  },
+
+  banUser: function(userid, adminuser, callback) {
+    self.getUserById(userid,function(err,user){
+      if (err) callback(err);
+      else db.run('UPDATE users SET banned = 1 WHERE id = $userid',
+        {$userid:user.id},
+        function(err){
+        if (err) callback(err);
+        else {
+          var report = `User ${user.email} was banned by ${adminuser.email}`;
+          self.insertReport('admin', user.id, report, adminuser.id, callback);
+        }
+      });
+    });
   },
 
   getUserByEmail: function(email, callback) {
@@ -90,6 +115,11 @@ var self = module.exports = {
       {$id:id},
       callback
     );
+  },
+
+  getGameById: function(id,callback){
+    db.get('SELECT * FROM games WHERE approved = 1 AND id = $id',
+    {$id:id},callback);
   },
 
   insertUser: function(email, hash, verifyhash, callback) {
@@ -182,7 +212,15 @@ var self = module.exports = {
           callback(err);
         } else {
           if (this.changes) { // set by sqlite3
-            callback(err, this.lastID);
+            self.getUserById(this.lastID, function(err, user) {
+              if (err) {
+                callback(err);
+              } else {
+                var report = `${user.email} verified their email/account.`;
+                self.insertReport('user_verify', user.id, report, user.id,
+                  function(err){callback(err, user);});
+              }
+            });
           } else {
             callback('verifyUser no rows updated');
           }

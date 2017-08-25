@@ -115,7 +115,13 @@ function verifyAuth(req,res,adminonly,callback){
     } else if (adminonly && !user.admin) {
       res.status(401).send({Message: 'Unauthorized.'});
     } else {
-      callback(user);
+      dao.getUserById(user.id,function(err,user){
+        if (user.banned) {
+          res.status(401).send({Message: 'Unauthorized. You have been banned.'});
+        } else {
+          callback(user);
+        }
+      });
     }
   });
 }
@@ -136,8 +142,20 @@ app.post('/admin',function(req,res){
 
 app.post('/admin/rejectgame',function(req,res){
   verifyAuth(req,res,true,function(user){
-    res.status(200).send({Message:"hi"});
-    dao.rejectGame(req.body.gameid,function(err){
+    dao.rejectGame(req.body.gameid,user,function(err){
+        if (err) {
+          console.log(err);
+          res.status(500).send({Message:"Database error."});
+        } else {
+          res.status(200).send();
+        }
+      });
+  });
+});
+
+app.post('/admin/banuser',function(req,res){
+  verifyAuth(req,res,true,function(user){
+    dao.banUser(req.body.userid,user,function(err){
         if (err) {
           console.log(err);
           res.status(500).send({Message:"Database error."});
@@ -314,6 +332,7 @@ app.post('/login', function(req, res){
     if (err) {
       console.log(err);
       res.status(500).send({Message: 'Database error.'});
+      return;
     }
     if (!row) {
       res.status(401).send({Message: 'Unauthorized.'});
@@ -322,8 +341,12 @@ app.post('/login', function(req, res){
 
     var valid = bcrypt.compareSync(password, row.passwordhash);
     if (valid) {
-      var token = generateToken(row);
-      res.status(200).send({Email: email, Token: token});
+      if (row.banned) {
+        res.status(401).send({Message: 'Unauthorized. You have been banned.'});
+      } else {
+        var token = generateToken(row);
+        res.status(200).send({Email: email, Token: token});
+      }
     } else {
       res.status(401).send({Message: 'Unauthorized.'});
     }
@@ -342,29 +365,20 @@ function generateToken(user) {
   });
 }
 
-// Verify email endpoint.
-// Successful response: Webpage
 app.get('/verify/:token', function(req, res){
   var token = req.params.token;
   if (!token) {
     res.status(400).send({Message: 'Must provide token in url.'});
   }
-  dao.verifyUser(token, function(err, lastID) {
+  dao.verifyUser(token, function(err, user) {
     if (err) {
       console.log(err);
       res.status(400).send({Message: 'Database error.'});
     } else {
-      dao.getUserById(lastID, function(err, row) {
-        if (err) {
-          console.log(err);
-          res.status(400).send({Message: 'Database error.'});
-        } else {
-          var token = generateToken(row);
-          res.status(200).send(dots.base({setToken: token,
-            content:'<p>Success! Your account is now activated!</p>',
-            navSelector:'.nothing'}));
-        }
-      });
+      var token = generateToken(user);
+      res.status(200).send(dots.base({setToken: token,
+        content:'<p>Success! Your account is now activated!</p>',
+        navSelector:'.nothing'}));
     }
   });
 });

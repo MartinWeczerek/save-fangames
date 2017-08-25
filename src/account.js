@@ -44,6 +44,7 @@ class Account extends React.Component {
   }
 
   handleLogin(event) {
+    event.preventDefault();
     this.setState({loggingin:true, errormsg:''});
 
     var component = this;
@@ -63,6 +64,7 @@ class Account extends React.Component {
   }
 
   handleRegister(event) {
+    event.preventDefault();
     if (this.state.typedpassword != this.state.typedpassword2) {
       this.setState({errormsg:'Passwords do not match.'});
       return;
