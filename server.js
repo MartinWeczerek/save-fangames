@@ -78,8 +78,11 @@ app.use(express.static(__dirname + '/www', {
 }));
 
 app.get('/',function(req,res){
+  // TODO: populate new releases
+  var releases = [{date:"8/25",games:[{name:"Game 3",link:"https://google.com"},{name:"Game 4",link:"https://google.com"}]},{date:"8/26",games:[{name:"Game 1",link:"https://google.com"},{name:"Game 2",link:"https://google.com"}]}];
+  var content = dots.homepage({releases:releases});
   res.status(200).send(dots.base({
-    content:'<p>Welcome to fangame submission site!</p>',
+    content:content,
     navSelector:'.navHome'}));
 });
 
@@ -90,9 +93,10 @@ app.get('/admin',function(req,res){
 });
 
 app.get('/submit',function(req,res){
+  var content = dots.submit({});
   res.status(200).send(dots.base({
-    content:'<div id="myprofileroot"></div><div id="submitroot">Enable JavaScript to log in and view this page.</div>',
-    navSelector:'.nothing'}));
+    content:content,
+    navSelector:'.navSubmit'}));
 });
 
 function verifyAuth(req,res,adminonly,callback){

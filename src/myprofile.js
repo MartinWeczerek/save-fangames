@@ -37,7 +37,6 @@ class MyProfile extends React.Component {
       return (
         <div>
           <div dangerouslySetInnerHTML={{__html: this.state.content}}></div>
-          <p>Games are approved approximately 12 hours after submission.</p>
         </div>);
     }
   }

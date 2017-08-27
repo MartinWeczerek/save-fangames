@@ -154,10 +154,12 @@ class Account extends React.Component {
 
     if (this.state.loginbox || this.state.registerbox) {
       var divStyle = {position:'absolute', width:'0', height:'0'}
+      var extraTop = "";
       var extraBox = "";
       var submitFunc = this.handleLogin;
       var buttonText = "Log in";
       if (this.state.registerbox) {
+        extraTop = (<span className="moreinfo">Your email address will not be public, will only be seen by moderators, and we won&#39;t share it.</span>);
         extraBox = (<span><br/><label>Re-enter password: </label>
           <input type="password" value={this.state.typedpassword2}
             onChange={this.handleText3Change} spellCheck="false" /></span>);
@@ -172,6 +174,7 @@ class Account extends React.Component {
           <span style={divStyle}>
             <div id="account-inputbox">
               <form onSubmit={submitFunc}>
+                {extraTop}
                 <label>Email: </label>
                 <input type="text" autoFocus value={this.state.typedemail} onChange={this.handleText1Change} spellCheck="false" />
                 <br/>

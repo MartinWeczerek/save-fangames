@@ -5,7 +5,7 @@
 body {
     background-color:#334466;
     background-image:url("images/bgcherry.png");
-    background-position:center 15%;
+    background-position:center 25%;
     background-repeat:no-repeat;
     color:white;
     font-size:1.25em;
@@ -15,24 +15,24 @@ body {
 
 #header { background-color:#1D263B; width:100%; }
 #header-inner { margin:0 auto; max-width:100%; width:1000px; 
-    margin:0 auto; padding:0 0.5em; }
+    padding:0 0.5em; }
 
 #logo { float:left; }
 #logo { font-size:1.25em; line-height:2.4em;
     height:2.4em; color:#CFE6FF; padding:0 0.5em; }
 #logo img { margin-right:0.4em; vertical-align:middle;
     margin-bottom:0.2em; margin-right:0.1em; }
-#accountroot { float:right; margin-right:0.5em; }
+#accountroot { float:right; margin-right:1em; }
 #account .email { text-align:right; margin-left:0.5em; }
 #account input[type=submit], button { margin-left:0.5em; }
 
 .clearboth { clear:both; }
 
-nav { min-height:3em; text-align:left;
-    vertical-align:middle; line-height:3em; }
+nav { min-height:2.25em; text-align:left;
+    vertical-align:middle; line-height:2.25em; }
 nav:after { content:" "; display:block; height:0; clear:both; }
-nav .navItem { display:inline-block; min-width: 4em; height:3em;
-    text-align:center; padding: 0 0.5em; float:left; margin:0 0.5em 0.5em 0; }
+nav .navItem { display:inline-block; min-width: 4em; height:2.25em;
+    text-align:center; padding: 0 0.75em; float:left; margin:0 0.5em 0.5em 0; }
 nav .navItem:hover { background-color:#3E517A; }
 nav a { cursor:pointer; }
 
@@ -40,6 +40,8 @@ nav a { cursor:pointer; }
     width:15em; background-color:#3E527A;
     text-align:center; padding:0.5em 1em 1em; line-height: 1.25em; 
     margin-top:3em; }
+
+#content { padding:1em 0.5em 2em 0.5em; }
 
 #adminpanel { text-align:left; font-size:0.85em; }
 .report { width:100%; min-height:4em; margin-top:0.5em;
@@ -68,11 +70,15 @@ table.mygames { border-collapse:collapse; }
 a { color: #C6C2C4; }
     a:hover { text-decoration:none; }
 
-p { margin-top:2em; }
+p { margin-top:1em; }
+
+h2 { margin-top:1em; font-weight:normal; font-size: 1.75em; }
+h3 { margin-top:2em; font-weight:normal; font-size:1.25em; }
 
 #gamesubmit { width:40%; margin-left:auto; margin-right:auto; }
 
 label { display:block; text-align:left; padding:0.4em 0 0.1em; }
+form .moreinfo { font-size:0.75em; vertical-align:bottom; color:#C6C2C4; }
 
 input[type=text], input[type=password] { padding:0.1em; resize:none;
     overflow:hidden; width:100%; font-size:1em; }
