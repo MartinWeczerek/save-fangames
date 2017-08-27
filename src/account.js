@@ -141,16 +141,13 @@ class Account extends React.Component {
     if (this.state.loggedin) {
       var adminButton = "";
       if (Auth.isAdmin()) {
-        adminButton = (<a onClick={this.handleAdminClicked}>
-          <span className="navItem navAdmin">Admin panel</span></a>);
+        adminButton = (<input type="submit" value="Admin Panel"
+          onClick={this.handleAdminClicked}/>);
       }
       return (
         <span id="account">
-          &nbsp;
-          <a onClick={this.handleNameClicked}>
-            <span className="navItem navAccount">Account</span></a>
-          {adminButton}
           <span className="email">{this.state.email}</span>
+          {adminButton}
           <input type="submit" value="Log out" onClick={this.handleLogout}/>
         </span>);
     }

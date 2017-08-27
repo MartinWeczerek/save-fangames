@@ -83,12 +83,6 @@ app.get('/',function(req,res){
     navSelector:'.navHome'}));
 });
 
-app.get('/account',function(req,res){
-  res.status(200).send(dots.base({
-    content:'<div id="myprofileroot"></div>',
-    navSelector:'.navAccount'}));
-});
-
 app.get('/admin',function(req,res){
   res.status(200).send(dots.base({
     content:'<div id="adminroot"></div>',
@@ -97,7 +91,7 @@ app.get('/admin',function(req,res){
 
 app.get('/submit',function(req,res){
   res.status(200).send(dots.base({
-    content:'<div id="submitroot"></div>',
+    content:'<div id="myprofileroot"></div><div id="submitroot"></div>',
     navSelector:'.navSubmit'}));
 });
 
@@ -173,6 +167,9 @@ app.post('/myprofile',function(req,res){
         console.log(err);
         res.status(500).send({Message:"Database error."});
       } else {
+        if (games.length == 0) {
+          games = [{name:"No games submitted yet!"}];
+        }
         res.status(200).send(dots.mygames({"games":games}));
       }
     });

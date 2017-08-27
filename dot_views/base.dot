@@ -10,11 +10,23 @@
   </script>
 </head>
 <body>
+    <div id="header">
+      <div id="header-inner">
+        <a href="/">
+          <span id="logo">
+            <img src='/images/logocherry.png'></img>Blue Fruit
+          </span>
+        </a>
+        <span id="accountroot"></span>
+        <div class="clearboth"></div>
+        <nav>
+          <a href="/"><span class="navItem navHome">Homepage</span></a>
+          <a href="/list"><span class="navItem navList">Full List</span></a>
+          <a href="/submit"><span class="navItem navSubmit">Submit Games</span></a>
+        </nav>
+      </div>
+    </div>
   <div id="wrapper">
-    <nav id=nav>
-      <a href="/"><span class="navItem navHome"><img src='/images/logocherry.png'></img>Blue</span></a><a href="/list"><span class="navItem navList">List</span></a><a href="/submit"><span class="navItem navSubmit">Submit</span></a>
-      <span id="accountroot"></span>
-    </nav>
     {{=it.content}}
   </div>
 </body>
