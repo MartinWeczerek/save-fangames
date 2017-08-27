@@ -91,8 +91,8 @@ app.get('/admin',function(req,res){
 
 app.get('/submit',function(req,res){
   res.status(200).send(dots.base({
-    content:'<div id="myprofileroot"></div><div id="submitroot"></div>',
-    navSelector:'.navSubmit'}));
+    content:'<div id="myprofileroot"></div><div id="submitroot">Enable JavaScript to log in and view this page.</div>',
+    navSelector:'.nothing'}));
 });
 
 function verifyAuth(req,res,adminonly,callback){

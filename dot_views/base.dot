@@ -12,12 +12,14 @@
 <body>
     <div id="header">
       <div id="header-inner">
+        <span id="accountroot">
+          Enable JavaScript to register an account and log in.
+        </span>
         <a href="/">
           <span id="logo">
             <img src='/images/logocherry.png'></img>Blue Fruit
           </span>
         </a>
-        <span id="accountroot"></span>
         <div class="clearboth"></div>
         <nav>
           <a href="/"><span class="navItem navHome">Homepage</span></a>

@@ -15,14 +15,14 @@ body {
 
 #header { background-color:#1D263B; width:100%; }
 #header-inner { margin:0 auto; max-width:100%; width:1000px; 
-    margin:0 auto;}
+    margin:0 auto; padding:0 0.5em; }
 
 #logo { float:left; }
-#logo { font-size:1.25em; overflow:hidden; line-height:2.4em;
-    height:2.4em; color:#CFE6FF; padding:0 0.5em; margin-left:0.25em; }
+#logo { font-size:1.25em; line-height:2.4em;
+    height:2.4em; color:#CFE6FF; padding:0 0.5em; }
 #logo img { margin-right:0.4em; vertical-align:middle;
     margin-bottom:0.2em; margin-right:0.1em; }
-#account { float:right; }
+#accountroot { float:right; margin-right:0.5em; }
 #account .email { text-align:right; margin-left:0.5em; }
 #account input[type=submit], button { margin-left:0.5em; }
 
@@ -32,7 +32,7 @@ nav { min-height:3em; text-align:left;
     vertical-align:middle; line-height:3em; }
 nav:after { content:" "; display:block; height:0; clear:both; }
 nav .navItem { display:inline-block; min-width: 4em; height:3em;
-    text-align:center; padding: 0 0.5em; float:left; margin:0 0 0.5em 0.5em; }
+    text-align:center; padding: 0 0.5em; float:left; margin:0 0.5em 0.5em 0; }
 nav .navItem:hover { background-color:#3E517A; }
 nav a { cursor:pointer; }
 
