@@ -35,7 +35,7 @@
         </a>
         <div class="clearboth"></div>
         <nav>
-          <a href="/"><span class="navItem navHome">Homepage</span></a>
+          <a href="/"><span class="navItem navHome">_(Homepage)</span></a>
           <a href="/list"><span class="navItem navList">Full List</span></a>
           <a href="/submit"><span class="navItem navSubmit">Submit Games</span></a>
         </nav>

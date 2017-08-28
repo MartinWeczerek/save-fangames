@@ -38,8 +38,18 @@ var dao = require('./dao.js');
 // Create tables if don't exist already.
 dao.ensureTablesCreated()
 
-// Parse DoT template files.
-var dots = require('dot').process({path: './dot_views'});
+// Generate localized versions of DoT templates, and parse them.
+require('./localizedot.js');
+var dots = require('dot').process({path: './loc_dot_views'});
+function dotsloc(templatename, data, locale) {
+  return dots[templatename+'_'+locale](data);
+}
+
+function reqLocale(req) {
+  var locale = req.cookies.locale;
+  if (!locale) locale = 'en';
+  return locale;
+}
 
 // Load config.
 const configPath = 'config/config.json';
@@ -81,28 +91,25 @@ app.use(express.static(__dirname + '/www', {
 }));
 
 app.get('/',function(req,res){
-  // TODO: translate based on cookie
-  locale = req.cookies.locale;
-  if (!locale) locale = 'en';
   // TODO: populate new releases
   var releases = [{date:"8/25",games:[{name:"Game 3",link:"https://google.com"},{name:"Game 4",link:"https://google.com"}]},{date:"8/26",games:[{name:"Game 1",link:"https://google.com"},{name:"Game 2",link:"https://google.com"}]}];
-  var content = dots.homepage({releases:releases});
-  res.status(200).send(dots.base({
+  var content = dotsloc('homepage',{releases:releases},reqLocale(req));
+  res.status(200).send(dotsloc('base',{
     content:content,
-    navSelector:'.navHome'}));
+    navSelector:'.navHome'},reqLocale(req)));
 });
 
 app.get('/admin',function(req,res){
-  res.status(200).send(dots.base({
+  res.status(200).send(dotsloc('base',{
     content:'<div id="adminroot"></div>',
-    navSelector:'.navAdmin'}));
+    navSelector:'.navAdmin'},reqLocale(req)));
 });
 
 app.get('/submit',function(req,res){
-  var content = dots.submit({});
-  res.status(200).send(dots.base({
+  var content = dotsloc('submit',{},reqLocale(req));
+  res.status(200).send(dotsloc('base',{
     content:content,
-    navSelector:'.navSubmit'}));
+    navSelector:'.navSubmit'},reqLocale(req)));
 });
 
 function verifyAuth(req,res,adminonly,callback){
@@ -180,7 +187,7 @@ app.post('/myprofile',function(req,res){
         if (games.length == 0) {
           games = [{name:"No games submitted yet!"}];
         }
-        res.status(200).send(dots.mygames({"games":games}));
+        res.status(200).send(dotsloc('mygames',{"games":games},reqLocale(req)));
       }
     });
   });
@@ -205,10 +212,10 @@ app.get('/list/:order',function(req,res){
       console.log(err);
       res.status(500).send({Message:"Database error."});
     } else {
-      var content = dots.fulllist({games:games,
-        toplinks:toplinks})
-      res.status(200).send(dots.base({content:content,
-        navSelector:'.navList'}));
+      var content = dotsloc('fulllist',{games:games,
+        toplinks:toplinks},reqLocale(req));
+      res.status(200).send(dotsloc('base',{content:content,
+        navSelector:'.navList'},reqLocale(req)));
     }
   });
 });
@@ -383,9 +390,9 @@ app.get('/verify/:token', function(req, res){
       res.status(400).send({Message: 'Database error.'});
     } else {
       var token = generateToken(user);
-      res.status(200).send(dots.base({setToken: token,
+      res.status(200).send(dotsloc('base',{setToken: token,
         content:'<p>Success! Your account is now activated!</p>',
-        navSelector:'.nothing'}));
+        navSelector:'.nothing'},reqLocale(req)));
     }
   });
 });
