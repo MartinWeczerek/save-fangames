@@ -25,6 +25,9 @@ body {
 #accountroot { float:right; margin-right:1em; }
 #account .email { text-align:right; margin-left:0.5em; }
 #account input[type=submit], button { margin-left:0.5em; }
+#language { float:right; margin-right:1em; text-align:left;
+    font-size:0.75em; }
+#language a:hover { text-decoration:underline; cursor:pointer; }
 
 .clearboth { clear:both; }
 
@@ -67,8 +70,8 @@ table.publicgames tr { line-height:1.25em; }
 table.mygames table.mygames th, table.mygames td { border:1px solid #aaa; padding: 0.4em; }
 table.mygames { border-collapse:collapse; }
 
-a { color: #C6C2C4; }
-    a:hover { text-decoration:none; }
+a { color: #C6C2C4; text-decoration:none; }
+    a:hover { text-decoration:underline; }
 
 p { margin-top:1em; }
 

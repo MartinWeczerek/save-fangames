@@ -7,11 +7,24 @@
     {{? it.setToken}}
     BundleEntry.Auth.authenticateUser('{{=it.setToken}}');
     {{?}}
+    function createCookie(name,value) {
+      var expires = "; expires=" + 'Fri, 31 Dec 9999 23:59:59 GMT';
+      document.cookie = name + "=" + value + expires + "; path=/";
+    }
+    function setLocale(locale) {
+      createCookie('locale', locale);
+      location.reload();
+    }
   </script>
 </head>
 <body>
     <div id="header">
       <div id="header-inner">
+        <span id="language">
+          <a onClick="setLocale('en')">English</a>
+          <br/>
+          <a onClick="setLocale('jp')">&#x65E5;&#x672C;&#x8A9E;</a>
+        </span>
         <span id="accountroot">
           Enable JavaScript to register an account and log in.
         </span>

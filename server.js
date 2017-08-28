@@ -21,6 +21,9 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
+var cookieParser = require('cookie-parser');
+app.use(cookieParser());
+
 // Various requires.
 var bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -78,6 +81,9 @@ app.use(express.static(__dirname + '/www', {
 }));
 
 app.get('/',function(req,res){
+  // TODO: translate based on cookie
+  locale = req.cookies.locale;
+  if (!locale) locale = 'en';
   // TODO: populate new releases
   var releases = [{date:"8/25",games:[{name:"Game 3",link:"https://google.com"},{name:"Game 4",link:"https://google.com"}]},{date:"8/26",games:[{name:"Game 1",link:"https://google.com"},{name:"Game 2",link:"https://google.com"}]}];
   var content = dots.homepage({releases:releases});
