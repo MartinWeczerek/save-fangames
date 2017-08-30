@@ -1,5 +1,6 @@
 import React from 'react';
 import Auth from './auth';
+import { _ } from './localize';
 require('./jwt-decode.min');
 
 class Account extends React.Component {
@@ -194,7 +195,7 @@ class Account extends React.Component {
       return (
         <span id="account">
           &nbsp;
-          <input type="submit" value="Log in" onClick={this.handleOpenLoginBox}/>
+          <input type="submit" value={_("Log in")} onClick={this.handleOpenLoginBox}/>
           <input type="submit" value="Register" onClick={this.handleOpenRegisterBox}/>
           <span style={{clear:'both'}} />
         </span>);
