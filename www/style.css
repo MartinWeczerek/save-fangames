@@ -22,10 +22,11 @@ body {
     height:2.4em; color:#CFE6FF; padding:0 0.5em; }
 #logo img { margin-right:0.4em; vertical-align:middle;
     margin-bottom:0.2em; margin-right:0.1em; }
-#accountroot { float:right; margin-right:1em; }
+#accountroot { float:right; margin-right:0.5em; }
 #account .email { text-align:right; margin-left:0.5em; }
-#account input[type=submit], button { margin-left:0.5em; }
-#language { float:right; margin-right:1em; text-align:left;
+#account input[type=submit], button { margin-left:0.5em;
+        height:2em; line-height:1em; vertical-align:middle; }
+#language { float:right; margin:0.25em 1em 0 0; text-align:left;
     font-size:0.75em; }
 #language a:hover { text-decoration:underline; cursor:pointer; }
 
