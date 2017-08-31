@@ -1,6 +1,8 @@
 <html>
 <head>
-  <script src="/bundle.js"></script>
+  <title>Blue Fruit</title>
+  <link rel="shortcut icon" href="/favicon.ico?v=1">
+  <script src="/bundle.js?v=1"></script>
   <link rel="stylesheet" type="text/css" href="/style.css?v=1">
   <script>
     document.styleSheets[0].insertRule('{{=it.navSelector}} { background-color:#3E517A; }', 1);

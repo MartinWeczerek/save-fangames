@@ -50,8 +50,10 @@ function dotsloc(templatename, data, locale) {
 app.use(function (req,res,next){
   var locale = req.cookies.locale;
   if (!locale) {
-    // TODO: try to get locale from HTTP_ACCEPT_LANGUAGE, see delfruit
-    locale = 'en';
+    locale = req.acceptsLanguages('en', 'jp');
+    if (!locale) {
+       locale = 'en';
+    }
     var expires = new Date(Date.now());
     expires.setFullYear(expires.getFullYear()+1);
     res.cookie('locale', locale, {expires:expires});
