@@ -45,11 +45,20 @@ function dotsloc(templatename, data, locale) {
   return dots[templatename+'_'+locale](data);
 }
 
-function reqLocale(req) {
+// Locale cookie midddleware
+// Sets res.locals.locale, and sets Set-Cookie header if no locale cookie.
+app.use(function (req,res,next){
   var locale = req.cookies.locale;
-  if (!locale) locale = 'en';
-  return locale;
-}
+  if (!locale) {
+    // TODO: try to get locale from HTTP_ACCEPT_LANGUAGE, see delfruit
+    locale = 'en';
+    var expires = new Date(Date.now());
+    expires.setFullYear(expires.getFullYear()+1);
+    res.cookie('locale', locale, {expires:expires});
+  }
+  res.locals.locale = locale;
+  next();
+});
 
 // Load config.
 const configPath = 'config/config.json';
@@ -93,23 +102,23 @@ app.use(express.static(__dirname + '/www', {
 app.get('/',function(req,res){
   // TODO: populate new releases
   var releases = [{date:"8/25",games:[{name:"Game 3",link:"https://google.com"},{name:"Game 4",link:"https://google.com"}]},{date:"8/26",games:[{name:"Game 1",link:"https://google.com"},{name:"Game 2",link:"https://google.com"}]}];
-  var content = dotsloc('homepage',{releases:releases},reqLocale(req));
+  var content = dotsloc('homepage',{releases:releases},res.locals.locale);
   res.status(200).send(dotsloc('base',{
     content:content,
-    navSelector:'.navHome'},reqLocale(req)));
+    navSelector:'.navHome'},res.locals.locale));
 });
 
 app.get('/admin',function(req,res){
   res.status(200).send(dotsloc('base',{
     content:'<div id="adminroot"></div>',
-    navSelector:'.navAdmin'},reqLocale(req)));
+    navSelector:'.navAdmin'},res.locals.locale));
 });
 
 app.get('/submit',function(req,res){
-  var content = dotsloc('submit',{},reqLocale(req));
+  var content = dotsloc('submit',{},res.locals.locale);
   res.status(200).send(dotsloc('base',{
     content:content,
-    navSelector:'.navSubmit'},reqLocale(req)));
+    navSelector:'.navSubmit'},res.locals.locale));
 });
 
 function verifyAuth(req,res,adminonly,callback){
@@ -187,7 +196,7 @@ app.post('/myprofile',function(req,res){
         if (games.length == 0) {
           games = [{name:"No games submitted yet!"}];
         }
-        res.status(200).send(dotsloc('mygames',{"games":games},reqLocale(req)));
+        res.status(200).send(dotsloc('mygames',{"games":games},res.locals.locale));
       }
     });
   });
@@ -213,9 +222,9 @@ app.get('/list/:order',function(req,res){
       res.status(500).send({Message:"Database error."});
     } else {
       var content = dotsloc('fulllist',{games:games,
-        toplinks:toplinks},reqLocale(req));
+        toplinks:toplinks},res.locals.locale);
       res.status(200).send(dotsloc('base',{content:content,
-        navSelector:'.navList'},reqLocale(req)));
+        navSelector:'.navList'},res.locals.locale));
     }
   });
 });
@@ -392,7 +401,7 @@ app.get('/verify/:token', function(req, res){
       var token = generateToken(user);
       res.status(200).send(dotsloc('base',{setToken: token,
         content:'<p>Success! Your account is now activated!</p>',
-        navSelector:'.nothing'},reqLocale(req)));
+        navSelector:'.nothing'},res.locals.locale));
     }
   });
 });
