@@ -1,6 +1,7 @@
 import React from 'react';
 import fs from 'fs';
 import Auth from './auth';
+import { _ } from './localize';
 
 var SubmitState = {
   INPUT: 1,
@@ -113,7 +114,7 @@ render(){
       );
     } else if (this.state.state == SubmitState.NOAUTH) {
       inner = (
-        <p>You must register an account and log in to submit a game.</p>
+        <p>{_("You must register an account and log in to submit a game.")}</p>
       )
     }
 

@@ -10,27 +10,32 @@ function readCookie(name) {
 }
 
 var locale = readCookie('locale');
+// Cookie should have been set by Set-Cookie header from server,
+// but just in case it was cleared, default to en.
 if (!locale) {
   locale = 'en';
 }
 
-// TODO: Somehow auto-generate this file with a JS object containing
-// translation data embedded in it. For example, maybe:
-
-// %%%%%
-
-// then server.js on startup replaces "%%%%%" with 
-// var dictionary = {jp:{'Log in':'Log in JP'},en:{'Log in':'Log in'}};
-// (with the data being read from a .mo file)
-
-// then the new, valid localize.js file gets webpacked and we're all dandy.
+import * as locdata from './locdata';
 
 module.exports = {
   _: function(key) {
-    if (key == 'Log in') {
-      if (locale == 'en') return 'Log in'
-      else return '\u30ED\u30B0\u30A4\u30F3'
+    var t = locdata.data[locale];
+    if (!t) {
+      console.log('Unrecognized locale: '+locale);
+      return key;
     }
-    return 'placeholder localization: not localized';
+    t = t[key];
+    if (t) {
+      t = t.msgstr[0];
+      if (!t) {
+        console.log('Empty translation for key '+key+' in locale '+locale);
+        return key;
+      }
+      return t;
+    } else {
+      console.log('Unrecognized key '+key+' in locale '+locale);
+      return key;
+    }
   }
 }

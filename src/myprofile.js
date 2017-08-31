@@ -28,7 +28,7 @@ class MyProfile extends React.Component {
 
   render() {
     if (this.state.loading) {
-      return (<div><p>Loading...</p></div>);
+      return (<div><p>{_("Loading...")}</p></div>);
     } else if (this.state.errormsg) {
       return (<div className="error"><p>{this.state.errormsg}</p></div>);
     } else if (!this.state.authenticated) {

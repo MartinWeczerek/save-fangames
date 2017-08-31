@@ -15,6 +15,7 @@
     "express": "^4.15.4",
     "file-system": "^2.2.2",
     "fs-es6": "0.0.2",
+    "gettext-parser": "^1.3.0",
     "jsonwebtoken": "^7.4.3",
     "jwt-decode": "^2.2.0",
     "moment": "^2.18.1",
@@ -30,7 +31,9 @@
   "devDependencies": {},
   "scripts": {
     "compile": "webpack",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "localize": "node ./localize-generate.js",
+    "pot": "translations/gt.sh"
   },
   "repository": {
     "type": "git",

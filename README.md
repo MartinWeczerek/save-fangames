@@ -1,15 +1,28 @@
-My Project
+Blue Fruit
 ---
 
 Welcome.
 
 Usage
 ---
+Generate various files from translations: (run this before "compile")
+```
+npm run localize
+```
 
-Start the development server with this command:
+Run webpack: (run "localize" before this)
+```
+npm run compile
+```
 
+Start the development server:
 ```
 npm start
+```
+
+Generate .pot file for translators, scanning src/\*.js and dot_views/\*.dot:
+```
+npm run pot
 ```
 
 Setup
@@ -53,9 +66,3 @@ For approval game wait seconds, 12*60*60 is 43200.
 
 For mail options, see https://nodemailer.com/smtp/#authentication
 
-Compile
----
-
-```
-npm run compile
-```

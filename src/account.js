@@ -196,7 +196,7 @@ class Account extends React.Component {
         <span id="account">
           &nbsp;
           <input type="submit" value={_("Log in")} onClick={this.handleOpenLoginBox}/>
-          <input type="submit" value="Register" onClick={this.handleOpenRegisterBox}/>
+          <input type="submit" value={_("Register")} onClick={this.handleOpenRegisterBox}/>
           <span style={{clear:'both'}} />
         </span>);
     }

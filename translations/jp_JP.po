@@ -1,0 +1,38 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-08-31 13:58-0700\n"
+"PO-Revision-Date: 2017-08-31 14:06-0700\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.3\n"
+"Last-Translator: \n"
+"Language: jp_JP\n"
+
+#: src/account.js:198
+msgid "Log in"
+msgstr "ログイン"
+
+#: src/account.js:199
+msgid "Register"
+msgstr ""
+
+#: src/myprofile.js:31
+msgid "Loading..."
+msgstr "読み込み中"
+
+#: src/submit.js:116
+msgid "You must register an account and log in to submit a game."
+msgstr "ゲームを提出するには、アカウントを登録してログインする必要があります。"
+
+#: dot_views/base.dot:40
+msgid "Homepage"
+msgstr "ホームページ"

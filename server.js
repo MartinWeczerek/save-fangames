@@ -38,8 +38,7 @@ var dao = require('./dao.js');
 // Create tables if don't exist already.
 dao.ensureTablesCreated()
 
-// Generate localized versions of DoT templates, and parse them.
-require('./localizedot.js');
+// Parse localized DoT templates.
 var dots = require('dot').process({path: './loc_dot_views'});
 function dotsloc(templatename, data, locale) {
   return dots[templatename+'_'+locale](data);
