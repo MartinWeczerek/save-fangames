@@ -2,6 +2,9 @@ process.env.NODE_ENV = 'production'; // So we don't return stack trace on error
 const express = require('express');
 const app = express();
 
+// TODO: prevent hard crashes such as calling nonexistent function (link below)
+// https://stackoverflow.com/questions/5999373/how-do-i-prevent-node-js-from-crashing-try-catch-doesnt-work#22424428
+
 // Hook up webpack dev middleware, which recompiles bundle.js on file changes.
 /*const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpack = require('webpack');

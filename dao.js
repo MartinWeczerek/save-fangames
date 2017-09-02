@@ -30,6 +30,7 @@ var self = module.exports = {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       userid INTEGER,
       name TEXT,
+      sortname TEXT,
       link TEXT,
       authors TEXT,
       private BOOLEAN DEFAULT 0,
@@ -137,8 +138,10 @@ var self = module.exports = {
   },
 
   insertGame: function(user,gamename,gamelink,gameauthors,callback) {
-    db.run('INSERT INTO games (userid,name,link,authors) VALUES ($userid,$name,$link,$authors)',
-      {$userid:user.id,$name:gamename,$link:gamelink,$authors:gameauthors},
+    var sortname = self.gameSortName(gamename);
+    db.run('INSERT INTO games (userid,name,sortname,link,authors) VALUES ($userid,$name,$sortname,$link,$authors)',
+      {$userid:user.id,$name:gamename,$sortname:sortname,
+          $link:gamelink,$authors:gameauthors},
       function(err) {
         if (err) callback(err);
         else if (this.changes) {
@@ -148,6 +151,15 @@ var self = module.exports = {
         else callback("Database error: insert failed to change");
       }
     );
+  },
+
+  gameSortName: function(gamename) {
+    // Remove standard fangame name prefixes
+    var regEx = new RegExp('i wanna be the ', 'ig');
+    gamename = gamename.replace(regEx, '');
+    var regEx = new RegExp('i wanna ', 'ig');
+    gamename = gamename.replace(regEx, '');
+    return gamename
   },
 
   approveMaturedGames: function(callback) {
@@ -188,17 +200,14 @@ var self = module.exports = {
   },
 
   getPublicListGamesNewest: function(callback) {
-    // TODO: return approval date instead of submit date
-    db.all('SELECT * FROM games WHERE approved = 1 AND private = 0 ORDER BY createdAt DESC',
+    db.all('SELECT * FROM games WHERE approved = 1 AND private = 0 ORDER BY approvedAt DESC',
       {},
       callback
     );
   },
 
   getPublicListGamesAlphabetical: function(callback) {
-    // TODO: return approval date instead of submit date
-    // TODO: Better alphabetical ordering, e.g. I wanna Cat shows up next to I wanna be the Cat
-    db.all('SELECT * FROM games WHERE approved = 1 AND private = 0 ORDER BY name COLLATE NOCASE ASC',
+    db.all('SELECT * FROM games WHERE approved = 1 AND private = 0 ORDER BY sortname COLLATE NOCASE ASC',
       {},
       callback
     );
