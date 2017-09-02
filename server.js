@@ -1,3 +1,4 @@
+process.env.NODE_ENV = 'production'; // So we don't return stack trace on error
 const express = require('express');
 const app = express();
 
@@ -101,6 +102,10 @@ schedule.scheduleJob(config.approval_check_schedule,function(){
 app.use(express.static(__dirname + '/www', {
   extensions: ['html'] // so "/submit" works as well as "/submit.html"
 }));
+
+app.get('/testerror',function(req,res){
+  undefined.length; // i'm a programmer!
+});
 
 app.get('/',function(req,res){
   var today = moment().utc().hour(0).minute(0).second(0).millisecond(0);
@@ -324,6 +329,7 @@ app.post('/submitgame', function(req, res){
 // Register endpoint.
 // Params: email, password
 // Successful response: {}
+// TODO: Rate limit /register so malicious peeps can't send a bajillion emails
 app.post('/register', function(req, res){
   // Sanitize input.
   var email = req.body.email;

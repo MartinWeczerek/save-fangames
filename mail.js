@@ -15,6 +15,8 @@ if (!config.mail.from) {
   throw('mail.from not defined in config.');
 }
 
+// TODO: make sure emails aren't marked as spam?
+// https://stackoverflow.com/questions/371/how-do-you-make-sure-email-you-send-programmatically-is-not-automatically-marked#396
 var transporter = nodemailer.createTransport(config.mail.options);
 
 transporter.verify(function(error, success) {
@@ -31,7 +33,7 @@ module.exports.sendAccountVerificationMail = function(to, verifyUrl, callback) {
     from: config.mail.from,
     to: to,
     subject: 'Fangame account verification',
-    text: 'Visit the following URL to verify your account:\n\n'+verifyUrl+'\n\nTODO: more text here including link to the website'
+    text: 'Visit the following URL to verify your Blue Fruit account:\n\n'+verifyUrl
   };
   transporter.sendMail(mailOptions, callback);
 }
