@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-31 13:58-0700\n"
-"PO-Revision-Date: 2017-08-31 14:04-0700\n"
+"POT-Creation-Date: 2017-09-02 14:49-0700\n"
+"PO-Revision-Date: 2017-09-02 14:54-0700\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,22 +18,126 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Language: en_EN\n"
 
-#: src/account.js:198
+#: src/account.js:130
+msgid ""
+"Verification email sent. Please check your email (including spam folder) to "
+"activate your account."
+msgstr ""
+"Verification email sent. Please check your email (including spam folder) to "
+"activate your account."
+
+#: src/account.js:135 src/account.js:139 src/submit.js:115
+msgid "Submitting..."
+msgstr "Submitting..."
+
+#: src/account.js:152
+msgid "Log out"
+msgstr "Log out"
+
+#: src/account.js:161 src/account.js:198
 msgid "Log in"
 msgstr "Log in"
 
-#: src/account.js:199
-msgid "Register"
-msgstr ""
+#: src/account.js:164
+msgid "Re-enter password:"
+msgstr "Re-enter password:"
 
-#: src/myprofile.js:31
+#: src/account.js:168 src/account.js:199
+msgid "Register"
+msgstr "Register"
+
+#: src/account.js:179
+msgid "Email:"
+msgstr "Email:"
+
+#: src/account.js:182
+msgid "Password:"
+msgstr "Password:"
+
+#: src/myprofile.js:32
 msgid "Loading..."
 msgstr "Loading..."
 
-#: src/submit.js:116
-msgid "You must register an account and log in to submit a game."
-msgstr "You must register an account and log in to submit a game."
+#: src/submit.js:91
+msgid "Name of your fangame:"
+msgstr "Name of your fangame:"
+
+#: src/submit.js:94
+msgid "Creator name(s) separated by commas:"
+msgstr "Creator name(s) separated by commas:"
+
+#: src/submit.js:97
+msgid "Link to your fangame:"
+msgstr "Link to your fangame:"
+
+#: src/submit.js:123
+msgid "Game submitted!"
+msgstr "Game submitted!"
+
+#: src/submit.js:129
+msgid "You must register an account to submit a game."
+msgstr "You must register an account to submit a game."
 
 #: dot_views/base.dot:40
 msgid "Homepage"
 msgstr "Homepage"
+
+#: dot_views/base.dot:41
+msgid "Full List"
+msgstr "Full List"
+
+#: dot_views/base.dot:42
+msgid "Submit Games"
+msgstr "Submit Games"
+
+#: dot_views/fulllist.dot:3 dot_views/fulllist.dot:5
+msgid "Alphabetical"
+msgstr "Alphabetical"
+
+#: dot_views/fulllist.dot:3 dot_views/fulllist.dot:5
+msgid "Date"
+msgstr "Date"
+
+#: dot_views/fulllist.dot:10
+msgid "Game"
+msgstr "Game"
+
+#: dot_views/fulllist.dot:11 dot_views/mygames.dot:4
+msgid "Creator(s)"
+msgstr "Creator(s)"
+
+#: dot_views/fulllist.dot:12
+msgid "Release Date"
+msgstr "Release Date"
+
+#: dot_views/homepage.dot:1
+msgid "Welcome to Blue Fruit!"
+msgstr "Welcome to Blue Fruit!"
+
+#: dot_views/homepage.dot:5
+msgid "New Releases"
+msgstr "New Releases"
+
+#: dot_views/homepage.dot:15
+msgid "Updates"
+msgstr "Updates"
+
+#: dot_views/mygames.dot:3
+msgid "Name"
+msgstr "Name"
+
+#: dot_views/mygames.dot:5
+msgid "Submitted Date"
+msgstr "Submitted Date"
+
+#: dot_views/mygames.dot:6
+msgid "Approved Date"
+msgstr "Approved Date"
+
+#: dot_views/submit.dot:1
+msgid "My submitted games"
+msgstr "My submitted games"
+
+#: dot_views/submit.dot:5
+msgid "Submit a new game"
+msgstr "Submit a new game"

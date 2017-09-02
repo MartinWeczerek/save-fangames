@@ -5,7 +5,7 @@
   <script src="/bundle.js?v=1"></script>
   <link rel="stylesheet" type="text/css" href="/style.css?v=1">
   <script>
-    document.styleSheets[0].insertRule('{{=it.navSelector}} { background-color:#3E517A; }', 1);
+    document.styleSheets[0].insertRule('{{=it.navSelector}} { background-color:#465E8C; }', 1);
     {{? it.setToken}}
     BundleEntry.Auth.authenticateUser('{{=it.setToken}}');
     {{?}}
@@ -38,8 +38,8 @@
         <div class="clearboth"></div>
         <nav>
           <a href="/"><span class="navItem navHome">_("Homepage")</span></a>
-          <a href="/list"><span class="navItem navList">Full List</span></a>
-          <a href="/submit"><span class="navItem navSubmit">Submit Games</span></a>
+          <a href="/list"><span class="navItem navList">_("Full List")</span></a>
+          <a href="/submit"><span class="navItem navSubmit">_("Submit Games")</span></a>
         </nav>
       </div>
     </div>

@@ -1,9 +1,15 @@
-<p>{{=it.toplinks}}</p>
+<p>
+{{? it.linkactive == "alpha"}}
+_("Alphabetical") | <a href="/list/new">_("Date")</a>
+{{?? it.linkactive == "new"}}
+<a href="/list/alpha">_("Alphabetical")</a> | _("Date")
+{{?}}
+</p>
 <table class="games publicgames">
   <tr>
-    <th>Name</th>
-    <th>Creator(s)</th>
-    <th>Released</th>
+    <th>_("Game")</th>
+    <th>_("Creator(s)")</th>
+    <th>_("Release Date")</th>
   </tr>
   {{~it.games :value:index}}
   <tr><td><a href="{{=value.link}}">{{=value.name}}</a></td><td>{{=value.authors}}</td><td>{{=value.approvedAt}}</td></tr>

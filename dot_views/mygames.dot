@@ -1,9 +1,9 @@
 <table class="games mygames">
   <tr>
-    <th>Name</th>
-    <th>Creator(s)</th>
-    <th>Submitted</th>
-    <th>Approved</th>
+    <th>_("Game")</th>
+    <th>_("Creator(s)")</th>
+    <th>_("Submitted Date")</th>
+    <th>_("Approved Date")</th>
   </tr>
   {{~it.games :value:index}}
   <tr>
@@ -14,6 +14,8 @@
         {{?? value.rejected}}Rejected
         {{??}}in progress
         {{?}}</td>
-    <td>{{? value.rejected}}Rejected{{?}}</td></tr>
+    <td>{{? value.rejected}}Rejected{{?}}</td>
+    <td>{{? value.approved}}<a href="/update/{{=value.id}}">Update (not implemented)</a>{{?}}</td>
+  </tr>
   {{~}}
 </table>

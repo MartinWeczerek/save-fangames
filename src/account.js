@@ -127,16 +127,16 @@ class Account extends React.Component {
   render() {
     if (this.state.sentverification) {
       return (<span id="account">
-          Verification email sent to {this.state.typedemail}. Click the link in the email.
+          {_("Verification email sent. Please check your email (including spam folder) to activate your account.")}
         </span>);
     }
 
     if (this.state.loggingin) {
-      return (<span id="account">Logging in...</span>);
+      return (<span id="account">{_("Submitting...")}</span>);
     }
 
     if (this.state.registering) {
-      return (<span id="account">Registering...</span>);
+      return (<span id="account">{_("Submitting...")}</span>);
     }
 
     if (this.state.loggedin) {
@@ -149,7 +149,7 @@ class Account extends React.Component {
         <span id="account">
           <span className="email">{this.state.email}</span>
           {adminButton}
-          <input type="submit" value="Log out" onClick={this.handleLogout}/>
+          <input type="submit" value={_("Log out")} onClick={this.handleLogout}/>
         </span>);
     }
 
@@ -158,14 +158,14 @@ class Account extends React.Component {
       var extraTop = "";
       var extraBox = "";
       var submitFunc = this.handleLogin;
-      var buttonText = "Log in";
+      var buttonText = _("Log in");
       if (this.state.registerbox) {
         extraTop = (<span className="moreinfo">Your email address will not be public, will only be seen by moderators, and we won&#39;t share it.</span>);
-        extraBox = (<span><br/><label>Re-enter password: </label>
+        extraBox = (<span><br/><label>{_("Re-enter password:")}</label>
           <input type="password" value={this.state.typedpassword2}
             onChange={this.handleText3Change} spellCheck="false" /></span>);
         submitFunc = this.handleRegister;
-        buttonText = "Register";
+        buttonText = _("Register");
       }
       return (
         <span id="account">
@@ -176,10 +176,10 @@ class Account extends React.Component {
             <div id="account-inputbox">
               <form onSubmit={submitFunc}>
                 {extraTop}
-                <label>Email: </label>
+                <label>{_("Email:")}</label>
                 <input type="text" autoFocus value={this.state.typedemail} onChange={this.handleText1Change} spellCheck="false" />
                 <br/>
-                <label>Password: </label>
+                <label>{_("Password:")}</label>
                 <input type="password" value={this.state.typedpassword} onChange={this.handleText2Change} spellCheck="false" />
                 {extraBox}
                 <br/>

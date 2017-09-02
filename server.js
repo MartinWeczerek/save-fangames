@@ -245,15 +245,15 @@ app.post('/myprofile',function(req,res){
 
 app.get('/list/:order',function(req,res){
   var daoFunc;
-  var toplinks;
+  var linkactive;
   if (req.params.order == 'new') {
     daoFunc = dao.getPublicListGamesNewest;
-    toplinks = '<a href="/list/alpha">Alphabetical</a> | Date';
+    linkactive = 'new';
   } else if (req.params.order == 'alpha') {
     daoFunc = dao.getPublicListGamesAlphabetical;
-    toplinks = 'Alphabetical | <a href="/list/new">Date</a>';
+    linkactive = 'alpha';
   } else {
-    res.status(400).send({Message:'Supported orderings are /list/new and /list/alpha.'});
+    res.status(404).send();
     return;
   }
 
@@ -263,7 +263,7 @@ app.get('/list/:order',function(req,res){
       res.status(500).send({Message:"Database error."});
     } else {
       var content = dotsloc('fulllist',{games:games,
-        toplinks:toplinks},res.locals.locale);
+        linkactive:linkactive},res.locals.locale);
       res.status(200).send(dotsloc('base',{content:content,
         navSelector:'.navList'},res.locals.locale));
     }

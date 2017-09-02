@@ -50,7 +50,7 @@ fs.readdirSync('./dot_views').forEach(file => {
         console.log('Warning: empty translation for key '+key+' in locale en');
         value = key;
       }
-      en = en.replace(`_("${key}")`, value);
+      en = en.split(`_("${key}")`).join(value);
     }
   }
   fs.writeFileSync(`./loc_dot_views/${templname}_en.dot`, en);
@@ -63,7 +63,7 @@ fs.readdirSync('./dot_views').forEach(file => {
         console.log('Warning: empty translation for key '+key+' in locale jp');
         value = key;
       }
-      jp = jp.replace(`_("${key}")`, value);
+      jp = jp.split(`_("${key}")`).join(value);
     }
   }
   fs.writeFileSync(`./loc_dot_views/${templname}_jp.dot`, jp);

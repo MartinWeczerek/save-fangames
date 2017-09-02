@@ -88,13 +88,13 @@ class Submit extends React.Component {
     }
     var form = (
       <form onSubmit={this.handleSubmit}>
-        <label>Name of your fangame: </label>
+        <label>{_("Name of your fangame:")}</label>
         <input type="text" autoFocus value={this.state.gamename} onChange={this.handleChange} spellCheck="false" />
         <br/>
-        <label>Creator name(s): </label>
+        <label>{_("Creator name(s) separated by commas:")}</label>
         <input type="text" value={this.state.gameauthors} onChange={this.handleChange2} spellCheck="false" />
         <br/>
-        <label>Link to your fangame: </label>
+        <label>{_("Link to your fangame:")}</label>
         <input type="text" value={this.state.gamelink} onChange={this.handleChange3} spellCheck="false" />
         <br/>
         <br/>

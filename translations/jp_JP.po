@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-31 13:58-0700\n"
-"PO-Revision-Date: 2017-08-31 14:06-0700\n"
+"POT-Creation-Date: 2017-09-02 14:49-0700\n"
+"PO-Revision-Date: 2017-09-02 15:04-0700\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,22 +17,126 @@ msgstr ""
 "Last-Translator: \n"
 "Language: jp_JP\n"
 
-#: src/account.js:198
+#: src/account.js:130
+msgid ""
+"Verification email sent. Please check your email (including spam folder) to "
+"activate your account."
+msgstr ""
+"確認メールが送信されました。 あなたのメールアドレス（迷惑メールフォルダを含"
+"む）を確認してアカウントを有効にしてください。"
+
+#: src/account.js:135 src/account.js:139 src/submit.js:115
+msgid "Submitting..."
+msgstr "送信中..."
+
+#: src/account.js:152
+msgid "Log out"
+msgstr "ログアウト"
+
+#: src/account.js:161 src/account.js:198
 msgid "Log in"
 msgstr "ログイン"
 
-#: src/account.js:199
+#: src/account.js:164
+msgid "Re-enter password:"
+msgstr "パスワード再入力："
+
+#: src/account.js:168 src/account.js:199
 msgid "Register"
-msgstr ""
+msgstr "登録"
 
-#: src/myprofile.js:31
+#: src/account.js:179
+msgid "Email:"
+msgstr "Eメール："
+
+#: src/account.js:182
+msgid "Password:"
+msgstr "パスワード："
+
+#: src/myprofile.js:32
 msgid "Loading..."
-msgstr "読み込み中"
+msgstr "読み込んでいます..."
 
-#: src/submit.js:116
-msgid "You must register an account and log in to submit a game."
-msgstr "ゲームを提出するには、アカウントを登録してログインする必要があります。"
+#: src/submit.js:91
+msgid "Name of your fangame:"
+msgstr "あなたのfangameの名前："
+
+#: src/submit.js:94
+msgid "Creator name(s) separated by commas:"
+msgstr "コンマで区切られた作成者名："
+
+#: src/submit.js:97
+msgid "Link to your fangame:"
+msgstr "あなたのfangameへのリンク："
+
+#: src/submit.js:123
+msgid "Game submitted!"
+msgstr "ゲームが送信されました！"
+
+#: src/submit.js:129
+msgid "You must register an account to submit a game."
+msgstr "ゲームを提出するには、アカウントを登録する必要があります。"
 
 #: dot_views/base.dot:40
 msgid "Homepage"
 msgstr "ホームページ"
+
+#: dot_views/base.dot:41
+msgid "Full List"
+msgstr "完全なリスト"
+
+#: dot_views/base.dot:42
+msgid "Submit Games"
+msgstr "ゲームを提出する"
+
+#: dot_views/fulllist.dot:3 dot_views/fulllist.dot:5
+msgid "Alphabetical"
+msgstr "アルファベット順"
+
+#: dot_views/fulllist.dot:3 dot_views/fulllist.dot:5
+msgid "Date"
+msgstr "日付"
+
+#: dot_views/fulllist.dot:10
+msgid "Game"
+msgstr "ゲーム"
+
+#: dot_views/fulllist.dot:11 dot_views/mygames.dot:4
+msgid "Creator(s)"
+msgstr "クリエイター"
+
+#: dot_views/fulllist.dot:12
+msgid "Release Date"
+msgstr "発売日"
+
+#: dot_views/homepage.dot:1
+msgid "Welcome to Blue Fruit!"
+msgstr "ブルーフルーツへようこそ！"
+
+#: dot_views/homepage.dot:5
+msgid "New Releases"
+msgstr "ニューリリース"
+
+#: dot_views/homepage.dot:15
+msgid "Updates"
+msgstr "アップデート"
+
+#: dot_views/mygames.dot:3
+msgid "Name"
+msgstr "名"
+
+#: dot_views/mygames.dot:5
+msgid "Submitted Date"
+msgstr "提出日"
+
+#: dot_views/mygames.dot:6
+msgid "Approved Date"
+msgstr "承認日"
+
+#: dot_views/submit.dot:1
+msgid "My submitted games"
+msgstr "私の提出されたゲーム"
+
+#: dot_views/submit.dot:5
+msgid "Submit a new game"
+msgstr "新しいゲームを提出する"
