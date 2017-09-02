@@ -71,6 +71,9 @@ class Submit extends React.Component {
       function(xhr){
         if (xhr.status == 200) {
           component.setState({state: SubmitState.SUCCESS});
+          setTimeout(function(){
+            location.reload();
+          }, 1000);
         } else {
           component.setState({state: SubmitState.INPUT,
             errormsg: Auth.parseErrorMessage(xhr)});
@@ -78,10 +81,12 @@ class Submit extends React.Component {
     });
   }
 
-render(){
-  var inner = "";
-  if (this.state.state == SubmitState.INPUT) {
-    inner = (
+  render(){
+    var button = <input type="submit" value="Submit" />;
+    if (this.state.state != SubmitState.INPUT) {
+      button = '';
+    }
+    var form = (
       <form onSubmit={this.handleSubmit}>
         <label>Name of your fangame: </label>
         <input type="text" autoFocus value={this.state.gamename} onChange={this.handleChange} spellCheck="false" />
@@ -93,38 +98,38 @@ render(){
         <input type="text" value={this.state.gamelink} onChange={this.handleChange3} spellCheck="false" />
         <br/>
         <br/>
-        <input type="submit" value="Submit" />
-        <div className="error"><p>{this.state.errormsg}</p></div>
-        </form>
-      )
+        {button}
+      </form>);
+    if (this.state.state == SubmitState.INPUT) {
+      return (
+        <div id="gamesubmit">
+          {form}
+          <div className="error"><p>{this.state.errormsg}</p></div>
+        </div>
+      );
 
     } else if (this.state.state == SubmitState.SENDING) {
-      inner = (
-        <div>
-          <p>Submitting...</p>
+      return (
+        <div id="gamesubmit">
+          {form}
+          <p>{_("Submitting...")}</p>
         </div>
       );
 
     } else if (this.state.state == SubmitState.SUCCESS) {
-      inner = (
-        <div>
-          <p>Your game {this.state.gamename} by {this.state.gameauthors} with link {this.state.gamelink} has been successfully submitted!</p>
-          <p>Refresh this page to check its status.</p>
+      return ( 
+        <div id="gamesubmit">
+          {form}
+          <p>{_("Game submitted!")}</p>
         </div>
       );
     } else if (this.state.state == SubmitState.NOAUTH) {
-      inner = (
-        <p>{_("You must register an account and log in to submit a game.")}</p>
-      )
-    }
-
-    return(
-      <div>
+      return (
         <div id="gamesubmit">
-          {inner}
+          <p>{_("You must register an account to submit a game.")}</p>
         </div>
-      </div>
-    )
+      );
+    }
   }
 }
 
