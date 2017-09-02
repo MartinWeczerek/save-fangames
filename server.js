@@ -1,11 +1,11 @@
 const express = require('express');
-const webpackDevMiddleware = require('webpack-dev-middleware');
+const app = express();
+
+// Hook up webpack dev middleware, which recompiles bundle.js on file changes.
+/*const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpack = require('webpack');
 const webpackConfig = require('./webpack.config.js');
-const app = express();
 const compiler = webpack(webpackConfig);
-
-// Hook up webpack middleware.
 app.use(webpackDevMiddleware(compiler, {
   hot: true,
   filename: 'bundle.js',
@@ -14,28 +14,19 @@ app.use(webpackDevMiddleware(compiler, {
     colors: true,
   },
   historyApiFallback: true,
-}));
+}));*/
 
 // Configure body-parser for POST parameters.
 var bodyParser = require('body-parser');
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
+// Configure cookie-parser.
 var cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
-// Various requires.
-var bcrypt = require('bcrypt');
-const saltRounds = 10;
-var jwt = require('jsonwebtoken');
-var fs = require('fs');
-const uuidv4 = require('uuid/v4'); // Version 4 is Random
-const mail = require('./mail.js');
-const webhooks = require('./webhooks.js');
-const { URL } = require('url');
-
+// Connect to DB and create tables if don't exist already.
 var dao = require('./dao.js');
-// Create tables if don't exist already.
 dao.ensureTablesCreated()
 
 // Parse localized DoT templates.
@@ -43,6 +34,16 @@ var dots = require('dot').process({path: './loc_dot_views'});
 function dotsloc(templatename, data, locale) {
   return dots[templatename+'_'+locale](data);
 }
+
+// Various requires.
+var bcrypt = require('bcrypt');
+const saltRounds = 10;
+var jwt = require('jsonwebtoken');
+const uuidv4 = require('uuid/v4'); // Version 4 is Random
+const { URL } = require('url');
+const moment = require('moment');
+const mail = require('./mail.js');
+const webhooks = require('./webhooks.js');
 
 // Locale cookie midddleware
 // Sets res.locals.locale, and sets Set-Cookie header if no locale cookie.
@@ -62,6 +63,7 @@ app.use(function (req,res,next){
 });
 
 // Load config.
+var fs = require('fs');
 const configPath = 'config/config.json';
 if (!fs.existsSync(configPath)) {
   throw(configPath+' does not exist.');
@@ -101,12 +103,42 @@ app.use(express.static(__dirname + '/www', {
 }));
 
 app.get('/',function(req,res){
-  // TODO: populate new releases
-  var releases = [{date:"8/25",games:[{name:"Game 3",link:"https://google.com"},{name:"Game 4",link:"https://google.com"}]},{date:"8/26",games:[{name:"Game 1",link:"https://google.com"},{name:"Game 2",link:"https://google.com"}]}];
-  var content = dotsloc('homepage',{releases:releases},res.locals.locale);
-  res.status(200).send(dotsloc('base',{
-    content:content,
-    navSelector:'.navHome'},res.locals.locale));
+  var today = moment().utc().hour(0).minute(0).second(0).millisecond(0);
+  var mindate = today.subtract(6, 'days').format('YYYY-MM-DD HH:mm:ss');
+  dao.getGames(mindate,function(err,games){
+    if (err) {
+      console.log(err);
+      res.status(500).send({Message:"Database error."});
+    } else {
+      // Group games into buckets by days.
+      // [ {date:'01/01', games:[...]}, {date:'01/03', games:[...]}, ... ]
+      games = games.sort(function(a,b){
+        var aa = moment(a.approvedAt).valueOf();
+        var bb = moment(b.approvedAt).valueOf();
+        if (aa < bb) return -1;
+        else if (aa == bb) return 0;
+        else return 1;
+      });
+
+      var releases = [];
+      var group = {};
+      for (var i=0; i<games.length; i++) {
+        var g = games[i];
+        var m = moment(g.approvedAt, 'YYYY-MM-DD HH:mm:ss');
+        var day = m.format('MM-DD');
+        if (day != group.date) {
+          group = {date:day, games:[]};
+          releases.push(group);
+        }
+        group.games.push({name:g.name,link:g.link});
+      }
+
+      var content = dotsloc('homepage',{releases:releases},res.locals.locale);
+      res.status(200).send(dotsloc('base',{
+        content:content,
+        navSelector:'.navHome'},res.locals.locale));
+    }
+  });
 });
 
 app.get('/admin',function(req,res){

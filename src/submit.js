@@ -109,7 +109,7 @@ render(){
       inner = (
         <div>
           <p>Your game {this.state.gamename} by {this.state.gameauthors} with link {this.state.gamelink} has been successfully submitted!</p>
-          <p>Visit <a href="/account">your account page</a> to check its status.</p>
+          <p>Refresh this page to check its status.</p>
         </div>
       );
     } else if (this.state.state == SubmitState.NOAUTH) {

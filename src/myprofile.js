@@ -1,5 +1,6 @@
 import React from 'react';
 import Auth from './auth';
+import { _ } from './localize';
 
 class MyProfile extends React.Component {
   constructor() {

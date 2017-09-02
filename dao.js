@@ -117,11 +117,6 @@ var self = module.exports = {
     );
   },
 
-  getGameById: function(id,callback){
-    db.get('SELECT * FROM games WHERE approved = 1 AND id = $id',
-    {$id:id},callback);
-  },
-
   insertUser: function(email, hash, verifyhash, callback) {
     db.run('UPDATE users SET verifyhash = ($verifyhash), passwordhash = ($hash) WHERE active = 0 and email = ($email)',
       {$verifyhash:verifyhash, $hash:hash, $email:email},
@@ -178,6 +173,11 @@ var self = module.exports = {
       {$mindate:mindate},
       callback
     );
+  },
+
+  getGameById: function(id,callback){
+    db.get('SELECT * FROM games WHERE approved = 1 AND id = $id',
+    {$id:id},callback);
   },
 
   getGamesByUser: function(userid,callback) {
