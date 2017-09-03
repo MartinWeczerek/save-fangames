@@ -111,12 +111,6 @@ routeHomepage: function(req, res) {
   });
 },
 
-routeAdmin: function(req, res) {
-  res.status(200).send(dotsloc('base',{
-    content:'<div id="adminroot"></div>',
-    navSelector:'.navAdmin'},res.locals.locale));
-},
-
 routeContactAdmin: function(req, res) {
   var content = dotsloc('contactadmin',{},res.locals.locale);
   res.status(200).send(dotsloc('base',{
@@ -150,9 +144,17 @@ routeSubmitGame: function(req, res) {
     navSelector:'.navSubmit'},res.locals.locale));
 },
 
+routeAdmin: function(req, res) {
+  res.status(200).send(dotsloc('base',{
+    content:'<div id="adminroot"></div>',
+    navSelector:'.navAdmin'},res.locals.locale));
+},
+
 routeAdminReports: function(req, res) {
   verifyAuth(req,res,true,function(user){
+    var pageLength = 20;
     dao.getReports(req.body.type,req.body.order,req.body.answered,
+      pageLength,pageLength*parseInt(req.body.pagenum),
       function(err,reports){
         if (err) {
           console.log(err);

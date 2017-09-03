@@ -15,6 +15,7 @@ class Admin extends React.Component {
       answered:0,
       reportsuccessmsg:'',
       reporterrormsg:'',
+      pagenum:0,
     };
 
     if (Auth.isUserAuthenticated()) {
@@ -24,6 +25,7 @@ class Admin extends React.Component {
 
     this.filter = this.filter.bind(this);
     this.filterChange = this.filterChange.bind(this);
+    this.showMore = this.showMore.bind(this);
   }
 
   filter(event) {
@@ -31,9 +33,11 @@ class Admin extends React.Component {
       event.preventDefault();
     }
 
+    this.state.pagenum = 0;
     var component = this;
     Auth.sendAuthedPost('/admin',
-      {order:this.state.order,type:this.state.type,answered:this.state.answered},
+      {order:this.state.order,type:this.state.type,answered:this.state.answered,
+      pagenum:0},
       function(xhr){
       component.setState({loading:false});
       if (xhr.status == 200) {
@@ -50,6 +54,25 @@ class Admin extends React.Component {
     const value = event.target.value;
     this.setState({[name]:value,loading:true},function(){
       this.filter(null);
+    });
+  }
+
+  showMore(event) {
+    this.state.pagenum++;
+    var component = this;
+    Auth.sendAuthedPost('/admin',
+      {order:this.state.order,type:this.state.type,answered:this.state.answered,
+      pagenum:this.state.pagenum},
+      function(xhr){
+      component.setState({loading:false});
+      if (xhr.status == 200) {
+        var newreports = JSON.parse(xhr.responseText);
+        var allreports = component.state.reports.slice().concat(newreports);
+        component.setState({authenticated:true,
+          reports:allreports});
+      } else {
+        component.setState({errormsg: Auth.parseErrorMessage(xhr)});
+      }
     });
   }
 
@@ -134,6 +157,7 @@ class Admin extends React.Component {
           <span className="error">{this.state.reporterrormsg}</span>
           <p></p>
           {this.state.reports.map((r, i) => this.reportJSX(r, i))}
+          <button onClick={this.showMore}>Show More</button>
         </div>);
     }
   }

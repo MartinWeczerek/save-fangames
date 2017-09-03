@@ -59,16 +59,18 @@ var self = module.exports = {
       callback);
   },
 
-  getReports: function(type, order, answered, callback) {
+  getReports: function(type, order, answered, limit, offset, callback) {
     if (order != 'ASC' && order != 'DESC') {
       callback('Invalid order given to getReports: '+order);
     }
     if (type == 'all') {
-      db.all(`SELECT * FROM reports WHERE answered = $answered ORDER BY id ${order}`,
+      db.all(`SELECT * FROM reports WHERE answered = $answered
+        ORDER BY id ${order} LIMIT ${limit} OFFSET ${offset}`,
         {$answered:answered},
         callback);
     } else {
-      db.all(`SELECT * FROM reports WHERE type = $type AND answered = $answered ORDER BY id ${order}`,
+      db.all(`SELECT * FROM reports WHERE type = $type AND answered = $answered
+        ORDER BY id ${order} LIMIT ${limit} OFFSET ${offset}`,
         {$type:type, $answered:answered},
         callback);
     }
