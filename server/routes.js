@@ -24,10 +24,14 @@ const dao = require('./dao.js');
 
 // Parse localized DoT templates.
 var dots = require('dot').process({path: './loc_dot_views'});
+
+// dotsloc executes a DoT template of a specified locale.
 function dotsloc(templatename, data, locale) {
   return dots[templatename+'_'+locale](data);
 }
 
+// verifyAuth parses a request's JWT token and either callback-returns a user
+// object if valid, or sends an error message on the response.
 function verifyAuth(req,res,adminonly,callback){
   var token = req.header('Authorization');
   if (!token) {
@@ -53,6 +57,7 @@ function verifyAuth(req,res,adminonly,callback){
   });
 }
 
+// generateToken generates a JWT token based on a user object.
 function generateToken(user) {
   var u = {
     email: user.email,

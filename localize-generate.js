@@ -24,7 +24,7 @@ var locdata =
 module.exports = {
   data:${tstr}
 };`;
-fs.writeFileSync('./src/locdata.js', locdata);
+fs.writeFileSync('./bundle/locdata.js', locdata);
 
 // Generate translated versions of all DoT templates in dot_views.
 console.log('starting DoT loc');

@@ -82,7 +82,7 @@ schedule.scheduleJob(config.approval_check_schedule,function(){
 });
 
 // Host static content.
-app.use(express.static(__dirname + '/www', {
+app.use(express.static(__dirname + '/../static', {
   extensions: ['html'] // so "/submit" works as well as "/submit.html"
 }));
 

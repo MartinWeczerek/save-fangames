@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  context: path.join(__dirname, 'src'),
+  context: path.join(__dirname, 'bundle'),
   entry: [
     './main.js',
   ],
@@ -9,7 +9,7 @@ module.exports = {
     fs: "empty"
   },
   output: {
-    path: path.join(__dirname, 'www'),
+    path: path.join(__dirname, 'static'),
     filename: 'bundle.js',
     library: 'BundleEntry', // Let non-bundled client JS can access Auth class.
   },

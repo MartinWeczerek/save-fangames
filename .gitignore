@@ -1,6 +1,6 @@
 /node_modules
 
-www/bundle.js
+static/bundle.js
 
 sf.db
 config
