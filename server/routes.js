@@ -361,8 +361,16 @@ routeLogin: function(req, res) {
       if (row.banned) {
         res.status(401).send({Message: 'Unauthorized. You have been banned.'});
       } else {
-        var token = generateToken(row);
-        res.status(200).send({Email: email, Token: token});
+        // TODO: verify from actual server this is the correct IP
+        dao.updateUserLastIP(row.id, req.ip, function(err) {
+          if (err) {
+            console.log(err);
+            res.status(500).send({Message: 'Database error.'});
+          } else {
+            var token = generateToken(row);
+            res.status(200).send({Email: email, Token: token});
+          }
+        });
       }
     } else {
       res.status(401).send({Message: 'Unauthorized.'});
@@ -380,10 +388,18 @@ routeVerifyEmail: function(req, res) {
       console.log(err);
       res.status(400).send({Message: 'Database error.'});
     } else {
-      var token = generateToken(user);
-      res.status(200).send(dotsloc('base',{setToken: token,
-        content:'<p>Success! Your account is now activated!</p>',
-        navSelector:'.nothing'},res.locals.locale));
+      // TODO: verify from actual server this is the correct IP
+      dao.updateUserLastIP(user.id, req.ip, function(err) {
+        if (err) {
+          console.log(err);
+          res.status(500).send({Message: 'Database error.'});
+        } else {
+          var token = generateToken(user);
+          res.status(200).send(dotsloc('base',{setToken: token,
+            content:'<p>Success! Your account is now activated!</p>',
+            navSelector:'.nothing'},res.locals.locale));
+        }
+      });
     }
   });
 }

@@ -24,7 +24,8 @@ var self = module.exports = {
       active BOOLEAN DEFAULT 0,
       verifyhash TEXT,
       admin BOOLEAN DEFAULT 0,
-      banned BOOLEAN DEFAULT 0)`);
+      banned BOOLEAN DEFAULT 0,
+      lastip TEXT)`);
 
     db.run(`CREATE TABLE IF NOT EXISTS games (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -142,6 +143,11 @@ var self = module.exports = {
         }
       }
     );
+  },
+
+  updateUserLastIP: function(userid, lastip, callback) {
+    db.run('UPDATE users SET lastip = ($lastip) WHERE id = ($id)',
+      {$lastip:lastip, $id:userid}, callback);
   },
 
   insertGame: function(user,gamename,gamelink,gameauthors,callback) {
