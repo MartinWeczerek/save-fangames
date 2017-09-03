@@ -110,6 +110,25 @@ app.get('/testerror',function(req,res){
   undefined.length; // i'm a programmer!
 });
 
+app.get('/contactadmin',function(req,res){
+  var content = dotsloc('contactadmin',{},res.locals.locale);
+  res.status(200).send(dotsloc('base',{
+    content:content,
+    navSelector:'.nothing'},res.locals.locale));
+});
+
+app.post('/contactadmin',function(req,res){
+  verifyAuth(req,res,false,function(user){
+    dao.userContactAdminReport(user,req.body.message,function(err){
+      if (err) {
+        res.status(500).send({Message:"Database error."});
+      } else {
+        res.status(200).send();
+      }
+    });
+  });
+});
+
 app.get('/',function(req,res){
   var today = moment().utc().hour(0).minute(0).second(0).millisecond(0);
   var mindate = today.subtract(6, 'days').format('YYYY-MM-DD HH:mm:ss');

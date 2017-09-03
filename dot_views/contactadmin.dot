@@ -1,0 +1,20 @@
+<script>
+  function asdfasdf(form) {
+    BundleEntry.Auth.sendAuthedPost('/contactadmin', 
+    {message:form["message"].value},
+    function(xhr){
+      if (xhr.status == 200) {
+        alert('Sent!');
+        window.location.href = '/';
+      } else {
+        alert('Failed to send');
+      }
+    });
+  }
+</script>
+<h3>Contact an Admin</h3>
+<form onsubmit="event.preventDefault(); asdfasdf(this);">
+  <label>Message:</label>
+  <input type="text" name="message"/>
+  <input type="submit" value="Submit"/>
+</form>

@@ -74,6 +74,11 @@ var self = module.exports = {
     }
   },
 
+  userContactAdminReport: function(user, message, callback) {
+    message = `User ${user.email} contacted admins, saying:\n${message}`;
+    self.insertReport('user_contact', user.id, message, user.id, callback);
+  },
+
   rejectGame: function(gameid, adminuser, callback) {
     self.getGameById(gameid, function(err,game){
       if (err) callback(err);

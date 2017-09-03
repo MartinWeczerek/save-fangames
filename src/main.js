@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Counter from './counter';
 import Submit from './submit';
 import Account from './account';
-import MyProfile from './myprofile';
+import MyGames from './mygames';
 import Admin from './admin';
 import Auth from './auth';
 
@@ -17,7 +17,7 @@ function addComponent(elt, component) {
 document.addEventListener('DOMContentLoaded', function() {
   addComponent('submitroot', <Submit/>);
   addComponent('accountroot', <Account/>);
-  addComponent('myprofileroot', <MyProfile/>);
+  addComponent('mygamesroot', <MyGames/>);
   addComponent('adminroot', <Admin/>);
 });
 

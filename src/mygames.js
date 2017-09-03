@@ -2,7 +2,7 @@ import React from 'react';
 import Auth from './auth';
 import { _ } from './localize';
 
-class MyProfile extends React.Component {
+class MyGames extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -43,4 +43,4 @@ class MyProfile extends React.Component {
   }
 }
 
-export default MyProfile;
+export default MyGames;

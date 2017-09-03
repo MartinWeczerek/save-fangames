@@ -147,6 +147,7 @@ class Account extends React.Component {
       }
       return (
         <span id="account">
+          <a href="/contactadmin">Contact admin</a>
           <span className="email">{this.state.email}</span>
           {adminButton}
           <input type="submit" value={_("Log out")} onClick={this.handleLogout}/>
