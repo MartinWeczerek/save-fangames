@@ -33,7 +33,7 @@ class MyGames extends React.Component {
     } else if (this.state.errormsg) {
       return (<div className="error"><p>{this.state.errormsg}</p></div>);
     } else if (!this.state.authenticated) {
-      return (<div><p>Not logged in.</p></div>);
+      return (<div></div>);
     } else {
       return (
         <div>
