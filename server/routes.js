@@ -227,6 +227,10 @@ routeFullList: function(req, res) {
       console.log(err);
       res.status(500).send({Message:"Database error."});
     } else {
+      for (var i=0; i<games.length; i++) {
+        var m = moment(games[i].approvedAt, 'YYYY-MM-DD HH:mm:ss');
+        games[i].approvedAt = m.format('YYYY-MM-DD');
+      }
       var content = dotsloc('fulllist',{games:games,
         linkactive:linkactive},res.locals.locale);
       res.status(200).send(dotsloc('base',{content:content,

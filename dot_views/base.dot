@@ -2,8 +2,8 @@
 <head>
   <title>Blue Fruit</title>
   <link rel="shortcut icon" href="/favicon.ico?v=1">
-  <script src="/bundle.js?v=1"></script>
   <link rel="stylesheet" type="text/css" href="/style.css?v=1">
+  <script src="/bundle.js?v=1"></script>
   <script>
     document.styleSheets[0].insertRule('{{=it.navSelector}} { background-color:#465E8C; }', 1);
     {{? it.setToken}}
@@ -20,33 +20,38 @@
   </script>
 </head>
 <body>
+  <div id="box">
     <div id="header">
       <div id="header-inner">
-        <span id="language">
-          <a onClick="setLocale('jp')">&#x65E5;&#x672C;&#x8A9E;</a>
-          <br/>
-          <a onClick="setLocale('en')">English</a>
-        </span>
-        <span id="accountroot">
-          Enable JavaScript to register an account and log in.
-        </span>
-        <a href="/">
-          <span id="logo">
-            <img src='/images/logocherry.png'></img>Blue Fruit
+        <div id="header-inner2">
+          <span id="language">
+            <a onClick="setLocale('jp')">&#x65E5;&#x672C;&#x8A9E;</a>
+            <br/>
+            <a onClick="setLocale('en')">English</a>
           </span>
-        </a>
-        <div class="clearboth"></div>
-        <nav>
-          <a href="/"><span class="navItem navHome">_("Homepage")</span></a>
-          <a href="/list"><span class="navItem navList">_("Full List")</span></a>
-          <a href="/submit"><span class="navItem navSubmit">_("Submit Games")</span></a>
-        </nav>
+          <span id="accountroot">
+            Enable JavaScript to register an account and log in.
+          </span>
+          <a href="/">
+            <span id="logo">
+              <img src='/images/logocherry.png'></img>Blue Fruit
+            </span>
+          </a>
+          <div class="clearboth"></div>
+          <nav>
+            <a href="/"><span class="navItem navHome">_("Homepage")</span></a>
+            <a href="/list"><span class="navItem navList">_("Full List")</span></a>
+            <a href="/submit"><span class="navItem navSubmit">_("Submit Games")</span></a>
+          </nav>
+        </div>
       </div>
     </div>
-  <div id="wrapper">
-    <div id="content">
-      {{=it.content}}
+    <div id="wrapper">
+      <div id="content">
+        {{=it.content}}
+      </div>
     </div>
   </div>
+
 </body>
 </html>

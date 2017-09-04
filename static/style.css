@@ -3,19 +3,17 @@
     letter-spacing:0.01em;
 }
 body {
-    background-color:#334466;
-    background-image:url("images/bgcherry.png");
+    background-color:#28354F;
+    /*background-image:url("images/bgcherry.png");
     background-position:center 25%;
-    background-repeat:no-repeat;
+    background-repeat:no-repeat;*/
     color:white;
     font-size:1.25em;
 }
 
-#wrapper { text-align:center; margin:0 auto; max-width:100%; width:1000px; }
-
-#header { background-color:#1D263B; width:100%; }
-#header-inner { margin:0 auto; max-width:100%; width:1000px; 
-    padding:0 0.5em; }
+#header { background-color:#1D263B; width:100%; flex:0 1 auto; }
+#header-inner { margin:0 auto; max-width:100%; width:1000px; }
+#header-inner2 { margin: 0 1.5em; }
 
 #logo { float:left; }
 #logo { font-size:1.25em; line-height:2.4em;
@@ -26,9 +24,9 @@ body {
 #account .email { text-align:right; margin-left:0.5em; }
 #account input[type=submit], button { margin-left:0.5em;
         height:2em; line-height:1em; vertical-align:middle; }
-#language { float:right; margin:0.75em 1em 0 0; text-align:left;
+#language { float:right; margin:0.75em 0 0 0; text-align:left;
     font-size:0.75em; }
-#language a { color:#AAAAAA; }
+#language a { color:#AAAAAA; text-decoration:none; }
 #language a:hover { text-decoration:underline; cursor:pointer; }
 
 .clearboth { clear:both; }
@@ -40,13 +38,19 @@ nav .navItem { display:inline-block; min-width: 4em; height:2.25em;
     text-align:center; padding: 0 0.75em; float:left; margin:0 0.5em 0.5em 0; }
 nav .navItem:hover { background-color:#465E8C; }
 nav a { cursor:pointer; color:white; }
+nav a:visited{ color:white; }
 
 #account-inputbox { position:absolute; margin-left:-17em;
     width:15em; background-color:#2A3854;
     text-align:center; padding:0.5em 1em 1em; line-height: 1.25em; 
     margin-top:2.5em; }
 
-#content { padding:1em 0.5em 2em 0.5em; }
+#box { display:flex; flex-flow:column; height:100%; }
+#wrapper { text-align:left; margin:0 auto; max-width:100%; width:1000px; 
+    /*border-style:solid; border-color:rgba(0,0,0,0) white; border-width:1px;*/
+    background-color:#334466;
+    flex: 1 1 auto; }
+#content { padding:0.5em 1em 2em; }
 
 #adminpanel { text-align:left; font-size:0.85em; }
 .report { width:100%; min-height:4em; margin-top:0.5em;
@@ -55,12 +59,10 @@ nav a { cursor:pointer; color:white; }
     text-align:center; vertical-align:middle; line-height:4em; }
 .reportcontents { display:inline-block; flex:1; padding:0.5em 0; }
 
-table.games { width: 80%; margin-left:auto; margin-right:auto;
-    margin-top:2em; }
+table.games { width: 80%; }
 table.games tr { width:100%; }
-table.games td a { color:white; text-decoration:none; }
+table.games td a { text-decoration:none; }
 table.games td a:hover { text-decoration:underline; }
-table.games td a:visited { color:#B79BE0; }
 table.games td { width:auto;max-width:0; }
 table.games th { text-align:left; }
 table.publicgames td:nth-child(1) { width:50%; }
@@ -72,15 +74,18 @@ table.publicgames tr { line-height:1.25em; }
 table.mygames table.mygames th, table.mygames td { border:1px solid #aaa; padding: 0.4em; }
 table.mygames { border-collapse:collapse; }
 
-a { color: #C6C2C4; text-decoration:none; }
-    a:hover { text-decoration:underline; }
+a { color: #A5C5F2; text-decoration:underline; }
+    a:hover { text-decoration:none; }
+    a:visited { color:#B79BE0; }
+.releases a { text-decoration:none; }
+    .releases a:hover { text-decoration:underline; }
 
-p { margin-top:1em; }
+p+p, div+p, p+h3, #gamesubmit, .releases+h3, p+table { margin-top:1em; }
 
-h2 { font-weight:normal; font-size:1.75em; }
-h3 { font-weight:normal; font-size:1.25em; }
+h2 { font-weight:normal; font-size:1.75em; margin-bottom:1em; }
+h3 { font-weight:normal; font-size:1.4em; margin-bottom:1em; }
 
-#gamesubmit { width:40%; margin-left:auto; margin-right:auto; }
+#gamesubmit { margin-left:auto; margin-right:auto; }
 
 label { display:block; text-align:left; padding:0.4em 0 0.1em; }
 form .moreinfo { font-size:0.75em; vertical-align:bottom; color:#C6C2C4; }

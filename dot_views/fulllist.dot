@@ -1,4 +1,5 @@
 <p>
+_("Order by:") 
 {{? it.linkactive == "alpha"}}
 _("Alphabetical") | <a href="/list/new">_("Date")</a>
 {{?? it.linkactive == "new"}}
