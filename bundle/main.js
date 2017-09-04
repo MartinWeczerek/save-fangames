@@ -6,6 +6,7 @@ import Account from './account';
 import MyGames from './mygames';
 import Admin from './admin';
 import AdminList from './adminlist';
+import ContactAdmin from './contactadmin';
 
 function addComponent(elt, component) {
   var root = document.getElementById(elt)
@@ -20,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
   addComponent('mygamesroot', <MyGames/>);
   addComponent('adminroot', <Admin/>);
   addComponent('adminlistroot', <AdminList/>);
+  addComponent('contactadminroot', <ContactAdmin/>);
 });
 
 // Let non-bundled client JS can access Auth class.

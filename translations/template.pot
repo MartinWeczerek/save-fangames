@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-02 15:15-0700\n"
+"POT-Creation-Date: 2017-09-04 14:03-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,93 +17,101 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/account.js:130
+#: bundle/account.js:133
 msgid ""
 "Verification email sent. Please check your email (including spam folder) to "
 "activate your account."
 msgstr ""
 
-#: src/account.js:135 src/account.js:139 src/submit.js:115
+#: bundle/account.js:138 bundle/account.js:142 bundle/submit.js:115
 msgid "Submitting..."
 msgstr ""
 
-#: src/account.js:152
+#: bundle/account.js:160
 msgid "Log out"
 msgstr ""
 
-#: src/account.js:161 src/account.js:198
+#: bundle/account.js:169 bundle/account.js:206
 msgid "Log in"
 msgstr ""
 
-#: src/account.js:164
+#: bundle/account.js:172
 msgid "Re-enter password:"
 msgstr ""
 
-#: src/account.js:168 src/account.js:199
+#: bundle/account.js:176 bundle/account.js:207
 msgid "Register"
 msgstr ""
 
-#: src/account.js:179
+#: bundle/account.js:187
 msgid "Email:"
 msgstr ""
 
-#: src/account.js:182
+#: bundle/account.js:190
 msgid "Password:"
 msgstr ""
 
-#: src/myprofile.js:32
+#: bundle/adminlist.js:100 bundle/contactadmin.js:41 bundle/mygames.js:32
 msgid "Loading..."
 msgstr ""
 
-#: src/submit.js:91
+#: bundle/submit.js:91
 msgid "Name of your fangame:"
 msgstr ""
 
-#: src/submit.js:94
+#: bundle/submit.js:94
 msgid "Creator name(s) separated by commas:"
 msgstr ""
 
-#: src/submit.js:97
+#: bundle/submit.js:97
 msgid "Link to your fangame:"
 msgstr ""
 
-#: src/submit.js:123
+#: bundle/submit.js:123
 msgid "Game submitted!"
 msgstr ""
 
-#: src/submit.js:129
+#: bundle/submit.js:129
 msgid "You must register an account to submit a game."
 msgstr ""
 
-#: dot_views/base.dot:40
+#: dot_views/base.dot:42
 msgid "Homepage"
 msgstr ""
 
-#: dot_views/base.dot:41
+#: dot_views/base.dot:43
 msgid "Full List"
 msgstr ""
 
-#: dot_views/base.dot:42
+#: dot_views/base.dot:44
 msgid "Submit Games"
 msgstr ""
 
-#: dot_views/fulllist.dot:3 dot_views/fulllist.dot:5
+#: dot_views/base.dot:45
+msgid "About"
+msgstr ""
+
+#: dot_views/fulllist.dot:2
+msgid "Order by:"
+msgstr ""
+
+#: dot_views/fulllist.dot:4 dot_views/fulllist.dot:6
 msgid "Alphabetical"
 msgstr ""
 
-#: dot_views/fulllist.dot:3 dot_views/fulllist.dot:5
+#: dot_views/fulllist.dot:4 dot_views/fulllist.dot:6
 msgid "Date"
 msgstr ""
 
-#: dot_views/fulllist.dot:10 dot_views/mygames.dot:3
+#: dot_views/fulllist.dot:11 dot_views/mygames.dot:3
 msgid "Game"
 msgstr ""
 
-#: dot_views/fulllist.dot:11 dot_views/mygames.dot:4
+#: dot_views/fulllist.dot:12 dot_views/mygames.dot:4
 msgid "Creator(s)"
 msgstr ""
 
-#: dot_views/fulllist.dot:12
+#: dot_views/fulllist.dot:13
 msgid "Release Date"
 msgstr ""
 
@@ -111,11 +119,11 @@ msgstr ""
 msgid "Welcome to Blue Fruit!"
 msgstr ""
 
-#: dot_views/homepage.dot:6
+#: dot_views/homepage.dot:3
 msgid "New Releases"
 msgstr ""
 
-#: dot_views/homepage.dot:16
+#: dot_views/homepage.dot:15
 msgid "Updates"
 msgstr ""
 

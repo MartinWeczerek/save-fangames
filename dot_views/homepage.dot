@@ -1,11 +1,5 @@
 <h2>_("Welcome to Blue Fruit!")</h2>
-<p>Blue Fruit is a central list of download links of <a href="https://cwpat.me/fangames-intro/">IWBTG fangames</a>. It replaces the <a href="https://www21.atwiki.jp/iwannabethewiki/pages/283.html">Aiwana wiki</a>.
-<br/><br/>
-When games are approved by the review process here, they will be added automatically to <a href="https://delicious-fruit.com/">Delicious Fruit</a>, the fangame review site.
-<br/><br/>
-Click the links in the top right to change between the English and Japanese translations of the site.
-</p>
-
+<p>English and Japanese translations are availble in the top right corner.</p>
 <h3>_("New Releases")</h3>
 <div class="releases">
 {{~it.releases :group:index}}

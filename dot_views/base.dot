@@ -42,6 +42,7 @@
             <a href="/"><span class="navItem navHome">_("Homepage")</span></a>
             <a href="/list"><span class="navItem navList">_("Full List")</span></a>
             <a href="/submit"><span class="navItem navSubmit">_("Submit Games")</span></a>
+            <a href="/about"><span class="navItem navAbout">_("About")</span></a>
           </nav>
         </div>
       </div>

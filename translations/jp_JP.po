@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-02 15:03-0700\n"
-"PO-Revision-Date: 2017-09-02 22:53-0700\n"
+"PO-Revision-Date: 2017-09-04 14:13-0700\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -129,3 +129,11 @@ msgstr "投稿日"
 #: dot_views/mygames.dot:6
 msgid "Approved Date"
 msgstr "承認日"
+
+#: dot_views/base.dot:45
+msgid "About"
+msgstr "約"
+
+#: dot_views/fulllist.dot:2
+msgid "Order by:"
+msgstr "並べ替え："

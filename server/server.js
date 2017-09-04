@@ -109,9 +109,11 @@ app.use(express.static(__dirname + '/../static', {
 // Register routes.
 const routes = require('./routes.js');
 app.get ('/',                 routes.routeHomepage);
-app.get ('/list/:order',      mcache(60*10), routes.routeFullList);
+// TODO: cache separate versions of page for each locale?
+app.get ('/list/:order',      /*mcache(60*10),*/ routes.routeFullList);
 app.get ('/list',             function(req,res){res.redirect('/list/alpha');});
 app.get ('/submit',           routes.routeSubmitPage);
+app.get ('/about',            routes.routeAbout);
 app.get ('/contactadmin',     routes.routeContactAdmin);
 app.post('/contactadmin',     routes.routeSendAdminMessage);
 

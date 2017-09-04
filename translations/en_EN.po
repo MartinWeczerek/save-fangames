@@ -141,3 +141,12 @@ msgstr "My submitted games"
 #: dot_views/submit.dot:5
 msgid "Submit a new game"
 msgstr "Submit a new game"
+
+#: dot_views/base.dot:45
+msgid "About"
+msgstr "About"
+
+#: dot_views/fulllist.dot:2
+msgid "Order by:"
+msgstr "Order by:"
+

@@ -112,9 +112,8 @@ routeHomepage: function(req, res) {
 },
 
 routeContactAdmin: function(req, res) {
-  var content = dotsloc('contactadmin',{},res.locals.locale);
   res.status(200).send(dotsloc('base',{
-    content:content,
+    content:'<div id="contactadminroot"></div>',
     navSelector:'.nothing'},res.locals.locale));
 },
 
@@ -128,6 +127,12 @@ routeSendAdminMessage: function(req, res) {
       }
     });
   });
+},
+
+routeAbout: function(req, res) {
+  var content = dotsloc('about',{},res.locals.locale);
+  res.status(200).send(dotsloc('base',{content:content,
+    navSelector:'.navAbout'},res.locals.locale));
 },
 
 routeSubmitPage:  function(req, res) {
