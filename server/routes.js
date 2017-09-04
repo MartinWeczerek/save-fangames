@@ -144,6 +144,25 @@ routeSubmitGame: function(req, res) {
     navSelector:'.navSubmit'},res.locals.locale));
 },
 
+routeAdminGames: function(req, res) {
+  res.status(200).send(dotsloc('base',{
+    content:'<div id="admingamesroot"></div>',
+    navSelector:'.navAdmin'},res.locals.locale));
+},
+
+routeAdminGamesData: function(req, res) {
+  verifyAuth(req,res,true,function(user){
+    dao.getGamesAdmin(function(err, games) {
+      if (err) {
+        console.log(err);
+        res.status(500).send({Message:"Database error."});
+      } else {
+        res.status(200).send(games);
+      }
+    });
+  });
+},
+
 routeAdmin: function(req, res) {
   res.status(200).send(dotsloc('base',{
     content:'<div id="adminroot"></div>',

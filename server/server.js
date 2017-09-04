@@ -125,6 +125,8 @@ app.get ('/admin',            routes.routeAdmin);
 app.post('/admin',            routes.routeAdminReports);
 app.post('/admin/rejectgame', routes.routeRejectGame);
 app.post('/admin/banuser',    routes.routeBanUser);
+app.get ('/admin/games',      routes.routeAdminGames);
+app.post('/admin/games',      routes.routeAdminGamesData);
 
 app.get ('/games',            routes.routeGamesData);
 

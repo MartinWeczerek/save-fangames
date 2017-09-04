@@ -83,10 +83,11 @@ var self = module.exports = {
   },
 
   rejectGame: function(gameid, adminuser, callback) {
-    self.getGameById(gameid, function(err,game){
+    var now = moment().utc().format('YYYY-MM-DD HH:mm:ss');
+    self.getGameByIdAdmin(gameid, function(err,game){
       if (err) callback(err);
-      else db.run('UPDATE games SET rejected = 1, approved = 0 WHERE id = $gameid',
-        {$gameid:game.id},
+      else db.run('UPDATE games SET rejected = 1, approved = 0, rejectedAt = ($now) WHERE id = $gameid',
+        {$now:now, $gameid:game.id},
         function(err){
         if (err) callback(err);
         else {
@@ -193,6 +194,11 @@ var self = module.exports = {
     });
   },
 
+  getGamesAdmin: function(callback) {
+    db.all('SELECT * FROM games ORDER BY approvedAt DESC',
+      {},callback);
+  },
+
   getGames: function(mindate,callback) {
     db.all('SELECT * FROM games WHERE approved = 1 AND private = 0 AND approvedAt >= $mindate',
       {$mindate:mindate},
@@ -200,8 +206,8 @@ var self = module.exports = {
     );
   },
 
-  getGameById: function(id,callback){
-    db.get('SELECT * FROM games WHERE approved = 1 AND id = $id',
+  getGameByIdAdmin: function(id,callback){
+    db.get('SELECT * FROM games WHERE id = $id',
     {$id:id},callback);
   },
 

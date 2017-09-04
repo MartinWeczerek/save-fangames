@@ -123,6 +123,9 @@ class Account extends React.Component {
   handleAdminClicked(event) {
     window.location.href = '/admin';
   }
+  handleAdminClicked2(event) {
+    window.location.href = '/admin/games';
+  }
 
   render() {
     if (this.state.sentverification) {
@@ -142,8 +145,13 @@ class Account extends React.Component {
     if (this.state.loggedin) {
       var adminButton = "";
       if (Auth.isAdmin()) {
-        adminButton = (<input type="submit" value="Admin Panel"
-          onClick={this.handleAdminClicked}/>);
+        adminButton = (
+          <span>
+            <input type="submit" value="Admin Reports"
+              onClick={this.handleAdminClicked}/>
+            <input type="submit" value="Admin Games"
+              onClick={this.handleAdminClicked2}/>
+          </span>);
       }
       return (
         <span id="account">
