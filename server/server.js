@@ -65,6 +65,26 @@ app.use(function (req,res,next){
   next();
 });
 
+// Cache middleware.
+// https://medium.com/the-node-js-collection/simple-server-side-cache-for-express-js-with-node-js-45ff296ca0f0
+const memorycache = require('memory-cache');
+const mcache = (seconds) => {
+  return (req, res, next) => {
+    var key = '__express__'+req.originalUrl || req.url;
+    let cachedBody = memorycache.get(key);
+    if (cachedBody) {
+      res.send(cachedBody);
+    } else {
+      res.oldSend = res.send;
+      res.send = (body) => {
+        memorycache.put(key, body, 1000*seconds);
+        res.oldSend(body);
+      }
+      next();
+    }
+  };
+};
+
 // Schedule periodic tasks.
 const schedule = require('node-schedule');
 const webhooks = require('./webhooks.js');
@@ -89,7 +109,7 @@ app.use(express.static(__dirname + '/../static', {
 // Register routes.
 const routes = require('./routes.js');
 app.get ('/',                 routes.routeHomepage);
-app.get ('/list/:order',      routes.routeFullList);
+app.get ('/list/:order',      mcache(60*10), routes.routeFullList);
 app.get ('/list',             function(req,res){res.redirect('/list/alpha');});
 app.get ('/submit',           routes.routeSubmitPage);
 app.get ('/contactadmin',     routes.routeContactAdmin);
