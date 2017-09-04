@@ -104,4 +104,5 @@ input[type=submit], button {
 select { font-size:1em; padding:0.1em; }
 
 .error { color:red; }
+.success { color:lime; }
 

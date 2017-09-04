@@ -144,13 +144,13 @@ routeSubmitGame: function(req, res) {
     navSelector:'.navSubmit'},res.locals.locale));
 },
 
-routeAdminGames: function(req, res) {
+routeAdminList: function(req, res) {
   res.status(200).send(dotsloc('base',{
-    content:'<div id="admingamesroot"></div>',
+    content:'<div id="adminlistroot"></div>',
     navSelector:'.navAdmin'},res.locals.locale));
 },
 
-routeAdminGamesData: function(req, res) {
+routeAdminGames: function(req, res) {
   verifyAuth(req,res,true,function(user){
     dao.getGamesAdmin(function(err, games) {
       if (err) {
@@ -158,6 +158,19 @@ routeAdminGamesData: function(req, res) {
         res.status(500).send({Message:"Database error."});
       } else {
         res.status(200).send(games);
+      }
+    });
+  });
+},
+
+routeAdminUsers: function(req, res) {
+  verifyAuth(req,res,true,function(user){
+    dao.getUsersAdmin(function(err, users) {
+      if (err) {
+        console.log(err);
+        res.status(500).send({Message:"Database error."});
+      } else {
+        res.status(200).send(users);
       }
     });
   });

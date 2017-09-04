@@ -25,7 +25,8 @@ var self = module.exports = {
       verifyhash TEXT,
       admin BOOLEAN DEFAULT 0,
       banned BOOLEAN DEFAULT 0,
-      lastip TEXT)`);
+      lastip TEXT,
+      createdAt DATETIME DEFAULT CURRENT_TIMESTAMP)`);
 
     db.run(`CREATE TABLE IF NOT EXISTS games (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -99,7 +100,7 @@ var self = module.exports = {
   },
 
   banUser: function(userid, adminuser, callback) {
-    self.getUserById(userid,function(err,user){
+    self.getUserByIdAdmin(userid,function(err,user){
       if (err) callback(err);
       else db.run('UPDATE users SET banned = 1 WHERE id = $userid',
         {$userid:user.id},
@@ -118,6 +119,10 @@ var self = module.exports = {
       {$email:email},
       callback
     );
+  },
+
+  getUserByIdAdmin: function(id, callback) {
+    db.get('SELECT * FROM users WHERE id = ($id)',{$id:id},callback);
   },
 
   getUserById: function(id, callback) {
@@ -144,6 +149,10 @@ var self = module.exports = {
         }
       }
     );
+  },
+
+  getUsersAdmin: function(callback) {
+    db.all('SELECT * FROM users ORDER BY id DESC',{},callback);
   },
 
   updateUserLastIP: function(userid, lastip, callback) {
@@ -195,8 +204,7 @@ var self = module.exports = {
   },
 
   getGamesAdmin: function(callback) {
-    db.all('SELECT * FROM games ORDER BY approvedAt DESC',
-      {},callback);
+    db.all('SELECT * FROM games ORDER BY id DESC',{},callback);
   },
 
   getGames: function(mindate,callback) {

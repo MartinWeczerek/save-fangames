@@ -124,7 +124,7 @@ class Account extends React.Component {
     window.location.href = '/admin';
   }
   handleAdminClicked2(event) {
-    window.location.href = '/admin/games';
+    window.location.href = '/admin/list';
   }
 
   render() {
@@ -149,7 +149,7 @@ class Account extends React.Component {
           <span>
             <input type="submit" value="Admin Reports"
               onClick={this.handleAdminClicked}/>
-            <input type="submit" value="Admin Games"
+            <input type="submit" value="Admin List"
               onClick={this.handleAdminClicked2}/>
           </span>);
       }
