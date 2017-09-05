@@ -25,8 +25,8 @@ class Submit extends React.Component {
     this.handleChange2 = this.handleAuthorsChange.bind(this);
     this.handleChange3 = this.handleLinkChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    Auth.authenticateUser.callback = this.handleOnAuth.bind(this);
-    Auth.deauthenticateUser.callback = this.handleOnDeauth.bind(this);
+    //Auth.authenticateUser.callback = this.handleOnAuth.bind(this);
+    //Auth.deauthenticateUser.callback = this.handleOnDeauth.bind(this);
     if (!Auth.isUserAuthenticated()) {
       this.state.state = SubmitState.NOAUTH;
     }
@@ -94,7 +94,7 @@ class Submit extends React.Component {
         <label>{_("Creator name(s) separated by commas:")}</label>
         <input type="text" value={this.state.gameauthors} onChange={this.handleChange2} spellCheck="false" />
         <br/>
-        <label>{_("Link to your fangame:")}</label>
+        <label>{_("Link to your fangame: (include https:// or http://)")}</label>
         <input type="text" value={this.state.gamelink} onChange={this.handleChange3} spellCheck="false" />
         <br/>
         <br/>

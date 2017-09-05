@@ -13,4 +13,13 @@
 </div>
 
 <h3>_("Updates")</h3>
-Coming soon!
+<div class="updates">
+{{~it.updates :group:index}}
+  {{=group.date}}
+  {{~group.games :game:index2}}
+    <br/>
+    <a href="{{=game.link}}">{{=game.name}}</a>
+  {{~}}
+  <br/>
+{{~}}
+</div>

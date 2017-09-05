@@ -80,33 +80,54 @@ routeHomepage: function(req, res) {
       console.log(err);
       res.status(500).send({Message:"Database error."});
     } else {
-      // Group games into buckets by days.
-      // [ {date:'01/01', games:[...]}, {date:'01/03', games:[...]}, ... ]
-      games = games.sort(function(a,b){
-        var aa = moment(a.approvedAt).valueOf();
-        var bb = moment(b.approvedAt).valueOf();
-        if (aa < bb) return -1;
-        else if (aa == bb) return 0;
-        else return 1;
-      });
+      dao.getUpdatedGames(mindate,function(err,updated) {
+      if (err) {
+        console.log(err);
+        res.status(500).send({Message:"Database error."});
+      } else {
 
-      var releases = [];
-      var group = {};
-      for (var i=0; i<games.length; i++) {
-        var g = games[i];
-        var m = moment(g.approvedAt, 'YYYY-MM-DD HH:mm:ss');
-        var day = m.format('MM-DD');
-        if (day != group.date) {
-          group = {date:day, games:[]};
-          releases.push(group);
+        // Group games into buckets by days.
+        // [ {date:'01/01', games:[...]}, {date:'01/03', games:[...]}, ... ]
+        games = games.sort(function(a,b){
+          var aa = moment(a.approvedAt).valueOf();
+          var bb = moment(b.approvedAt).valueOf();
+          if (aa < bb) return -1;
+          else if (aa == bb) return 0;
+          else return 1;
+        });
+
+        var releases = [];
+        var group = {};
+        for (var i=0; i<games.length; i++) {
+          var g = games[i];
+          var m = moment(g.approvedAt, 'YYYY-MM-DD HH:mm:ss');
+          var day = m.format('MM-DD');
+          if (day != group.date) {
+            group = {date:day, games:[]};
+            releases.push(group);
+          }
+          group.games.push({name:g.name,link:g.link});
         }
-        group.games.push({name:g.name,link:g.link});
-      }
 
-      var content = dotsloc('homepage',{releases:releases},res.locals.locale);
-      res.status(200).send(dotsloc('base',{
-        content:content,
-        navSelector:'.navHome'},res.locals.locale));
+        var updates = [];
+        var group = {};
+        for (var i=0; i<updated.length; i++) {
+          var g = updated[i];
+          var m = moment(g.linkUpdateApprovedAt, 'YYYY-MM-DD HH:mm:ss');
+          var day = m.format('MM-DD');
+          if (day != group.date) {
+            group = {date:day, games:[]};
+            updates.push(group);
+          }
+          group.games.push({name:g.name,link:g.link});
+        }
+
+        var content = dotsloc('homepage',{releases:releases, updates:updates},res.locals.locale);
+        res.status(200).send(dotsloc('base',{
+          content:content,
+          navSelector:'.navHome'},res.locals.locale));
+      }
+      });
     }
   });
 },
@@ -229,16 +250,18 @@ routeMyGames: function(req, res) {
         console.log(err);
         res.status(500).send({Message:"Database error."});
       } else {
-        if (games.length == 0) {
-          games = [{name:"No games submitted yet!"}];
-        }
         // Only send the user info they need to know about their games.
+        // TODO: move this to SQL SELECT query
         var limgames = [];
         for (var i=0; i<games.length; i++) {
           var g = games[i];
           limgames.push({id:g.id, name:g.name, link:g.link, authors:g.authors,
             createdAt:g.createdAt, approvedAt:g.approvedAt,
-            rejected:g.rejected, approved:g.approved});
+            rejected:g.rejected, approved:g.approved,
+            linkUpdate:g.linkUpdate, linkUpdateAt:g.linkUpdateAt,
+            linkUpdateApproved:g.linkUpdateApproved,
+            linkUpdateApprovedAt:g.linkUpdateApprovedAt
+            });
         }
         res.status(200).send(limgames);
       }

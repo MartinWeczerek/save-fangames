@@ -47,8 +47,6 @@ class ContactAdmin extends React.Component {
         1. You must be logged in to contact administrators.
         <br/><br/>
         2. Valid reasons to contact admins include: Asking questions about the site, changing your game&#39;s title or authors, reporting an abusive game.
-        <br/><br/>
-        3. To update your game&#39;s download link, use the Submit Games page, not this form.
         </p>
         <form onSubmit={this.submit}>
           <label>Message:</label>

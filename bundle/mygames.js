@@ -8,6 +8,7 @@ class MyGames extends React.Component {
     this.state = {
       loading:true,
       errormsg:'',
+      auth:true,
 
       games:[],
       actionerrormsg:'',
@@ -24,6 +25,9 @@ class MyGames extends React.Component {
           component.setState({errormsg: Auth.parseErrorMessage(xhr)});
         }
       });
+    } else {
+      this.state.loading = false;
+      this.state.auth = false;
     }
   }
 
@@ -45,10 +49,29 @@ class MyGames extends React.Component {
   }
 
   gameJSX(g, i) {
+    var approvedAt = "";
+    if (g.rejected) {
+      approvedAt = "Rejected";
+    } else if (g.approvedAt) {
+      approvedAt = g.approvedAt;
+    } else {
+      approvedAt = "in progress";
+    }
+    if (!g.linkUpdateAt) {
+      g.linkUpdateAt = "";
+    }
+    if (!g.linkUpdate) {
+      g.linkUpdateApprovedAt = "";
+    } else if (!g.linkUpdateApproved) {
+      g.linkUpdateApprovedAt = "in progress";
+    }
     return <tr key={g.id}>
       <td><a href={g.link}>{g.name}</a></td>
       <td>{g.authors}</td>
       <td>{g.createdAt}</td>
+      <td>{approvedAt}</td>
+      <td><a href={g.linkUpdate}>{g.linkUpdateAt}</a></td>
+      <td>{g.linkUpdateApprovedAt}</td>
       <td>
         <button onClick={() => this.updateLink(g)}>{_("Update Link")}</button>
       </td>
@@ -70,11 +93,24 @@ class MyGames extends React.Component {
     } else if (this.state.errormsg) {
       return <div className="error">{this.state.errormsg}</div>;
 
+    } else if (!this.state.auth || this.state.games.length == 0) {
+      return <div></div>;
+
     } else {
       return (<div>
           <div className="success"><p>{this.state.actionsuccessmsg}</p></div>
           <div className="error"><p>{this.state.actionerrormsg}</p></div>
           <table>
+            <thead>
+              <tr>
+                <th>{_("Game")}</th>
+                <th>{_("Creator(s)")}</th>
+                <th>{_("Submitted Date")}</th>
+                <th>{_("Approved Date")}</th>
+                <th>{_("Update Link")}</th>
+                <th>{_("Update Approved")}</th>
+              </tr>
+            </thead>
             <tbody>
               {this.state.games.map((g,i) => this.gameJSX(g,i))}
             </tbody>

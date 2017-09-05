@@ -245,6 +245,13 @@ var self = module.exports = {
     );
   },
 
+  getUpdatedGames: function(mindate,callback) {
+    db.all('SELECT * FROM games WHERE approved = 1 AND private = 0 AND linkUpdateApproved AND linkUpdateApprovedAt >= $mindate',
+      {$mindate:mindate},
+      callback
+    );
+  },
+
   getGameByIdAdmin: function(id,callback){
     db.get('SELECT * FROM games WHERE id = $id',
     {$id:id},callback);
