@@ -98,6 +98,16 @@ schedule.scheduleJob(config.approval_check_schedule,function(){
       console.log(`${games.length} games approved`);
       webhooks.sendGamesApproved(games);
     }
+    dao.approveMaturedGameLinkUpdates(function(err,games){
+      if (err) {
+        console.log(err);
+        return;
+      }
+      if (games.length > 0) {
+        console.log(`${games.length} game link updates approved`);
+        webhooks.sendGameLinkUpdatesApproved(games);
+      }
+    });
   });
 });
 
@@ -120,8 +130,9 @@ app.post('/contactadmin',     routes.routeSendAdminMessage);
 app.post('/register',         routes.routeRegister);
 app.get ('/verify/:token',    routes.routeVerifyEmail);
 app.post('/login',            routes.routeLogin);
-app.post('/myprofile',        routes.routeProfileData);
+app.post('/mygames',          routes.routeMyGames);
 app.post('/submitgame',       routes.routeSubmitGame);
+app.post('/updategame',       routes.routeUpdateGame);
 
 app.get ('/admin',            routes.routeAdmin);
 app.post('/admin',            routes.routeAdminReports);

@@ -5,7 +5,7 @@ class AdminList extends React.Component {
   constructor() {
     super();
     this.state = {
-      loading:false,
+      loading:true,
       errormsg:'',
 
       games:[],
@@ -49,7 +49,6 @@ class AdminList extends React.Component {
   }
 
   banUser(u) {
-    console.log(u);
     if (window.confirm('Are you sure you want to ban user '+u.email+'?')) {
       this.setState({actionsuccessmsg:'', actionerrormsg:''});
       var component = this;
@@ -76,6 +75,7 @@ class AdminList extends React.Component {
       <td>{g.rejectedAt}</td>
       <td>
         <button onClick={() => this.rejectGame(g)}>Reject</button>
+        <button onClick={() => this.rejectGameUpdate(g)}>Reject Update</button>
       </td>
     </tr>;
   }

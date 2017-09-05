@@ -142,13 +142,6 @@ routeSubmitPage:  function(req, res) {
     navSelector:'.navSubmit'},res.locals.locale));
 },
 
-routeSubmitGame: function(req, res) {
-  var content = dotsloc('submit',{},res.locals.locale);
-  res.status(200).send(dotsloc('base',{
-    content:content,
-    navSelector:'.navSubmit'},res.locals.locale));
-},
-
 routeAdminList: function(req, res) {
   res.status(200).send(dotsloc('base',{
     content:'<div id="adminlistroot"></div>',
@@ -229,7 +222,7 @@ routeBanUser: function(req, res) {
   });
 },
 
-routeProfileData: function(req, res) {
+routeMyGames: function(req, res) {
   verifyAuth(req,res,false,function(user){
     dao.getGamesByUser(user.id,function(err,games){
       if (err) {
@@ -239,7 +232,15 @@ routeProfileData: function(req, res) {
         if (games.length == 0) {
           games = [{name:"No games submitted yet!"}];
         }
-        res.status(200).send(dotsloc('mygames',{"games":games},res.locals.locale));
+        // Only send the user info they need to know about their games.
+        var limgames = [];
+        for (var i=0; i<games.length; i++) {
+          var g = games[i];
+          limgames.push({id:g.id, name:g.name, link:g.link, authors:g.authors,
+            createdAt:g.createdAt, approvedAt:g.approvedAt,
+            rejected:g.rejected, approved:g.approved});
+        }
+        res.status(200).send(limgames);
       }
     });
   });
@@ -321,9 +322,38 @@ routeSubmitGame: function(req, res) {
         res.status(500).send({Message: 'Database error.'});
         return;
       }
+      console.log('Game submitted');
       webhooks.sendGameSubmitted(user.email, gamename, gameauthors, gamelink);
       res.status(200).send({Message: "Success!"})
       // TODO: possibly 400 if game name (link?) is already in the list
+    });
+  });
+},
+
+routeUpdateGame: function(req, res) {
+  var gamelink = req.body.gamelink;
+  if (!gamelink) {
+    res.status(400).send({Message: "Game link cannot be empty."});
+    return;
+  }
+  
+  try {
+    new URL(gamelink);
+  }catch(e){
+    res.status(400).send({Message: `Invalid URL: ${gamelink}.`});
+    return;
+  }
+
+  verifyAuth(req,res,false,function(user){
+    dao.updateGameLink(req.body.game.id, gamelink, user.id, function(err){
+      if (err) {
+        console.log(err);
+        res.status(500).send({Message: 'Database error.'});
+      } else {
+        console.log('Game link update submitted');
+        webhooks.sendLinkUpdateSubmitted(user.email, req.body.game.name, gamelink);
+        res.status(200).send({Message: "Success!"})
+      }
     });
   });
 },

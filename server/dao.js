@@ -41,7 +41,12 @@ var self = module.exports = {
       approvedAt DATETIME,
       rejected BOOLEAN DEFAULT 0,
       rejectedAt DATETIME,
-      rejectedBy INTEGER)`);
+      rejectedBy INTEGER,
+      linkUpdate TEXT,
+      linkUpdateAt DATETIME,
+      linkUpdateApproved BOOLEAN DEFAULT 0,
+      linkUpdateApprovedAt DATETIME
+      )`);
 
     db.run(`CREATE TABLE IF NOT EXISTS reports (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -186,6 +191,8 @@ var self = module.exports = {
   },
 
   approveMaturedGames: function(callback) {
+    // TODO: Learn SQL and how to return the rows from an UPDATE in one query
+    // (same for the link updates function below)
     var now = moment().utc().format('YYYY-MM-DD HH:mm:ss');
     var cutoff = moment.utc().subtract(config.approval_game_wait_seconds, 'seconds').format('YYYY-MM-DD HH:mm:ss');
     db.all('SELECT * FROM games WHERE approved = 0 AND createdAt < ($cutoff) AND rejected = 0',
@@ -196,6 +203,30 @@ var self = module.exports = {
         return;
       }
       db.run('UPDATE games SET approved = 1, approvedAt = ($now) WHERE approved = 0 AND createdAt < ($cutoff) AND rejected = 0',
+      {$now:now, $cutoff:cutoff},
+      function(err){
+        callback(err,rows);
+      });
+    });
+  },
+
+  updateGameLink: function(gameid, link, userid, callback) {
+    var now = moment().utc().format('YYYY-MM-DD HH:mm:ss');
+    db.run('UPDATE games SET linkUpdate = ($link), linkUpdateAt = ($now), linkUpdateApproved = 0 WHERE id = ($gameid) AND userid = ($userid)',
+    {$link:link, $now:now, $gameid:gameid, $userid:userid}, callback);
+  },
+
+  approveMaturedGameLinkUpdates: function(callback) {
+    var now = moment().utc().format('YYYY-MM-DD HH:mm:ss');
+    var cutoff = moment.utc().subtract(config.approval_game_wait_seconds, 'seconds').format('YYYY-MM-DD HH:mm:ss');
+    db.all('SELECT * FROM games WHERE linkUpdate != "" AND linkUpdateApproved = 0 AND linkUpdateAt < ($cutoff) AND rejected = 0',
+    {$cutoff:cutoff},
+    function(err,rows){
+      if (err) {
+        callback(err);
+        return;
+      }
+      db.run('UPDATE games SET link = linkUpdate, linkUpdateApproved = 1, linkUpdateApprovedAt = ($now) WHERE linkUpdate != "" AND linkUpdateApproved = 0 AND linkUpdateAt < ($cutoff) AND rejected = 0',
       {$now:now, $cutoff:cutoff},
       function(err){
         callback(err,rows);

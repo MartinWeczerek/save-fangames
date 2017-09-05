@@ -45,6 +45,7 @@ Create file config/config.json:
 "jwt_secret": "Put something here!!!",
 "discord_webhook_url": "https://discordapp.com/api/webhooks/AAAAA",
 "discord_webhook_url_approved": "https://discordapp.com/api/webhooks/BBBBB",
+"discord_webhook_url_approved_updated": "https://discordapp.com/api/webhooks/CCCCC",
 "approval_game_wait_seconds": "15",
 "approval_check_schedule": "*/5 * * * * *",
 "mail": {
