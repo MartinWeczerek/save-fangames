@@ -120,7 +120,7 @@ class Submit extends React.Component {
       return ( 
         <div id="gamesubmit">
           {form}
-          <p>{_("Game submitted!")}</p>
+          <div className="success"><p>{_("Game submitted!")}</p></div>
         </div>
       );
     } else if (this.state.state == SubmitState.NOAUTH) {

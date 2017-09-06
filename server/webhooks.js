@@ -56,6 +56,11 @@ module.exports = {
     postDiscord(config.discord_webhook_url, message)
   },
 
+  sendContactAdminMessage: function(email, msg) {
+    var message = `----------\n${email} contacted admins saying: \n${msg}`;
+    postDiscord(config.discord_webhook_url, message);
+  },
+
   sendGamesApproved: function(games) {
     postDiscord(config.discord_webhook_url_approved, gamesMessage(games, false));
   },

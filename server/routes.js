@@ -144,6 +144,7 @@ routeSendAdminMessage: function(req, res) {
       if (err) {
         res.status(500).send({Message:"Database error."});
       } else {
+        webhooks.sendContactAdminMessage(user.email, req.body.message);
         res.status(200).send();
       }
     });
