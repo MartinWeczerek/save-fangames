@@ -1,5 +1,6 @@
 import React from 'react';
 import Auth from './auth';
+import { _ } from './localize';
 
 class AdminList extends React.Component {
   constructor() {
@@ -75,7 +76,6 @@ class AdminList extends React.Component {
       <td>{g.rejectedAt}</td>
       <td>
         <button onClick={() => this.rejectGame(g)}>Reject</button>
-        <button onClick={() => this.rejectGameUpdate(g)}>Reject Update</button>
       </td>
     </tr>;
   }

@@ -65,57 +65,71 @@ class MyGames extends React.Component {
     } else if (!g.linkUpdateApproved) {
       g.linkUpdateApprovedAt = "in progress";
     }
-    return <tr key={g.id}>
-      <td><a href={g.link}>{g.name}</a></td>
-      <td>{g.authors}</td>
-      <td>{g.createdAt}</td>
-      <td>{approvedAt}</td>
-      <td><a href={g.linkUpdate}>{g.linkUpdateAt}</a></td>
-      <td>{g.linkUpdateApprovedAt}</td>
-      <td>
+
+    var status1 = "";
+    var status1class = "";
+    if (g.rejected) {
+      status1 = "Rejected";
+      status1class = "mygamered";
+    } else if (g.approved) {
+      status1 = <span>Approved<br/>{g.approvedAt}</span>;
+      status1class = "mygamegreen";
+    } else {
+      status1 = <span>Pending<br/>{g.createdAt}</span>;
+      status1class = "mygameyellow";
+    }
+
+    var status2 = "";
+    var status2class = "mygameempty";
+    if (g.approved && g.linkUpdate) {
+      if (g.linkUpdateApproved) {
+        status2 = <span>Update Approved<br/>{g.linkUpdateApprovedAt}</span>;
+        status2class = "mygamegreen";
+      } else {
+        status2 = <span>Update Pending<br/>
+            <a href={g.linkUpdate}>{g.linkUpdate}</a><br/>{g.linkUpdateApprovedAt}</span>;
+        status2class = "mygameyellow";
+      }
+    }
+    return (
+    <div key={g.id} className="mygame">
+      <span className="mygamemain">
+        {g.name}
+        <br/>
+        <a href={g.link}>{g.link}</a>
+        <br/>
+        {g.authors}
+      </span>
+      <span className={status1class}>
+        {status1}
+      </span>
+      <span className={status2class}>
+        {status2}
+        <br/>
         <button onClick={() => this.updateLink(g)}>{_("Update Link")}</button>
-      </td>
-    </tr>;
-    /*
-      <td>{{? value.approvedAt}}{{=value.approvedAt}}
-          {{?? value.rejected}}Rejected
-          {{??}}in progress
-          {{?}}</td>
-      <td>{{? value.rejected}}Rejected{{?}}</td>
-      <td>{{? value.approved}}<a href="/update/{{=value.id}}">Update (not implemented)</a>{{?}}</td>
-    */
+      </span>
+    </div>);
   }
 
   render() {
     if (this.state.loading) {
-      return <div>{_("Loading...")}</div>;
+      return (<div>{_("Loading...")}</div>);
 
     } else if (this.state.errormsg) {
-      return <div className="error">{this.state.errormsg}</div>;
+      return (<div className="error">{this.state.errormsg}</div>);
 
     } else if (!this.state.auth || this.state.games.length == 0) {
-      return <div></div>;
+      return (<div></div>);
 
     } else {
-      return (<div>
-          <div className="success"><p>{this.state.actionsuccessmsg}</p></div>
-          <div className="error"><p>{this.state.actionerrormsg}</p></div>
-          <table>
-            <thead>
-              <tr>
-                <th>{_("Game")}</th>
-                <th>{_("Creator(s)")}</th>
-                <th>{_("Submitted Date")}</th>
-                <th>{_("Approved Date")}</th>
-                <th>{_("Update Link")}</th>
-                <th>{_("Update Approved")}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.state.games.map((g,i) => this.gameJSX(g,i))}
-            </tbody>
-          </table>
-        </div>);
+      return (
+      <div>
+        <div className="success"><p>{this.state.actionsuccessmsg}</p></div>
+        <div className="error"><p>{this.state.actionerrormsg}</p></div>
+        <div className="mygames">
+          {this.state.games.map((g,i) => this.gameJSX(g,i))}
+        </div>
+      </div>);
     }
   }
 }
