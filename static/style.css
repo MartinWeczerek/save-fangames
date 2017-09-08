@@ -38,7 +38,8 @@ nav .navItem { display:inline-block; min-width: 4em; height:2.25em;
     text-align:center; padding: 0 0.75em; float:left; margin:0 0.5em 0.5em 0; }
 nav .navItem:hover { background-color:#465E8C; }
 nav a { cursor:pointer; color:white; }
-nav a:visited{ color:white; }
+nav a:visited { color:white; }
+.submitNavHighlight { background-color:#465E8C; }
 
 #account-inputbox { position:absolute; margin-left:-17em;
     width:15em; background-color:#2A3854;
@@ -88,7 +89,7 @@ a { color: #A5C5F2; text-decoration:underline; }
 .releases a { text-decoration:none; }
     .releases a:hover { text-decoration:underline; }
 
-p+p, div+p, p+h3, #gamesubmit, .releases+h3, p+table { margin-top:1em; }
+p+p, div+p, p+h3, .releases+h3, p+table, p+form { margin-top:1em; }
 
 h2 { font-weight:normal; font-size:1.75em; margin-bottom:1em; }
 h3 { font-weight:normal; font-size:1.4em; margin-bottom:1em; }

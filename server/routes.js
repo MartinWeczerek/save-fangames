@@ -157,6 +157,13 @@ routeAbout: function(req, res) {
     navSelector:'.navAbout'},res.locals.locale));
 },
 
+routeMyGamesPage:  function(req, res) {
+  var content = dotsloc('mygames',{},res.locals.locale);
+  res.status(200).send(dotsloc('base',{
+    content:content,
+    navSelector:'.navSubmit'},res.locals.locale));
+},
+
 routeSubmitPage:  function(req, res) {
   var content = dotsloc('submit',{},res.locals.locale);
   res.status(200).send(dotsloc('base',{

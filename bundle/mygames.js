@@ -112,23 +112,39 @@ class MyGames extends React.Component {
   }
 
   render() {
+    var nav =
+      <nav id="submitnav">
+        <a href="/mygames">
+          <div className="navItem submitNavHighlight">{_("My Games")}</div>
+        </a>
+        <a href="/submit">
+          <div className="navItem">{_("Submit a new game")}</div>
+        </a>
+      </nav>;
+    var nogames = "";
+    if (this.state.games.length == 0) {
+      nogames = <p>No games submitted yet!</p>;
+    }
     if (this.state.loading) {
-      return (<div>{_("Loading...")}</div>);
+      return (<div>{nav}<p>{_("Loading...")}</p></div>);
 
     } else if (this.state.errormsg) {
-      return (<div className="error">{this.state.errormsg}</div>);
+      return (<div>{nav}<div className="error">{this.state.errormsg}</div></div>);
 
-    } else if (!this.state.auth || this.state.games.length == 0) {
-      return (<div></div>);
+    } else if (!this.state.auth) {
+      return (<div>{nav}<p>{_("You must register an account to submit a game.")}</p></div>);
 
     } else {
       return (
       <div>
+        {nav}
         <div className="success"><p>{this.state.actionsuccessmsg}</p></div>
         <div className="error"><p>{this.state.actionerrormsg}</p></div>
         <div className="mygames">
           {this.state.games.map((g,i) => this.gameJSX(g,i))}
         </div>
+        {nogames}
+        <p>To change your game&#39;s title or creators, or for any other issues, <a href="/contactadmin">contact the admins</a>.</p>
       </div>);
     }
   }

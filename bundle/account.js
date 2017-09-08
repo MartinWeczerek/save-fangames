@@ -28,8 +28,11 @@ class Account extends React.Component {
         if (!expired) {
           this.state.loggedin = true;
           this.state.email = decoded.email;
+        } else {
+          Auth.deauthenticateUser();
         }
       } catch(e) {
+        Auth.deauthenticateUser();
       }
     }
     this.handleLogin = this.handleLogin.bind(this)
