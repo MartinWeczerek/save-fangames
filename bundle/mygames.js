@@ -32,6 +32,7 @@ class MyGames extends React.Component {
   }
 
   updateLink(g) {
+    // TODO: somehow use a text box instead of popup
     var newlink = prompt(_("Link"))
     if (newlink) {
       this.setState({actionsuccessmsg:'', actionerrormsg:''});

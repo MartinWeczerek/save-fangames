@@ -288,7 +288,7 @@ var self = module.exports = {
           callback(err);
         } else {
           if (this.changes) { // set by sqlite3
-            self.getUserById(this.lastID, function(err, user) {
+            self.getUserByIdAdmin(this.lastID, function(err, user) {
               if (err) {
                 callback(err);
               } else {

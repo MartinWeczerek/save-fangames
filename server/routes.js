@@ -1,5 +1,12 @@
 (function() {
 
+const maxlenEmail = 100;
+const minlenPassword = 6;
+const maxlenGameName = 100;
+const maxlenGameAuthors = 200;
+const maxlenGameLink = 200;
+const maxlenContactAdmin = 1000;
+
 // Load config.
 const fs = require('fs');
 const configPath = 'config/config.json';
@@ -68,6 +75,15 @@ function generateToken(user) {
   return token = jwt.sign(u, config.jwt_secret, {
     expiresIn: 60 * 60 * 24 // 24 hours
   });
+}
+
+// limitString sends 400 to response and returns true if string is too long.
+function limitString(len, maxlen, res, specific) {
+  if (len > maxlen) {
+    res.status(400).send({Message:`Too many characters${specific}: ${len}/${maxlen}`});
+    return true;
+  }
+  return false;
 }
 
 var self = module.exports = {
@@ -140,6 +156,9 @@ routeContactAdmin: function(req, res) {
 
 routeSendAdminMessage: function(req, res) {
   verifyAuth(req,res,false,function(user){
+    if (limitString(req.body.message.length, maxlenContactAdmin, res, "")) {
+      return;
+    }
     dao.userContactAdminReport(user,req.body.message,function(err){
       if (err) {
         res.status(500).send({Message:"Database error."});
@@ -260,6 +279,7 @@ routeMyGames: function(req, res) {
       } else {
         // Only send the user info they need to know about their games.
         // TODO: move this to SQL SELECT query
+        // TODO: send hours left until approval
         var limgames = [];
         for (var i=0; i<games.length; i++) {
           var g = games[i];
@@ -308,6 +328,7 @@ routeFullList: function(req, res) {
   });
 },
 
+// TODO: verify API key so only Delfruit can access?
 routeGamesData: function(req, res) {
   dao.getGames(req.query.mindate,function(err,games){
     if (err) {
@@ -320,32 +341,39 @@ routeGamesData: function(req, res) {
 },
 
 routeSubmitGame: function(req, res) {
-  var gamename = req.body.gamename
-  var gamelink = req.body.gamelink
-  var gameauthors = req.body.gameauthors
-  var token = req.header('Authorization');
-
-  if (!gamename) {
-    res.status(400).send({Message: "Game name cannot be empty."})
-    return
-
-  } else if (!gamelink) {
-    res.status(400).send({Message: "Game link cannot be empty."})
-    return
-
-  } else if (!gameauthors) {
-    res.status(400).send({Message: "Game authors cannot be empty."})
-    return
-  }
-
-  try {
-    new URL(gamelink);
-  }catch(e){
-    res.status(400).send({Message: `Invalid URL: ${gamelink}.`});
-    return;
-  }
-
   verifyAuth(req,res,false,function(user){
+    var gamename = req.body.gamename
+    var gamelink = req.body.gamelink
+    var gameauthors = req.body.gameauthors
+    var token = req.header('Authorization');
+
+    if (!gamename) {
+      res.status(400).send({Message: "Game name cannot be empty."})
+      return
+
+    } else if (!gamelink) {
+      res.status(400).send({Message: "Game link cannot be empty."})
+      return
+
+    } else if (!gameauthors) {
+      res.status(400).send({Message: "Game authors cannot be empty."})
+      return
+    }
+
+    if (limitString(gamename.length, maxlenGameName, res, " in game name")
+        || limitString(gamelink.length, maxlenGameLink, res, " in game link")
+        || limitString(gameauthors.length, maxlenGameAuthors, res,
+        " in game authors")) {
+      return;
+    }
+
+    try {
+      new URL(gamelink);
+    }catch(e){
+      res.status(400).send({Message: `Invalid URL: ${gamelink}.`});
+      return;
+    }
+
     dao.insertGame(user, gamename, gamelink, gameauthors, function(err){
       if (err) {
         console.log('SQLite error:');
@@ -362,20 +390,23 @@ routeSubmitGame: function(req, res) {
 },
 
 routeUpdateGame: function(req, res) {
-  var gamelink = req.body.gamelink;
-  if (!gamelink) {
-    res.status(400).send({Message: "Game link cannot be empty."});
-    return;
-  }
-  
-  try {
-    new URL(gamelink);
-  }catch(e){
-    res.status(400).send({Message: `Invalid URL: ${gamelink}.`});
-    return;
-  }
-
   verifyAuth(req,res,false,function(user){
+    var gamelink = req.body.gamelink;
+    if (!gamelink) {
+      res.status(400).send({Message: "Game link cannot be empty."});
+      return;
+    }
+    if (limitString(gamelink.length, maxlenGameLink, res, " in game link")) {
+      return;
+    }
+    
+    try {
+      new URL(gamelink);
+    }catch(e){
+      res.status(400).send({Message: `Invalid URL: ${gamelink}.`});
+      return;
+    }
+
     dao.updateGameLink(req.body.game.id, gamelink, user.id, function(err){
       if (err) {
         console.log(err);
@@ -397,10 +428,18 @@ routeRegister: function(req, res) {
   if (!email) {
     res.status(400).send({Message: 'Email cannot be empty.'});
     return;
+  }
+  if (limitString(email.length, maxlenEmail, res, ' in email')) {
+    return;
+  }
 
   // TODO: password strength check
-  } else if (!password) {
+  if (!password) {
     res.status(400).send({Message: 'Password cannot be empty.'});
+    return;
+  }
+  if (password.length < minlenPassword) {
+    res.status(400).send({Message: `Password must be at least ${minlenPassword} characters.`});
     return;
   }
 
