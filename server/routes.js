@@ -464,7 +464,7 @@ routeLogin: function(req, res) {
         res.status(401).send({Message: 'Unauthorized. You have been banned.'});
       } else {
         // TODO: verify from actual server this is the correct IP
-        dao.updateUserLastIP(row.id, req.ip, function(err) {
+        dao.updateUserLastLogin(row.id, req.ip, function(err) {
           if (err) {
             console.log(err);
             res.status(500).send({Message: 'Database error.'});

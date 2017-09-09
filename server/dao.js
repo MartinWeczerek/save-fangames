@@ -26,6 +26,7 @@ var self = module.exports = {
       admin BOOLEAN DEFAULT 0,
       banned BOOLEAN DEFAULT 0,
       lastip TEXT,
+      lastLogin DATETIME,
       createdAt DATETIME DEFAULT CURRENT_TIMESTAMP)`);
 
     db.run(`CREATE TABLE IF NOT EXISTS games (
@@ -160,9 +161,10 @@ var self = module.exports = {
     db.all('SELECT * FROM users ORDER BY id DESC',{},callback);
   },
 
-  updateUserLastIP: function(userid, lastip, callback) {
-    db.run('UPDATE users SET lastip = ($lastip) WHERE id = ($id)',
-      {$lastip:lastip, $id:userid}, callback);
+  updateUserLastLogin: function(userid, lastip, callback) {
+    var now = moment().utc().format('YYYY-MM-DD HH:mm:ss');
+    db.run('UPDATE users SET lastip = ($lastip), lastLogin = ($now) WHERE id = ($id)',
+      {$lastip:lastip, $now:now, $id:userid}, callback);
   },
 
   insertGame: function(user,gamename,gamelink,gameauthors,callback) {
