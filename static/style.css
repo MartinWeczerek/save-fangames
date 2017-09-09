@@ -21,7 +21,7 @@ body {
 #logo img { margin-right:0.4em; vertical-align:middle;
     margin-bottom:0.2em; margin-right:0.1em; }
 #accountroot { float:right; margin: 0.5em 0.5em 0 0; }
-#account .email { text-align:right; margin-left:0.5em; }
+#account #email { text-align:right; margin-left:0.5em; }
 #account input[type=submit], button { margin-left:0.5em;
         height:2em; line-height:1em; vertical-align:middle; }
 #language { float:right; margin:0.75em 0 0 0; text-align:left;

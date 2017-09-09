@@ -45,6 +45,7 @@ class Account extends React.Component {
     this.handleText1Change = this.handleText1Change.bind(this)
     this.handleText2Change = this.handleText2Change.bind(this)
     this.handleText3Change = this.handleText3Change.bind(this)
+    this.toggleEmail = this.toggleEmail.bind(this)
   }
 
   handleLogin(event) {
@@ -129,6 +130,14 @@ class Account extends React.Component {
   handleAdminClicked2(event) {
     window.location.href = '/admin/list';
   }
+  toggleEmail() {
+    var elt = document.getElementById('email');
+    if (elt.innerHTML == this.state.email) {
+      elt.innerHTML = _('[show email]');
+    } else {
+      elt.innerHTML = this.state.email;
+    }
+  }
 
   render() {
     if (this.state.sentverification) {
@@ -158,7 +167,7 @@ class Account extends React.Component {
       }
       return (
         <span id="account">
-          <span className="email">{this.state.email}</span>
+          <span id="email" onClick={() => this.toggleEmail()}>{_('[show email]')}</span>
           {adminButton}
           <input type="submit" value={_("Log out")} onClick={this.handleLogout}/>
         </span>);
