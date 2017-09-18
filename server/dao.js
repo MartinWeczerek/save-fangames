@@ -281,28 +281,27 @@ var self = module.exports = {
   },
 
   verifyUser: function(verifyhash, callback) {
-    db.run('UPDATE users SET verifyhash = (""), active = 1 WHERE active = 0 AND verifyhash = ($verifyhash)',
-      {$verifyhash:verifyhash},
-      function(err) {
-        if (err) {
-          callback(err);
-        } else {
-          if (this.changes) { // set by sqlite3
-            self.getUserByIdAdmin(this.lastID, function(err, user) {
-              if (err) {
-                callback(err);
-              } else {
-                var report = `${user.email} verified their email/account.`;
-                self.insertReport('user_verify', user.id, report, user.id,
-                  function(err){callback(err, user);});
-              }
-            });
-          } else {
-            callback('verifyUser no rows updated');
-          }
-        }
+    db.run('UPDATE users SET active = 1 WHERE active = 0 AND verifyhash = ($verifyhash)',
+        {$verifyhash:verifyhash}, function(err) {
+      if (err) {
+        callback(err);
+        return;
       }
-    );
+      if (this.changes) { // set by sqlite3
+        db.get('SELECT * FROM users WHERE verifyhash = ($verifyhash)',{$verifyhash:verifyhash},
+            function(err, user) {
+          if (err) {
+            callback(err);
+            return;
+          }
+          var report = `${user.email} verified their email/account.`;
+          self.insertReport('user_verify', user.id, report, user.id,
+            function(err){callback(err, user);});
+        });
+      } else {
+        callback('verifyUser no rows updated');
+      }
+    });
   }
 }
 
