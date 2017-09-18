@@ -7,7 +7,7 @@
   {{=group.date}}
   {{~group.games :game:index2}}
     <br/>
-    <a href="{{=game.link}}">{{=game.name}}</a>
+    <a href="{{=game.link}}">{{=game.name}}</a> - {{=game.authors}}
   {{~}}
   <br/>
 {{~}}
@@ -19,7 +19,7 @@
   {{=group.date}}
   {{~group.games :game:index2}}
     <br/>
-    <a href="{{=game.link}}">{{=game.name}}</a>
+    <a href="{{=game.link}}">{{=game.name}}</a> - {{=game.authors}}
   {{~}}
   <br/>
 {{~}}

@@ -73,42 +73,40 @@ class MyGames extends React.Component {
       status1 = "Rejected";
       status1class = "mygamered";
     } else if (g.approved) {
-      status1 = <span>Approved<br/>{g.approvedAt}</span>;
+      status1 = <span>Online</span>;
       status1class = "mygamegreen";
     } else {
-      status1 = <span>Pending<br/>{g.createdAt}</span>;
+      status1 = <span>{_("Pending")} (TODO hours)</span>;
       status1class = "mygameyellow";
     }
 
     var status2 = "";
     var status2class = "mygameempty";
     if (g.approved && g.linkUpdate) {
-      if (g.linkUpdateApproved) {
-        status2 = <span>Update Approved<br/>{g.linkUpdateApprovedAt}</span>;
-        status2class = "mygamegreen";
-      } else {
-        status2 = <span>Update Pending<br/>
-            <a href={g.linkUpdate}>{g.linkUpdate}</a><br/>{g.linkUpdateApprovedAt}</span>;
+      if (!g.linkUpdateApproved) {
+        status2 = <span>
+          <a href={g.linkUpdate}>{_("Link Update Pending")}</a> (TODO hours)
+        </span>;
         status2class = "mygameyellow";
       }
     }
+
     return (
     <div key={g.id} className="mygame">
-      <span className="mygamemain">
-        {g.name}
-        <br/>
-        <a href={g.link}>{g.link}</a>
-        <br/>
-        {g.authors}
-      </span>
+      {g.name}
+      <br/>
       <span className={status1class}>
         {status1}
       </span>
       <span className={status2class}>
         {status2}
-        <br/>
-        <button onClick={() => this.updateLink(g)}>{_("Update Link")}</button>
       </span>
+      <br/>
+      {g.authors}
+      <br/>
+      <a href={g.link}>{g.link}</a>
+      <br/>
+      <button onClick={() => this.updateLink(g)}>{_("Update Link")}</button>
     </div>);
   }
 

@@ -122,7 +122,7 @@ routeHomepage: function(req, res) {
             group = {date:day, games:[]};
             releases.push(group);
           }
-          group.games.push({name:g.name,link:g.link});
+          group.games.push({name:g.name, link:g.link, authors:g.authors});
         }
 
         var updates = [];
@@ -135,7 +135,7 @@ routeHomepage: function(req, res) {
             group = {date:day, games:[]};
             updates.push(group);
           }
-          group.games.push({name:g.name,link:g.link});
+          group.games.push({name:g.name, link:g.link, authors:g.authors});
         }
 
         var content = dotsloc('homepage',{releases:releases, updates:updates},res.locals.locale);
