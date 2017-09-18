@@ -530,7 +530,7 @@ routeVerifyEmail: function(req, res) {
       res.status(400).send({Message: 'Database error.'});
     } else {
       // TODO: verify from actual server this is the correct IP
-      dao.updateUserLastIP(user.id, req.ip, function(err) {
+      dao.updateUserLastLogin(user.id, req.ip, function(err) {
         if (err) {
           console.log(err);
           res.status(500).send({Message: 'Database error.'});
