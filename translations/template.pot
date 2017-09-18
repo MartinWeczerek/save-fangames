@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-04 14:03-0700\n"
+"POT-Creation-Date: 2017-09-18 13:13-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,42 +17,74 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: bundle/account.js:133
+#: bundle/account.js:136 bundle/account.js:170
+msgid "[show email]"
+msgstr ""
+
+#: bundle/account.js:145
 msgid ""
 "Verification email sent. Please check your email (including spam folder) to "
 "activate your account."
 msgstr ""
 
-#: bundle/account.js:138 bundle/account.js:142 bundle/submit.js:115
+#: bundle/account.js:150 bundle/account.js:154 bundle/submit.js:133
 msgid "Submitting..."
 msgstr ""
 
-#: bundle/account.js:160
+#: bundle/account.js:172
 msgid "Log out"
 msgstr ""
 
-#: bundle/account.js:169 bundle/account.js:206
+#: bundle/account.js:181 bundle/account.js:218
 msgid "Log in"
 msgstr ""
 
-#: bundle/account.js:172
+#: bundle/account.js:184
 msgid "Re-enter password:"
 msgstr ""
 
-#: bundle/account.js:176 bundle/account.js:207
+#: bundle/account.js:188 bundle/account.js:219
 msgid "Register"
 msgstr ""
 
-#: bundle/account.js:187
+#: bundle/account.js:199
 msgid "Email:"
 msgstr ""
 
-#: bundle/account.js:190
+#: bundle/account.js:202
 msgid "Password:"
 msgstr ""
 
-#: bundle/adminlist.js:100 bundle/contactadmin.js:41 bundle/mygames.js:32
+#: bundle/adminlist.js:100 bundle/contactadmin.js:41 bundle/mygames.js:128
 msgid "Loading..."
+msgstr ""
+
+#: bundle/mygames.js:36
+msgid "Link"
+msgstr ""
+
+#: bundle/mygames.js:79
+msgid "Pending"
+msgstr ""
+
+#: bundle/mygames.js:88
+msgid "Link Update Pending"
+msgstr ""
+
+#: bundle/mygames.js:109
+msgid "Update Link"
+msgstr ""
+
+#: bundle/mygames.js:117 bundle/submit.js:111
+msgid "My Games"
+msgstr ""
+
+#: bundle/mygames.js:120 bundle/submit.js:114
+msgid "Submit a new game"
+msgstr ""
+
+#: bundle/mygames.js:134 bundle/submit.js:150
+msgid "You must register an account to submit a game."
 msgstr ""
 
 #: bundle/submit.js:91
@@ -60,19 +92,15 @@ msgid "Name of your fangame:"
 msgstr ""
 
 #: bundle/submit.js:94
-msgid "Creator name(s) separated by commas:"
+msgid "Creator name(s): (Creator 1, Creator 2, Creator 3, ...)"
 msgstr ""
 
 #: bundle/submit.js:97
-msgid "Link to your fangame:"
+msgid "Link to your fangame: (include https:// or http://)"
 msgstr ""
 
-#: bundle/submit.js:123
+#: bundle/submit.js:143
 msgid "Game submitted!"
-msgstr ""
-
-#: bundle/submit.js:129
-msgid "You must register an account to submit a game."
 msgstr ""
 
 #: dot_views/base.dot:42
@@ -103,11 +131,11 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: dot_views/fulllist.dot:11 dot_views/mygames.dot:3
+#: dot_views/fulllist.dot:11
 msgid "Game"
 msgstr ""
 
-#: dot_views/fulllist.dot:12 dot_views/mygames.dot:4
+#: dot_views/fulllist.dot:12
 msgid "Creator(s)"
 msgstr ""
 
@@ -119,18 +147,10 @@ msgstr ""
 msgid "Welcome to Blue Fruit!"
 msgstr ""
 
-#: dot_views/homepage.dot:3
+#: dot_views/homepage.dot:4
 msgid "New Releases"
 msgstr ""
 
-#: dot_views/homepage.dot:15
+#: dot_views/homepage.dot:16
 msgid "Updates"
-msgstr ""
-
-#: dot_views/mygames.dot:5
-msgid "Submitted Date"
-msgstr ""
-
-#: dot_views/mygames.dot:6
-msgid "Approved Date"
 msgstr ""
