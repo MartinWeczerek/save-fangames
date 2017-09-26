@@ -48,6 +48,7 @@ Create file config/config.json:
 "discord_webhook_url_approved_updated": "https://discordapp.com/api/webhooks/CCCCC",
 "approval_game_wait_seconds": "15",
 "approval_check_schedule": "*/5 * * * * *",
+"hacky_timezone_offset": "4",
 "mail": {
     "options": {
         "host": "127.0.0.1",

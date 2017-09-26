@@ -336,10 +336,13 @@ routeMyGames: function(req, res) {
           var g = games[i];
           // TODO: hardcoded timezone offset!
           var approveTime = moment(g.createdAt, 'YYYY-MM-DD HH:mm:ss').add(
-              config.approval_game_wait_seconds,'seconds').subtract(7, 'hours');
+              config.approval_game_wait_seconds,'seconds').subtract(
+              parseInt(config.hacky_timezone_offset), 'hours');
           var timeLeftApprove = approveTime.fromNow();
+          console.log(approveTime, moment().utc());
           var updateApproveTime = moment(g.linkUpdateAt, 'YYYY-MM-DD HH:mm:ss').add(
-              config.approval_game_wait_seconds,'seconds').subtract(7, 'hours');
+              config.approval_game_wait_seconds,'seconds').subtract(
+              parseInt(config.hacky_timezone_offset), 'hours');
           var timeLeftUpdate = updateApproveTime.fromNow();
           limgames.push({id:g.id, name:g.name, link:g.link, authors:g.authors,
             createdAt:g.createdAt, approvedAt:g.approvedAt,
