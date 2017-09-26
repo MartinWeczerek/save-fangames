@@ -59,6 +59,48 @@ var self = module.exports = {
       answered_by_id INTEGER,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       answered_at DATETIME)`);
+
+    db.run(`CREATE TABLE IF NOT EXISTS ipbans (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      ip TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      admin_id INTEGER
+    )`);
+  },
+
+  insertIPBan: function(ip, adminuser, callback) {
+    db.run('INSERT INTO ipbans (ip, admin_id) VALUES ($ip, $admin_id)',
+    {$ip: ip, $admin_id: adminuser.id},
+    function(err){
+      if (err) callback(err);
+      else {
+        var report = `IP ${ip} was banned by ${adminuser.email}`;
+        self.insertReport('ipban', -1, report, adminuser.id, callback);
+      }
+    });
+  },
+
+  getIPBansAdmin: function(callback) {
+    db.all('SELECT * FROM ipbans ORDER BY id DESC',{},callback);
+  },
+
+  deleteIPBan: function(ip, adminuser, callback) {
+    db.run('DELETE FROM ipbans WHERE ip = $ip',
+    {$ip: ip},
+    function(err){
+      if (err) callback(err);
+      else {
+        var report = `IP ${ip} was UNbanned by ${adminuser.email}`;
+        self.insertReport('ipban', -1, report, adminuser.id, callback);
+      }
+    });
+  },
+
+  isIPBanned: function(ip, callback) {
+    db.get('SELECT * FROM ipbans WHERE ip LIKE ($ip)',
+      {$ip:ip},
+      callback
+    );
   },
 
   insertReport: function(type, target_id, report, reporter_id, callback) {
@@ -138,9 +180,9 @@ var self = module.exports = {
     );
   },
 
-  insertUser: function(email, hash, verifyhash, callback) {
-    db.run('UPDATE users SET verifyhash = ($verifyhash), passwordhash = ($hash) WHERE active = 0 and email = ($email)',
-      {$verifyhash:verifyhash, $hash:hash, $email:email},
+  insertUser: function(email, hash, verifyhash, lastip, callback) {
+    db.run('UPDATE users SET verifyhash = ($verifyhash), passwordhash = ($hash), lastip = ($lastip) WHERE active = 0 and email = ($email)',
+      {$verifyhash:verifyhash, $hash:hash, $lastip:lastip, $email:email},
       function(err) {
         if (err) {
           callback(err);

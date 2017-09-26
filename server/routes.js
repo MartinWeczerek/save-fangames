@@ -40,27 +40,39 @@ function dotsloc(templatename, data, locale) {
 // verifyAuth parses a request's JWT token and either callback-returns a user
 // object if valid, or sends an error message on the response.
 function verifyAuth(req,res,adminonly,callback){
-  var token = req.header('Authorization');
-  if (!token) {
-    res.status(400).send({Message: "Must set Authorization header."});
-    return;
-  }
-  token = token.replace('Bearer ', '');
-
-  jwt.verify(token, config.jwt_secret, function(err, user) {
+  dao.isIPBanned(req.ip, function(err, ipban) {
     if (err) {
-      res.status(401).send({Message: 'Unauthorized.'});
-    } else if (adminonly && !user.admin) {
-      res.status(401).send({Message: 'Unauthorized.'});
-    } else {
-      dao.getUserById(user.id,function(err,user){
-        if (user.banned) {
-          res.status(401).send({Message: 'Unauthorized. You have been banned.'});
-        } else {
-          callback(user);
-        }
-      });
+      console.log(err);
+      res.status(500).send({Message:"Database error."});
+      return;
     }
+    if (ipban) {
+      res.status(401).send({Message: 'Unauthorized.'});
+      return;
+    }
+
+    var token = req.header('Authorization');
+    if (!token) {
+      res.status(400).send({Message: "Must set Authorization header."});
+      return;
+    }
+    token = token.replace('Bearer ', '');
+
+    jwt.verify(token, config.jwt_secret, function(err, user) {
+      if (err) {
+        res.status(401).send({Message: 'Unauthorized.'});
+      } else if (adminonly && !user.admin) {
+        res.status(401).send({Message: 'Unauthorized.'});
+      } else {
+        dao.getUserById(user.id,function(err,user){
+          if (user.banned) {
+            res.status(401).send({Message: 'Unauthorized. You have been banned.'});
+          } else {
+            callback(user);
+          }
+        });
+      }
+    });
   });
 }
 
@@ -222,6 +234,19 @@ routeAdminUsers: function(req, res) {
   });
 },
 
+routeAdminIPBans: function(req, res) {
+  verifyAuth(req,res,true,function(user){
+    dao.getIPBansAdmin(function(err, users) {
+      if (err) {
+        console.log(err);
+        res.status(500).send({Message:"Database error."});
+      } else {
+        res.status(200).send(users);
+      }
+    });
+  });
+},
+
 routeAdmin: function(req, res) {
   res.status(200).send(dotsloc('base',{
     content:'<div id="adminroot"></div>',
@@ -267,6 +292,32 @@ routeBanUser: function(req, res) {
           res.status(200).send();
         }
       });
+  });
+},
+
+routeIPBan: function(req, res) {
+  verifyAuth(req,res,true,function(user){
+    dao.insertIPBan(req.body.ip,user,function(err){
+      if (err) {
+        console.log(err);
+        res.status(500).send({Message:"Database error."});
+      } else {
+        res.status(200).send();
+      }
+    });
+  });
+},
+
+routeIPUnban: function(req, res) {
+  verifyAuth(req,res,true,function(user){
+    dao.deleteIPBan(req.body.ip,user,function(err){
+      if (err) {
+        console.log(err);
+        res.status(500).send({Message:"Database error."});
+      } else {
+        res.status(200).send();
+      }
+    });
   });
 },
 
@@ -456,28 +507,40 @@ routeRegister: function(req, res) {
       return;
     }
 
-    var verifyHash = uuidv4();
-    var verifyUrl = config.root_url+'/verify/'+verifyHash;
-
-    // Add user to the database.
-    var hash = bcrypt.hashSync(password, saltRounds);
-    dao.insertUser(email, hash, verifyHash, function(err){
+    dao.isIPBanned(req.ip, function(err, ipban) {
       if (err) {
-        console.log('SQLite error:');
         console.log(err);
-        res.status(500).send({Message: 'Database error.'});
+        res.status(500).send({Message:"Database error."});
+        return;
+      }
+      if (ipban) {
+        res.status(401).send({Message: 'Unauthorized.'});
         return;
       }
 
-      // Send verification email.
-      mail.sendAccountVerificationMail(email, verifyUrl, function(error, info) {
-        if (error) {
-          console.log(error);
-          res.status(500).send({Message: 'Failed to send email.'});
-        } else {
-          console.log('Email sent: ' + info.response);
-          res.status(200).send({Message: 'Sent verification email. Please click the link in it.'});
+      // Add user to the database.
+      var verifyHash = uuidv4();
+      var verifyUrl = config.root_url+'/verify/'+verifyHash;
+
+      var hash = bcrypt.hashSync(password, saltRounds);
+      dao.insertUser(email, hash, verifyHash, req.ip, function(err){
+        if (err) {
+          console.log('SQLite error:');
+          console.log(err);
+          res.status(500).send({Message: 'Database error.'});
+          return;
         }
+
+        // Send verification email.
+        mail.sendAccountVerificationMail(email, verifyUrl, function(error, info) {
+          if (error) {
+            console.log(error);
+            res.status(500).send({Message: 'Failed to send email.'});
+          } else {
+            console.log('Email sent: ' + info.response);
+            res.status(200).send({Message: 'Sent verification email. Please click the link in it.'});
+          }
+        });
       });
     });
   });

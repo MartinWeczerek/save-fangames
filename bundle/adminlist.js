@@ -11,6 +11,7 @@ class AdminList extends React.Component {
 
       games:[],
       users:[],
+      ipbans:[],
       actionsuccessmsg:'',
       actionerrormsg:'',
     };
@@ -28,6 +29,14 @@ class AdminList extends React.Component {
       component.setState({loading:false});
       if (xhr.status == 200) {
         component.setState({users:JSON.parse(xhr.responseText)});
+      } else {
+        component.setState({errormsg: Auth.parseErrorMessage(xhr)});
+      }
+    });
+    Auth.sendAuthedPost('/admin/ipbans',{},function(xhr) {
+      component.setState({loading:false});
+      if (xhr.status == 200) {
+        component.setState({ipbans:JSON.parse(xhr.responseText)});
       } else {
         component.setState({errormsg: Auth.parseErrorMessage(xhr)});
       }
@@ -54,6 +63,38 @@ class AdminList extends React.Component {
       this.setState({actionsuccessmsg:'', actionerrormsg:''});
       var component = this;
       Auth.sendAuthedPost('/admin/banuser', {userid:u.id}, function(xhr) {
+        if (xhr.status == 200) {
+          component.setState({
+              actionsuccessmsg:'Success. Reload the page to see changes.'});
+        } else {
+          component.setState({actionerrormsg:Auth.parseErrorMessage(xhr)});
+        }
+      });
+    }
+  }
+
+  banIP() {
+    var ip = document.getElementById('ipbantextarea').value;
+    if (!ip) return;
+    if (window.confirm('Are you sure you want to ban IP '+ip+'?')) {
+      this.setState({actionsuccessmsg:'', actionerrormsg:''});
+      var component = this;
+      Auth.sendAuthedPost('/admin/ipban', {ip:ip}, function(xhr) {
+        if (xhr.status == 200) {
+          component.setState({
+              actionsuccessmsg:'Success. Reload the page to see changes.'});
+        } else {
+          component.setState({actionerrormsg:Auth.parseErrorMessage(xhr)});
+        }
+      });
+    }
+  }
+
+  unbanIP(ip) {
+    if (window.confirm('Are you sure you want to unban IP '+ip+'?')) {
+      this.setState({actionsuccessmsg:'', actionerrormsg:''});
+      var component = this;
+      Auth.sendAuthedPost('/admin/ipunban', {ip:ip}, function(xhr) {
         if (xhr.status == 200) {
           component.setState({
               actionsuccessmsg:'Success. Reload the page to see changes.'});
@@ -95,6 +136,17 @@ class AdminList extends React.Component {
     </tr>;
   }
 
+  ipbanJSX(b, i) {
+    return <tr key={b.id}>
+      <td>{b.id}</td>
+      <td>{b.ip}</td>
+      <td>{b.created_at}</td>
+      <td>
+        <button onClick={() => this.unbanIP(b.ip)}>Unban</button>
+      </td>
+    </tr>;
+  }
+
   render() {
     if (this.state.loading) {
       return <div>{_("Loading...")}</div>;
@@ -109,6 +161,8 @@ class AdminList extends React.Component {
         <a href="#adminGames">Games</a>
         &nbsp;
         <a href="#adminUsers">Users</a>
+        &nbsp;
+        <a href="#adminIPBans">IP Bans</a>
         <h3 id="adminGames">Games</h3>
         <table>
           <thead>
@@ -130,22 +184,37 @@ class AdminList extends React.Component {
         </table>
         <h3 id="adminUsers">Users</h3>
         <table>
-        <thead>
-        <tr>
-          <th>ID</th>
-          <th>Email</th>
-          <th>CreatedAt</th>
-          <th>Active</th>
-          <th>Admin</th>
-          <th>Banned</th>
-          <th>Last IP</th>
-          <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-          {this.state.users.map((u,i) => this.userJSX(u,i))}
-        </tbody>
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>CreatedAt</th>
+            <th>Active</th>
+            <th>Admin</th>
+            <th>Banned</th>
+            <th>Last IP</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+            {this.state.users.map((u,i) => this.userJSX(u,i))}
+          </tbody>
         </table>
+        <h3 id="adminIPBans">IP Bans</h3>
+        <table>
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>IP</th>
+            <th>CreatedAt</th>
+          </tr>
+          </thead>
+          <tbody>
+            {this.state.ipbans.map((b,i) => this.ipbanJSX(b,i))}
+          </tbody>
+        </table>
+        <textarea id="ipbantextarea"></textarea>
+        <button onClick={() => this.banIP()}>Ban IP</button>
         </div>);
     }
   }

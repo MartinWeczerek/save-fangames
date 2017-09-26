@@ -144,6 +144,7 @@ class Admin extends React.Component {
               <option value="game_submit">game_submit</option>
               <option value="user_verify">user_verify</option>
               <option value="user_contact">user_contact</option>
+              <option value="ipban">ipban</option>
               <option value="admin">admin</option>
             </select>
             <br/>

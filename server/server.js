@@ -139,9 +139,12 @@ app.get ('/admin',            routes.routeAdmin);
 app.post('/admin',            routes.routeAdminReports);
 app.post('/admin/rejectgame', routes.routeRejectGame);
 app.post('/admin/banuser',    routes.routeBanUser);
+app.post('/admin/ipban',      routes.routeIPBan);
+app.post('/admin/ipunban',    routes.routeIPUnban);
 app.get ('/admin/list',       routes.routeAdminList);
 app.post('/admin/games',      routes.routeAdminGames);
 app.post('/admin/users',      routes.routeAdminUsers);
+app.post('/admin/ipbans',     routes.routeAdminIPBans);
 
 app.get ('/games',            routes.routeGamesData);
 
