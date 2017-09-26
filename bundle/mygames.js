@@ -76,7 +76,7 @@ class MyGames extends React.Component {
       status1 = <span>Online</span>;
       status1class = "mygamegreen";
     } else {
-      status1 = <span>{_("Pending")} (TODO hours)</span>;
+      status1 = <span>{_("Pending")} ({g.timeLeftApprove})</span>;
       status1class = "mygameyellow";
     }
 
@@ -85,7 +85,7 @@ class MyGames extends React.Component {
     if (g.approved && g.linkUpdate) {
       if (!g.linkUpdateApproved) {
         status2 = <span>
-          <a href={g.linkUpdate}>{_("Link Update Pending")}</a> (TODO hours)
+          <a href={g.linkUpdate}>{_("Link Update Pending")}</a> ({g.timeLeftUpdate})
         </span>;
         status2class = "mygameyellow";
       }

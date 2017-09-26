@@ -330,16 +330,25 @@ routeMyGames: function(req, res) {
       } else {
         // Only send the user info they need to know about their games.
         // TODO: move this to SQL SELECT query
-        // TODO: send hours left until approval
+        var now = moment().utc();
         var limgames = [];
         for (var i=0; i<games.length; i++) {
           var g = games[i];
+          // TODO: hardcoded timezone offset!
+          var approveTime = moment(g.createdAt, 'YYYY-MM-DD HH:mm:ss').add(
+              config.approval_game_wait_seconds,'seconds').subtract(7, 'hours');
+          var timeLeftApprove = approveTime.fromNow();
+          var updateApproveTime = moment(g.linkUpdateAt, 'YYYY-MM-DD HH:mm:ss').add(
+              config.approval_game_wait_seconds,'seconds').subtract(7, 'hours');
+          var timeLeftUpdate = updateApproveTime.fromNow();
           limgames.push({id:g.id, name:g.name, link:g.link, authors:g.authors,
             createdAt:g.createdAt, approvedAt:g.approvedAt,
             rejected:g.rejected, approved:g.approved,
             linkUpdate:g.linkUpdate, linkUpdateAt:g.linkUpdateAt,
             linkUpdateApproved:g.linkUpdateApproved,
-            linkUpdateApprovedAt:g.linkUpdateApprovedAt
+            linkUpdateApprovedAt:g.linkUpdateApprovedAt,
+            timeLeftApprove:timeLeftApprove,
+            timeLeftUpdate:timeLeftUpdate
             });
         }
         res.status(200).send(limgames);

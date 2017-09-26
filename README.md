@@ -61,7 +61,7 @@ Create file config/config.json:
 
 Discord webhook URLs may be omitted.
 
-For approval check schedule, see https://www.npmjs.com/package/node-schedule. "0 0 * * * *" is at 00:00 every hour, "*/5 * * * * *" is every 5 seconds.
+For approval check schedule, see https://www.npmjs.com/package/node-schedule. "0 * * * * *" is at :00 every minute, "*/5 * * * * *" is every 5 seconds.
 
 For approval game wait seconds, 12*60*60 is 43200.
 
