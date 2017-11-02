@@ -1,6 +1,6 @@
 <h2>_("Welcome to Blue Fruit!")</h2>
 <p>Blue Fruit is a site to submit and view new releases of IWBTG fangames, a niche subgenre of freeware games. For more information visit the <a href="/about">About</a> page.</p>
-<p>English and Japanese translations are availble in the top right corner.</p>
+<p>English and Japanese translations are available in the top right corner.</p>
 <h3>_("New Releases")</h3>
 <div class="releases">
 {{~it.releases :group:index}}
