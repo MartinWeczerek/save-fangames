@@ -108,7 +108,7 @@ class AdminList extends React.Component {
   gameJSX(g, i) {
     return <tr key={g.id}>
       <td>{g.id}</td>
-      <td><a href="{g.link}">{g.name}</a></td>
+      <td><a href={g.link}>{g.name}</a></td>
       <td>{g.approved ? 'App':''}</td>
       <td>{g.rejected ? 'Rej':''}</td>
       <td>{g.private  ? 'Pri':''}</td>
