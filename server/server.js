@@ -116,6 +116,12 @@ app.use(express.static(__dirname + '/../static', {
   extensions: ['html'] // so "/submit" works as well as "/submit.html"
 }));
 
+//generic error handler
+app.use(function (err, req, res, next) {
+  console.error(err.stack)
+  res.status(500).send('Something broke!')
+})
+
 // Register routes.
 const routes = require('./routes.js');
 app.get ('/',                 routes.routeHomepage);
