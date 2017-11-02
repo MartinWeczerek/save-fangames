@@ -23,7 +23,8 @@ const moment = require('moment');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const uuidv4 = require('uuid/v4'); // Version 4 is Random
-const { URL } = require('url');
+//const { URL } = require('url');
+const URL = require('url').Url;
 
 const mail = require('./mail.js');
 const webhooks = require('./webhooks.js');
@@ -433,6 +434,7 @@ routeSubmitGame: function(req, res) {
     try {
       new URL(gamelink);
     }catch(e){
+      console.log(e);
       res.status(400).send({Message: `Invalid URL: ${gamelink}.`});
       return;
     }
