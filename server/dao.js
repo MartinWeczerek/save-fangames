@@ -46,7 +46,9 @@ var self = module.exports = {
       linkUpdate TEXT,
       linkUpdateAt DATETIME,
       linkUpdateApproved BOOLEAN DEFAULT 0,
-      linkUpdateApprovedAt DATETIME
+      linkUpdateApprovedAt DATETIME,
+      imported BOOLEAN DEFAULT 0,
+      wiki BOOLEAN DEFAULT 0
       )`);
 
     db.run(`CREATE TABLE IF NOT EXISTS reports (
@@ -283,7 +285,8 @@ var self = module.exports = {
   },
 
   getGames: function(mindate,callback) {
-    db.all('SELECT * FROM games WHERE approved = 1 AND private = 0 AND approvedAt >= $mindate',
+    //wiki=0 to suppress initial wiki imports from the frontpage
+    db.all('SELECT * FROM games WHERE approved = 1 AND private = 0 AND wiki = 0 AND approvedAt >= $mindate',
       {$mindate:mindate},
       callback
     );
