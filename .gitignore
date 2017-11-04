@@ -3,6 +3,6 @@
 static/bundle.js
 
 sf.db
-config
+config/config.json
 loc_dot_views
 bundle/locdata.js

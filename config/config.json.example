@@ -1,0 +1,22 @@
+{
+  "root_url": "http://blue.example.com",
+  "discord_webhook_url":"https://discordapp.com/api/webhooks/long_number/gobbldygook",
+  "discord_webhook_url_approved":"https://discordapp.com/api/webhooks/long_number/gobbldygook",
+  "discord_webhook_url_approved_updated": "https://discordapp.com/api/webhooks/long_number/gobbldygook",
+  "approval_game_wait_seconds": "43200",
+  "approval_game_wait_seconds_trusted": "10800",
+  "approval_check_schedule": "0 * * * * *",
+  "hacky_timezone_offset": "4",
+  "port": 3000,
+  "jwt_secret": "please change this to something really random, smash your keyboard, do not leave it like this",
+  "mail": {
+    "options": {
+      "host": "127.0.0.1",
+      "port": 25,
+      "auth": null,
+    "secure": false,
+    "tls": {"rejectUnauthorized":false}
+    },
+    "from": "steve@example.com"
+  }
+}
