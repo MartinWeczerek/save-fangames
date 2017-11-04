@@ -52,6 +52,8 @@ app.use(cookieParser());
 // Sets res.locals.locale, and sets Set-Cookie header if no locale cookie.
 app.use(function (req,res,next){
   var locale = req.cookies.locale;
+  //unset locale if not a supported one
+  if (['en','jp'].indexOf(locale) == -1) locale = '';
   if (!locale) {
     locale = req.acceptsLanguages('en', 'jp');
     if (!locale) {

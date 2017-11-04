@@ -370,6 +370,9 @@ routeFullList: function(req, res) {
   } else if (req.params.order == 'alpha') {
     daoFunc = dao.getPublicListGamesAlphabetical;
     linkactive = 'alpha';
+  } else if (req.params.order == 'author') {
+    daoFunc = dao.getPublicListGamesAuthor;
+    linkactive = 'author';
   } else {
     res.status(404).send();
     return;

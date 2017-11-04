@@ -1,9 +1,11 @@
 <p>
 _("Order by:") 
 {{? it.linkactive == "alpha"}}
-_("Alphabetical") | <a href="/list/new">_("Date")</a>
+_("Alphabetical") | <a href="/list/new">_("Date")</a> | <a href="/list/author">_("Author")</a>
 {{?? it.linkactive == "new"}}
-<a href="/list/alpha">_("Alphabetical")</a> | _("Date")
+<a href="/list/alpha">_("Alphabetical")</a> | _("Date") | <a href="/list/author">_("Author")</a>
+{{?? it.linkactive == "author"}}
+<a href="/list/alpha">_("Alphabetical")</a> | <a href="/list/new">_("Date")</a> | _("Author")
 {{?}}
 </p>
 <table class="games publicgames">

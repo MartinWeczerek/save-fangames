@@ -325,6 +325,13 @@ var self = module.exports = {
     );
   },
 
+  getPublicListGamesAuthor: function(callback) {
+    db.all('SELECT * FROM games WHERE approved = 1 AND private = 0 ORDER BY authors COLLATE NOCASE ASC',
+      {},
+      callback
+    );
+  },
+
   verifyUser: function(verifyhash, callback) {
     db.run('UPDATE users SET active = 1 WHERE active = 0 AND verifyhash = ($verifyhash)',
         {$verifyhash:verifyhash}, function(err) {
