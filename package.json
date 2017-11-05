@@ -35,7 +35,8 @@
     "compile": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1",
     "localize": "node ./localize-generate.js",
-    "pot": "translations/gt.sh"
+    "pot": "translations/gt.sh",
+    "update_server": "git pull && npm run localize && npm run compile && forever restart server/server.js"
   },
   "repository": {
     "type": "git",
