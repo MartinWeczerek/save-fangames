@@ -148,3 +148,7 @@ msgstr "新着"
 #: dot_views/homepage.dot:16
 msgid "Updates"
 msgstr "更新"
+
+#: dot_views/fulllist.dot:5
+msgid "Author"
+msgstr "製作者"

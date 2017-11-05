@@ -150,3 +150,7 @@ msgstr "About"
 msgid "Order by:"
 msgstr "Order by:"
 
+#: dot_views/fulllist.dot:5
+msgid "Author"
+msgstr "Author"
+
