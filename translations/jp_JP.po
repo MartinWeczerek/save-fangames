@@ -79,7 +79,7 @@ msgstr "作品をアップする"
 
 #: bundle/mygames.js:136 bundle/submit.js:150
 msgid "You must register an account to submit a game."
-msgstr "作品をアップするにはアカウントを作成する必要があります。"
+msgstr "作品を申請するにはアカウントを作成する必要があります。"
 
 #: bundle/submit.js:91
 msgid "Name of your fangame:"
@@ -103,11 +103,11 @@ msgstr "ホーム"
 
 #: dot_views/base.dot:43
 msgid "Full List"
-msgstr "全リスト"
+msgstr "一覧"
 
 #: dot_views/base.dot:44
 msgid "Submit Games"
-msgstr "投稿"
+msgstr "申請"
 
 #: dot_views/base.dot:45
 msgid "About"
@@ -123,7 +123,7 @@ msgstr "アルファベット順"
 
 #: dot_views/fulllist.dot:4 dot_views/fulllist.dot:6
 msgid "Date"
-msgstr "データ"
+msgstr "公開日"
 
 #: dot_views/fulllist.dot:11
 msgid "Game"
