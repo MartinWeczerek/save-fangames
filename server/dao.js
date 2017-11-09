@@ -241,33 +241,19 @@ var self = module.exports = {
     // (same for the link updates function below)
     var now = moment().utc().format('YYYY-MM-DD HH:mm:ss');
     var cutoff = moment.utc().subtract(config.approval_game_wait_seconds, 'seconds').format('YYYY-MM-DD HH:mm:ss');
-    var cutoff_trusted = moment.utc().subtract(config.approval_game_wait_seconds_trusted, 'seconds').format('YYYY-MM-DD HH:mm:ss');
-    
-    //approve non-trusted
-    db.run(
-      'UPDATE games '+
-      'SET approved = 1, approvedAt = ($now) '+
-      'WHERE approved = 0 AND createdAt < ($cutoff) AND rejected = 0',
-      {$cutoff:cutoff},
+    db.all('SELECT * FROM games WHERE approved = 0 AND createdAt < ($cutoff) AND rejected = 0',
+    {$cutoff:cutoff},
+    function(err,rows){
+      if (err) {
+        callback(err);
+        return;
+      }
+      db.run('UPDATE games SET approved = 1, approvedAt = ($now) WHERE approved = 0 AND createdAt < ($cutoff) AND rejected = 0',
+      {$now:now, $cutoff:cutoff},
       function(err){
         callback(err,rows);
-      }
-    );
-
-    //approve trusted
-    db.run(
-      'UPDATE games g '+
-      'SET g.approved = 1, g.approvedAt = ($now) '+
-      'WHERE g.approved = 0 AND g.createdAt < ($cutoff) AND g.rejected = 0'+
-      'AND EXISTS ('+
-      '  SELECT 1 FROM games g2 '+
-      '  WHERE g2.userid=g.userid AND g2.approved=1 and g2.rejected=0'+
-      ')',
-      {$cutoff:cutoff_trusted},
-      function(err){
-        callback(err,rows);
-      }
-    );
+      });
+    });
   },
 
   updateGameLink: function(gameid, link, userid, callback) {
