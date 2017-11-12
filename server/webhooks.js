@@ -61,8 +61,8 @@ module.exports = {
     postDiscord(config.discord_webhook_url, message);
   },
 
-  sendGamesApproved: function(games) {
-    postDiscord(config.discord_webhook_url_approved, gamesMessage(games, false));
+  sendGameApproved: function(game) {
+    postDiscord(config.discord_webhook_url_approved, gamesMessage([game], false));
   },
 
   sendGameLinkUpdatesApproved: function(games) {

@@ -236,24 +236,47 @@ var self = module.exports = {
     return gamename
   },
 
+  approveGame: function(id,callback) {
+    //callback: function(err)
+    //err: if update fails, err contains information why
+    db.run(
+      'UPDATE games SET approved = 1, approvedAt = CURRENT_TIMESTAMP WHERE id = ($id)',
+      {$id:id},
+      callback
+    );
+  }
+
   approveMaturedGames: function(callback) {
-    // TODO: Learn SQL and how to return the rows from an UPDATE in one query
-    // (same for the link updates function below)
-    var now = moment().utc().format('YYYY-MM-DD HH:mm:ss');
-    var cutoff = moment.utc().subtract(config.approval_game_wait_seconds, 'seconds').format('YYYY-MM-DD HH:mm:ss');
-    db.all('SELECT * FROM games WHERE approved = 0 AND createdAt < ($cutoff) AND rejected = 0',
-    {$cutoff:cutoff},
-    function(err,rows){
-      if (err) {
-        callback(err);
-        return;
+    //callback: function(err,row)
+    //called for each approved game
+
+    var untrust_time = config.approval_game_wait_seconds;
+    var trust_time = config.approval_game_wait_seconds_trusted;
+    var cutoff = moment.utc().subtract(untrust_time, 'seconds').format('YYYY-MM-DD HH:mm:ss');
+    var cutoff_trusted = moment.utc().subtract(trust_time, 'seconds').format('YYYY-MM-DD HH:mm:ss');
+    
+    db.all(
+      'SELECT g.id,g.name,g.authors,g.link '+ //these are needed by the "gamesMessage" webhook
+      'FROM g.games '+
+      'WHERE g.approved = 0 AND g.rejected = 0 '+
+      'AND (g.createdAt < ($cutoff)) '+
+      'OR (g.createdAt < ($cutoff_trust) AND EXISTS ('+
+      '  SELECT 1 FROM games g2 '+
+      '  WHERE g2.userid=g.userid AND g2.approved=1 and g2.rejected=0'+
+      '))',
+      {$cutoff:cutoff, $cutoff_trust:cutoff_trusted},
+      function(err,rows) { 
+        if (err) callback(err);
+        else rows.forEach(
+          function(row) { 
+            approveGame(row.id,function(err) {
+              if (err) callback(err);
+              else callback(err,row);
+            }); 
+          }
+        );
       }
-      db.run('UPDATE games SET approved = 1, approvedAt = ($now) WHERE approved = 0 AND createdAt < ($cutoff) AND rejected = 0',
-      {$now:now, $cutoff:cutoff},
-      function(err){
-        callback(err,rows);
-      });
-    });
+    );
   },
 
   updateGameLink: function(gameid, link, userid, callback) {

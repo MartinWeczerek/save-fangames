@@ -91,14 +91,14 @@ const mcache = (seconds) => {
 const schedule = require('node-schedule');
 const webhooks = require('./webhooks.js');
 schedule.scheduleJob(config.approval_check_schedule,function(){
-  dao.approveMaturedGames(function(err,games){
+  dao.approveMaturedGames(function(err,game){
     if (err) {
       console.log(err);
       return;
     }
-    if (games.length > 0) {
-      console.log(`${games.length} games approved`);
-      webhooks.sendGamesApproved(games);
+    if (game.length > 0) {
+      console.log(`[${game.id}] ${game.name} approved`);
+      webhooks.sendGameApproved(game);
     }
     dao.approveMaturedGameLinkUpdates(function(err,games){
       if (err) {
