@@ -43,7 +43,9 @@ module.exports.sendRejectMail = function(to, gameName, msg, callback) {
     from: config.mail.from,
     to: to,
     subject: 'Fangame rejected',
-    text: 'Your game submission, '+gameName+', was rejected for reason: '+msg+'\n\nIf you feel this was an error, please contact the admins.'
+    text: 'Your game submission, '+gameName+', was rejected for reason: '+msg+
+    '\n\nIf you feel this was an error, please contact the admins.'+
+    '\n\nRegards, the admins of Blue Fruit'
   };
   transporter.sendMail(mailOptions, callback);
 }

@@ -271,14 +271,15 @@ routeAdminReports: function(req, res) {
 },
 
 routeRejectGame: function(req, res) {
+  var rejectId = req.body.gameid
   verifyAuth(req,res,true,function(user){
-    dao.rejectGame(req.body.gameid,req.body.msg,user,function(err){
+    dao.rejectGame(rejectId,req.body.msg,user,function(err){
         if (err) {
           console.log(err);
           res.status(500).send({Message:"Database error."});
         } else {
           //try to send rejection email
-          dao.getRejectInfo(req.body.gameid,function(obj){
+          dao.getRejectInfo(rejectId,function(err,obj){
             if (obj.rejectedMsg != '') {
               mail.sendRejectMail(obj.email,obj.name,obj.rejectedMsg,function(err){
                 if (err) console.log(err);

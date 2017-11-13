@@ -385,12 +385,12 @@ var self = module.exports = {
     });
   },
 
-  getRejectInfo: function(gameid) {
+  getRejectInfo: function(gameid,callback) {
     db.get(
       'SELECT g.id, g.name, g.rejectedMsg, u.email '+
       'FROM games g '+
       'JOIN users u on u.id = g.userid '+
-      'id = ($id)',
+      'WHERE g.id = ($id)',
       {$id:gameid},
       callback
     );
