@@ -38,4 +38,14 @@ module.exports.sendAccountVerificationMail = function(to, verifyUrl, callback) {
   transporter.sendMail(mailOptions, callback);
 }
 
+module.exports.sendRejectMail = function(to, gameName, msg, callback) {
+  var mailOptions = {
+    from: config.mail.from,
+    to: to,
+    subject: 'Fangame rejected',
+    text: 'Your game submission, '+gameName+', was rejected for reason: '+msg+'\n\nIf you feel this was an error, please contact the admins.'
+  };
+  transporter.sendMail(mailOptions, callback);
+}
+
 }());

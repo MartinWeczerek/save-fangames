@@ -44,10 +44,12 @@ class AdminList extends React.Component {
   }
 
   rejectGame(g) {
-    if (window.confirm('Are you sure you want to reject game '+g.name+'?')) {
+    var admin_msg = window.prompt('Are you sure you want to reject game '+g.name+'? '+
+      'Add a message to send to the creator, or leave blank to send no message.');
+    if (admin_msg != null) {
       this.setState({actionsuccessmsg:'', actionerrormsg:''});
       var component = this;
-      Auth.sendAuthedPost('/admin/rejectgame', {gameid:g.id}, function(xhr) {
+      Auth.sendAuthedPost('/admin/rejectgame', {gameid:g.id,msg:admin_msg}, function(xhr) {
         if (xhr.status == 200) {
           component.setState({
               actionsuccessmsg:'Success. Reload the page to see changes.'});

@@ -43,6 +43,7 @@ var self = module.exports = {
       rejected BOOLEAN DEFAULT 0,
       rejectedAt DATETIME,
       rejectedBy INTEGER,
+      rejectedMsg TEXT,
       linkUpdate TEXT,
       linkUpdateAt DATETIME,
       linkUpdateApproved BOOLEAN DEFAULT 0,
@@ -133,12 +134,12 @@ var self = module.exports = {
     self.insertReport('user_contact', user.id, message, user.id, callback);
   },
 
-  rejectGame: function(gameid, adminuser, callback) {
+  rejectGame: function(gameid, msg, adminuser, callback) {
     var now = moment().utc().format('YYYY-MM-DD HH:mm:ss');
     self.getGameByIdAdmin(gameid, function(err,game){
       if (err) callback(err);
-      else db.run('UPDATE games SET rejected = 1, approved = 0, rejectedAt = ($now) WHERE id = $gameid',
-        {$now:now, $gameid:game.id},
+      else db.run('UPDATE games SET rejected = 1, approved = 0, rejectedAt = ($now), rejectedMsg=($msg) WHERE id = $gameid',
+        {$now:now, $gameid:game.id, $msg:msg},
         function(err){
         if (err) callback(err);
         else {
@@ -382,6 +383,17 @@ var self = module.exports = {
         callback('verifyUser no rows updated');
       }
     });
+  },
+
+  getRejectInfo: function(gameid) {
+    db.get(
+      'SELECT g.id, g.name, g.rejectedMsg, u.email '+
+      'FROM games g '+
+      'JOIN users u on u.id = g.userid '+
+      'id = ($id)',
+      {$id:gameid},
+      callback
+    );
   }
 }
 

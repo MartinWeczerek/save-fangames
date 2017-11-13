@@ -93,8 +93,10 @@ class Admin extends React.Component {
   }
 
   rejectGame(gameid, reportindex) {
-    if (window.confirm('Are you sure you want to reject the game?')) {
-      this.sendAdminCommand('/admin/rejectgame', {gameid:gameid},
+    var admin_msg = window.prompt('Are you sure you want to reject the game? '+
+      'Add a message to send to the creator, or leave blank to send no message.');
+    if (admin_msg != null) {
+      this.sendAdminCommand('/admin/rejectgame', {gameid:gameid,msg:admin_msg},
         `Game #${gameid} rejected.`, reportindex);
     }
   }
