@@ -269,7 +269,7 @@ var self = module.exports = {
         if (err) callback(err);
         else rows.forEach(
           function(row) { 
-            approveGame(row.id,function(err) {
+            module.exports.approveGame(row.id,function(err) {
               if (err) callback(err);
               else callback(err,row);
             }); 
