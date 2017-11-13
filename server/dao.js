@@ -257,7 +257,7 @@ var self = module.exports = {
     
     db.all(
       'SELECT g.id,g.name,g.authors,g.link '+ //these are needed by the "gamesMessage" webhook
-      'FROM g.games '+
+      'FROM games '+
       'WHERE g.approved = 0 AND g.rejected = 0 '+
       'AND (g.createdAt < ($cutoff)) '+ //untrusted
       'OR (g.createdAt < ($cutoff_trust) AND EXISTS ('+ //trusted - user has another approved game
