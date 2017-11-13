@@ -244,7 +244,7 @@ var self = module.exports = {
       {$id:id},
       callback
     );
-  }
+  },
 
   approveMaturedGames: function(callback) {
     //callback: function(err,row)
@@ -259,8 +259,8 @@ var self = module.exports = {
       'SELECT g.id,g.name,g.authors,g.link '+ //these are needed by the "gamesMessage" webhook
       'FROM g.games '+
       'WHERE g.approved = 0 AND g.rejected = 0 '+
-      'AND (g.createdAt < ($cutoff)) '+
-      'OR (g.createdAt < ($cutoff_trust) AND EXISTS ('+
+      'AND (g.createdAt < ($cutoff)) '+ //untrusted
+      'OR (g.createdAt < ($cutoff_trust) AND EXISTS ('+ //trusted - user has another approved game
       '  SELECT 1 FROM games g2 '+
       '  WHERE g2.userid=g.userid AND g2.approved=1 and g2.rejected=0'+
       '))',
