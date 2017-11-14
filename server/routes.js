@@ -292,6 +292,20 @@ routeRejectGame: function(req, res) {
   });
 },
 
+routeApproveGame: function(req, res) {
+  var id = req.body.gameid
+  verifyAuth(req,res,true,function(user){
+    dao.approveGame(id,function(err){
+        if (err) {
+          console.log(err);
+          res.status(500).send({Message:"Database error."});
+        } else {
+          res.status(200).send();
+        }
+      });
+  });
+},
+
 routeBanUser: function(req, res) {
   verifyAuth(req,res,true,function(user){
     dao.banUser(req.body.userid,user,function(err){

@@ -138,7 +138,9 @@ var self = module.exports = {
     var now = moment().utc().format('YYYY-MM-DD HH:mm:ss');
     self.getGameByIdAdmin(gameid, function(err,game){
       if (err) callback(err);
-      else db.run('UPDATE games SET rejected = 1, approved = 0, rejectedAt = ($now), rejectedMsg=($msg) WHERE id = $gameid',
+      else db.run(
+        'UPDATE games SET rejected = 1, approved = 0, rejectedAt = ($now), '+
+        'rejectedMsg=($msg) WHERE id = $gameid',
         {$now:now, $gameid:game.id, $msg:msg},
         function(err){
         if (err) callback(err);
@@ -241,7 +243,8 @@ var self = module.exports = {
     //callback: function(err)
     //err: if update fails, err contains information why
     db.run(
-      'UPDATE games SET approved = 1, approvedAt = CURRENT_TIMESTAMP WHERE id = ($id)',
+      'UPDATE games SET approved = 1, approvedAt = CURRENT_TIMESTAMP, rejected=0 '+
+      'WHERE id = ($id)',
       {$id:id},
       callback
     );

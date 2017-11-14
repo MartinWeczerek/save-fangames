@@ -60,6 +60,21 @@ class AdminList extends React.Component {
     }
   }
 
+  approveGame(g) {
+    if (window.confirm('Are you sure you want to approve game '+g.name+'?')) {
+      this.setState({actionsuccessmsg:'', actionerrormsg:''});
+      var component = this;
+      Auth.sendAuthedPost('/admin/approvegame', {gameid:g.id}, function(xhr) {
+        if (xhr.status == 200) {
+          component.setState({
+              actionsuccessmsg:'Success. Reload the page to see changes.'});
+        } else {
+          component.setState({actionerrormsg:Auth.parseErrorMessage(xhr)});
+        }
+      });
+    }
+  }
+
   banUser(u) {
     if (window.confirm('Are you sure you want to ban user '+u.email+'?')) {
       this.setState({actionsuccessmsg:'', actionerrormsg:''});
@@ -108,6 +123,11 @@ class AdminList extends React.Component {
   }
 
   gameJSX(g, i) {
+    var btnReject = null;
+    var btnApprove = null;
+    if (!g.rejected) btnReject= <button onClick={() => this.rejectGame(g)}>Reject</button>;
+    if (!g.approved) btnApprove = <button onClick={() => this.approveGame(g)}>Approve</button>;
+
     return <tr key={g.id}>
       <td>{g.id}</td>
       <td><a href={g.link}>{g.name}</a></td>
@@ -118,7 +138,8 @@ class AdminList extends React.Component {
       <td>{g.approvedAt}</td>
       <td>{g.rejectedAt}</td>
       <td>
-        <button onClick={() => this.rejectGame(g)}>Reject</button>
+        {btnReject}
+        {btnApprove}
       </td>
     </tr>;
   }
