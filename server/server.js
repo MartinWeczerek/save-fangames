@@ -96,20 +96,19 @@ schedule.scheduleJob(config.approval_check_schedule,function(){
       console.log(err);
       return;
     }
-    if (game.length > 0) {
-      console.log(`[${game.id}] ${game.name} approved`);
-      webhooks.sendGameApproved(game);
+    console.log(`[${game.id}] ${game.name} approved`);
+    webhooks.sendGameApproved(game);
+  });
+
+  dao.approveMaturedGameLinkUpdates(function(err,games){
+    if (err) {
+      console.log(err);
+      return;
     }
-    dao.approveMaturedGameLinkUpdates(function(err,games){
-      if (err) {
-        console.log(err);
-        return;
-      }
-      if (games.length > 0) {
-        console.log(`${games.length} game link updates approved`);
-        webhooks.sendGameLinkUpdatesApproved(games);
-      }
-    });
+    if (games.length > 0) {
+      console.log(`${games.length} game link updates approved`);
+      webhooks.sendGameLinkUpdatesApproved(games);
+    }
   });
 });
 
