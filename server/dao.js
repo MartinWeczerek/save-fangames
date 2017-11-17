@@ -263,11 +263,11 @@ var self = module.exports = {
       'SELECT g.id,g.name,g.authors,g.link '+ //these are needed by the "gamesMessage" webhook
       'FROM games g '+
       'WHERE g.approved = 0 AND g.rejected = 0 '+
-      'AND (g.createdAt < ($cutoff)) '+ //untrusted
+      'AND ((g.createdAt < ($cutoff)) '+ //untrusted
       'OR (g.createdAt < ($cutoff_trust) AND EXISTS ('+ //trusted - user has another approved game
       '  SELECT 1 FROM games g2 '+
       '  WHERE g2.userid=g.userid AND g2.approved=1 and g2.rejected=0'+
-      '))',
+      ')))',
       {$cutoff:cutoff, $cutoff_trust:cutoff_trusted},
       function(err,rows) { 
         if (err) callback(err);

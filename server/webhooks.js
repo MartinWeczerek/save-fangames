@@ -22,7 +22,8 @@ function postDiscord(url, message) {
     {json: {content:message, embeds:[]}},
     function(err,rsp,body) {
       if (err || rsp.statusCode != 204) {
-        console.log('webhook error: status code '+rsp.statusCode+': '+err);
+        if (rsp) console.log('webhook error: status code '+rsp.statusCode);
+        console.log('webhook error: '+err);
       }
     }
   );
