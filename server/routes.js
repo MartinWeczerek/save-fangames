@@ -137,6 +137,7 @@ routeHomepage: function(req, res) {
           }
           group.games.push({name:g.name, link:g.link, authors:g.authors});
         }
+        releases.reverse();
 
         var updates = [];
         var group = {};
@@ -150,6 +151,7 @@ routeHomepage: function(req, res) {
           }
           group.games.push({name:g.name, link:g.link, authors:g.authors});
         }
+        updates.reverse();
 
         var content = dotsloc('homepage',{releases:releases, updates:updates},res.locals.locale);
         res.status(200).send(dotsloc('base',{
