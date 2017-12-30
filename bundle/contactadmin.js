@@ -36,7 +36,7 @@ class ContactAdmin extends React.Component {
 
   render() {
     if (this.state.done) {
-      return <div className="success">Sent!</div>;
+      return <div className="success">Message sent! A reply will be sent to your email.</div>;
     } else if (this.state.sending) {
       return <div>{_("Loading...")}</div>;
     } else {

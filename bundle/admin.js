@@ -108,6 +108,14 @@ class Admin extends React.Component {
     }
   }
 
+  reply(userid, reportindex) {
+    var admin_msg = window.prompt('Enter reply message.');
+    if (admin_msg != null) {
+      this.sendAdminCommand('/admin/reply', {userid:userid,msg:admin_msg},
+        `Replied.`, reportindex);
+    }
+  }
+
   reportJSX(r, i) {
     var actionButton = '';
     if (r.type == 'game_submit') {
@@ -118,6 +126,10 @@ class Admin extends React.Component {
       actionButton = <span><br/><br/>
         <input type="submit" onClick={() => this.banUser(r.target_id, i)}
         value="Ban User" /></span>;
+    } else if (r.type == 'user_contact') {
+      actionButton = <span><br/><br/>
+        <input type="submit" onClick={() => this.reply(r.target_id, i)}
+        value="Reply" /></span>;
     }
     return (
     <div className="report" key={r.id}>
@@ -146,6 +158,7 @@ class Admin extends React.Component {
               <option value="game_submit">game_submit</option>
               <option value="user_verify">user_verify</option>
               <option value="user_contact">user_contact</option>
+              <option value="user_contact_reply">user_contact_reply</option>
               <option value="ipban">ipban</option>
               <option value="admin">admin</option>
             </select>

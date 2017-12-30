@@ -50,4 +50,14 @@ module.exports.sendRejectMail = function(to, gameName, msg, callback) {
   transporter.sendMail(mailOptions, callback);
 }
 
+module.exports.sendAdminReplyMail = function(to, adminname, msg, callback) {
+  var mailOptions = {
+    from: config.mail.from,
+    to: to,
+    subject: 'Admin response',
+    text: 'An administrator, '+adminname+', replied to your message:\n\n'+msg
+  };
+  transporter.sendMail(mailOptions, callback);
+}
+
 }());

@@ -62,6 +62,11 @@ module.exports = {
     postDiscord(config.discord_webhook_url, message);
   },
 
+  sendAdminReply: function(adminemail, useremail, msg) {
+    var message = `----------\nAdmin ${adminemail} replied to user ${useremail}, saying: \n${msg}`;
+    postDiscord(config.discord_webhook_url, message);
+  },
+
   sendGameApproved: function(game) {
     postDiscord(config.discord_webhook_url_approved, gamesMessage([game], false));
   },

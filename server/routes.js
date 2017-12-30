@@ -347,6 +347,40 @@ routeIPUnban: function(req, res) {
   });
 },
 
+routeAdminReply: function(req, res) {
+  verifyAuth(req,res,true,function(adminuser){
+    dao.getUserByIdAdmin(req.body.userid, function(err, user) {
+      if (err) {
+        console.log(err);
+        res.status(500).send({Message:"Database error."});
+      } else {
+
+        mail.sendAdminReplyMail(user.email, adminuser.name, req.body.msg, function(error, info) {
+          if (error) {
+            console.log(error);
+            res.status(500).send({Message: 'Failed to send email.'});
+          } else {
+
+            console.log('Email sent: ' + info.response);
+            webhooks.sendAdminReply(adminuser.email, user.email, req.body.msg);
+            dao.userContactReply(adminuser,req.body.userid,user.email,req.body.msg,function(err){
+              if (err) {
+                console.log(err);
+                res.status(500).send({Message:"Database error."});
+              } else {
+                res.status(200).send();
+              }
+            });
+
+          }
+        });
+
+      }
+    });
+
+  });
+},
+
 routeMyGames: function(req, res) {
   verifyAuth(req,res,false,function(user){
     dao.getGamesByUser(user.id,function(err,games){

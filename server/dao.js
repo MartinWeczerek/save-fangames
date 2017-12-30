@@ -20,6 +20,7 @@ var self = module.exports = {
     db.run(`CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       email TEXT,
+      name TEXT DEFAULT "default_name",
       passwordhash TEXT,
       active BOOLEAN DEFAULT 0,
       verifyhash TEXT,
@@ -132,6 +133,11 @@ var self = module.exports = {
   userContactAdminReport: function(user, message, callback) {
     message = `User ${user.email} contacted admins, saying:\n${message}`;
     self.insertReport('user_contact', user.id, message, user.id, callback);
+  },
+
+  userContactReply: function(adminuser, userid, useremail, message, callback) {
+    message = `Admin ${adminuser.email} replied to user ${useremail}, saying:\n${message}`;
+    self.insertReport('user_contact_reply', userid, message, adminuser.id, callback);
   },
 
   rejectGame: function(gameid, msg, adminuser, callback) {

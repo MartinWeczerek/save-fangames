@@ -149,6 +149,8 @@ app.post('/admin/approvegame',routes.routeApproveGame);
 app.post('/admin/banuser',    routes.routeBanUser);
 app.post('/admin/ipban',      routes.routeIPBan);
 app.post('/admin/ipunban',    routes.routeIPUnban);
+app.post('/admin/reply',      routes.routeAdminReply);
+
 app.get ('/admin/list',       routes.routeAdminList);
 app.post('/admin/games',      routes.routeAdminGames);
 app.post('/admin/users',      routes.routeAdminUsers);
