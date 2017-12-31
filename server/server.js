@@ -97,7 +97,7 @@ schedule.scheduleJob(config.approval_check_schedule,function(){
       return;
     }
     console.log(`[${game.id}] ${game.name} approved`);
-    webhooks.sendGameApproved(game);
+    webhooks.sendGameApproved(game, 'Auto-approve');
   });
 
   dao.approveMaturedGameLinkUpdates(function(err,games){

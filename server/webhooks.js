@@ -67,7 +67,9 @@ module.exports = {
     postDiscord(config.discord_webhook_url, message);
   },
 
-  sendGameApproved: function(game) {
+  sendGameApproved: function(game, approver) {
+    var message = `----------\n${approver} approved ${game.name}\nby ${game.authors}\n${game.link}`;
+    postDiscord(config.discord_webhook_url, message);
     postDiscord(config.discord_webhook_url_approved, gamesMessage([game], false));
   },
 

@@ -302,7 +302,15 @@ routeApproveGame: function(req, res) {
           console.log(err);
           res.status(500).send({Message:"Database error."});
         } else {
-          res.status(200).send();
+          dao.getGameByIdAdmin(id, function(err, game) {
+            if (err) {
+              console.log(err);
+              res.status(500).send({Message:"Database error."});
+            } else {
+              webhooks.sendGameApproved(game, user.name);
+              res.status(200).send();
+            }
+          });
         }
       });
   });
@@ -399,7 +407,6 @@ routeMyGames: function(req, res) {
               config.approval_game_wait_seconds,'seconds').subtract(
               parseInt(config.hacky_timezone_offset), 'hours');
           var timeLeftApprove = approveTime.fromNow();
-          console.log(approveTime, moment().utc());
           var updateApproveTime = moment(g.linkUpdateAt, 'YYYY-MM-DD HH:mm:ss').add(
               config.approval_game_wait_seconds,'seconds').subtract(
               parseInt(config.hacky_timezone_offset), 'hours');

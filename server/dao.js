@@ -250,7 +250,7 @@ var self = module.exports = {
     //err: if update fails, err contains information why
     db.run(
       'UPDATE games SET approved = 1, approvedAt = CURRENT_TIMESTAMP, rejected=0 '+
-      'WHERE id = ($id)',
+      'WHERE id = ($id) AND approved = 0',
       {$id:id},
       callback
     );

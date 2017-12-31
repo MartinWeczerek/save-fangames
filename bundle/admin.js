@@ -101,6 +101,13 @@ class Admin extends React.Component {
     }
   }
 
+  approveGame(gameid, reportindex) {
+    if (window.confirm('Are you sure you want to approve the game?')) {
+      this.sendAdminCommand('/admin/approvegame', {gameid:gameid},
+        `Game #${gameid} approved.`, reportindex);
+    }
+  }
+
   banUser(userid, reportindex) {
     if (window.confirm('Are you sure you want to ban this user?')) {
       this.sendAdminCommand('/admin/banuser', {userid:userid},
@@ -121,7 +128,8 @@ class Admin extends React.Component {
     if (r.type == 'game_submit') {
       actionButton = <span><br/><br/>
         <input type="submit" onClick={() => this.rejectGame(r.target_id, i)}
-        value="Reject Game" /></span>;
+        value="Reject Game" /><input type="submit" onClick={() => this.approveGame(r.target_id, i)}
+        value="Approve Game" /></span>;
     } else if (r.type == 'user_verify') {
       actionButton = <span><br/><br/>
         <input type="submit" onClick={() => this.banUser(r.target_id, i)}
