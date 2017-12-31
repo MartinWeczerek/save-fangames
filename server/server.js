@@ -135,6 +135,11 @@ app.get ('/about',            routes.routeAbout);
 app.get ('/contactadmin',     routes.routeContactAdmin);
 app.post('/contactadmin',     routes.routeSendAdminMessage);
 
+app.get ('/forgotpassword',   routes.routeForgotPassword);
+app.post('/forgotpassword',   routes.routeForgotPasswordPost);
+app.get ('/resetpassword/:token',routes.routeResetPassword);
+app.post('/resetpassword',    routes.routeResetPasswordPost);
+
 app.post('/register',         routes.routeRegister);
 app.get ('/verify/:token',    routes.routeVerifyEmail);
 app.post('/login',            routes.routeLogin);

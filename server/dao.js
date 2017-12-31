@@ -24,6 +24,7 @@ var self = module.exports = {
       passwordhash TEXT,
       active BOOLEAN DEFAULT 0,
       verifyhash TEXT,
+      forgothash TEXT,
       admin BOOLEAN DEFAULT 0,
       banned BOOLEAN DEFAULT 0,
       lastip TEXT,
@@ -180,6 +181,20 @@ var self = module.exports = {
     );
   },
 
+  getUserByForgotHash: function(hash, callback) {
+    db.get('SELECT * FROM users WHERE active = 1 AND forgothash = ($hash)',
+      {$hash:hash},
+      callback
+    );
+  },
+
+  resetUserPassword: function(hash, passwordhash, callback) {
+    db.run('UPDATE users SET passwordhash=($passwordhash), forgothash="" WHERE forgothash=($hash)',
+      {$passwordhash:passwordhash, $hash:hash},
+      callback
+    );
+  },
+
   getUserByIdAdmin: function(id, callback) {
     db.get('SELECT * FROM users WHERE id = ($id)',{$id:id},callback);
   },
@@ -208,6 +223,10 @@ var self = module.exports = {
         }
       }
     );
+  },
+
+  userForgetPassword: function(email, forgotHash, callback) {
+    db.run('UPDATE users SET forgothash=($forgotHash) WHERE email = ($email)', {$forgotHash:forgotHash, $email:email}, callback);
   },
 
   getUsersAdmin: function(callback) {

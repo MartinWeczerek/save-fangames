@@ -54,8 +54,18 @@ module.exports.sendAdminReplyMail = function(to, adminname, msg, callback) {
   var mailOptions = {
     from: config.mail.from,
     to: to,
-    subject: 'Admin response',
+    subject: 'Blue Fruit Admin response',
     text: 'An administrator, '+adminname+', replied to your message:\n\n'+msg
+  };
+  transporter.sendMail(mailOptions, callback);
+}
+
+module.exports.sendForgotPasswordMail = function(to, url, callback) {
+  var mailOptions = {
+    from: config.mail.from,
+    to: to,
+    subject: 'Blue Fruit password recovery',
+    text: 'Someone (hopefully you) has indicated they forgot the password to the Blue Fruit account with this email.\n\nIf this was not you, you can ignore this email.\n\nIf it was you, click the following link to reset your password: '+url
   };
   transporter.sendMail(mailOptions, callback);
 }

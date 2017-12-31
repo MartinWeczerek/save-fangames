@@ -176,12 +176,80 @@ routeSendAdminMessage: function(req, res) {
     }
     dao.userContactAdminReport(user,req.body.message,function(err){
       if (err) {
+        console.log(err);
         res.status(500).send({Message:"Database error."});
       } else {
         webhooks.sendContactAdminMessage(user.email, req.body.message);
         res.status(200).send();
       }
     });
+  });
+},
+
+routeForgotPassword: function(req, res) {
+  var content = dotsloc('forgotpassword',{},res.locals.locale);
+  res.status(200).send(dotsloc('base',{content:content,
+    navSelector:'.nothing'},res.locals.locale));
+},
+
+routeForgotPasswordPost: function(req, res) {
+  var forgotHash = uuidv4();
+  var forgotUrl = config.root_url+'/resetpassword/'+forgotHash;
+  dao.userForgetPassword(req.body.email, forgotHash, function(err){
+      if (err) {
+        console.log(err);
+        res.status(500).send({Message:"Database error."});
+      } else {
+        mail.sendForgotPasswordMail(req.body.email, forgotUrl, function(error, info) {
+          if (error) {
+            console.log(error);
+            res.status(500).send({Message: 'Failed to send email.'});
+          } else {
+            console.log('Email sent: ' + info.response);
+            res.status(200).send();
+          }
+        });
+      }
+  });
+},
+
+routeResetPassword: function(req, res) {
+  var token = req.params.token;
+  if (!token) {
+    res.status(400).send({Message: 'Must provide token in url.'});
+  }
+  dao.getUserByForgotHash(token, function(err, user) {
+    if (err) {
+      console.log(err);
+      res.status(500).send({Message: 'Database error.'});
+    } else if (!user) {
+      res.status(400).send({Message: 'Not a valid password reset link.'});
+    } else {
+      var content = dotsloc('resetpassword',{token:token},res.locals.locale);
+      res.status(200).send(dotsloc('base',{content:content,
+        navSelector:'.nothing'},res.locals.locale));
+    }
+  });
+},
+
+routeResetPasswordPost: function(req, res) {
+  dao.getUserByForgotHash(req.body.token, function(err, user) {
+    if (err) {
+      console.log(err);
+      res.status(500).send({Message: 'Database error.'});
+    } else if (!user) {
+      res.status(400).send({Message: 'Not a valid password reset token.'});
+    } else {
+      var hash = bcrypt.hashSync(req.body.password, saltRounds);
+      dao.resetUserPassword(req.body.token, hash, function(err) {
+        if (err) {
+          console.log(err);
+          res.status(500).send({Message: 'Database error.'});
+        } else {
+          res.status(200).send();
+        }
+      });
+    }
   });
 },
 

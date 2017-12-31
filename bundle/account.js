@@ -203,6 +203,8 @@ class Account extends React.Component {
                 <input type="password" value={this.state.typedpassword} onChange={this.handleText2Change} spellCheck="false" />
                 {extraBox}
                 <br/>
+                <a href="/forgotpassword">Forgot password</a>
+                <br/>
                 <br/>
                 <input type="submit" value={buttonText}/>
               </form>
