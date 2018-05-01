@@ -17,16 +17,19 @@ if (!config.discord_webhook_url_approved_updated) {
 
 function postDiscord(url, message) {
   if (!url) return;
-  request.post(
-    url,
-    {json: {content:message, embeds:[]}},
-    function(err,rsp,body) {
-      if (err || rsp.statusCode != 204) {
-        if (rsp) console.log('webhook error: status code '+rsp.statusCode);
-        console.log('webhook error: '+err);
-      }
-    }
-  );
+  if (!Array.isArray(url)) url = [url];
+  url.forEach(function(curUrl) {
+	  request.post(
+		curUrl,
+		{json: {content:message, embeds:[]}},
+		function(err,rsp,body) {
+		  if (err || rsp.statusCode != 204) {
+			if (rsp) console.log('webhook error: status code '+rsp.statusCode);
+			console.log('webhook error: '+err);
+		  }
+		}
+	  );
+  });
 }
 
 function gamesMessage(games, linkUpdated) {
