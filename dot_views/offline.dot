@@ -1,0 +1,68 @@
+<html>
+<head>
+  <title>Blue Fruit</title>
+  <link rel="shortcut icon" href="/favicon.ico?v=1">
+  <link rel="stylesheet" type="text/css" href="/style.css?v=1">
+</head>
+<body>
+  <div id="box">
+    <div id="header">
+      <div id="header-inner">
+        <div id="header-inner2">
+          <span id="language">
+          </span>
+          <a href="/">
+            <span id="logo">
+              <img src='/images/logocherry.png'></img>Blue Fruit
+            </span>
+          </a>
+          <div class="clearboth"></div>
+        </div>
+      </div>
+    </div>
+    <div id="wrapper">
+      <div id="content">
+
+        <h2>Blue Fruit is offline.</h2>
+        <p>Blue Fruit was a site to submit and view new releases of IWBTG fangames, a niche subgenre of freeware games.</p>
+        <p>You can still submit and browse new games on the <a href="https://www.iwannawiki.com/">I Wanna Wiki</a>, hosted by the Japanese Fangame Community. You can submit new games at the <a href="https://www.iwannawiki.com/request">I Wanna Wiki Request Page</a>. New games added to the wiki will be added to <a href="https://delicious-fruit.com">Delicious Fruit</a> from there.</p>
+        <p>Thanks to everyone who helped make this project possible! Make sure to stay tuned to <a href="https://delicious-fruit.com">Delicious Fruit</a> for future updates!</p>
+
+        <h3>New Releases</h3>
+        <div class="releases"> 01-24 <br> <a
+            href="https://www.dropbox.com/s/eylcqjvu8d1fhir/stuff%20i%20also%20used%20to%20do.rar?dl=0">stuff i also
+            used to do</a> - InkWitch <br> <a
+            href="http://www.mediafire.com/file/ck2reksrw6ter6g/Spring_is_Coming.zip/file">Spring is Coming</a> - Mosna
+          <br> <a href="http://www.mediafire.com/file/jo0kmsfkw0pe2bo/I_wanna_Get_heart.zip/file">I wanna Get heart</a>
+          - Xingjin,Monikara,Tw <br> <a href="http://www.mediafire.com/file/1ldp9emig4jvdue/I_wanna_go_home.exe/file">I
+            wanna go home</a> - NotPAjime <br> 01-23 <br> <a
+            href="http://www.mediafire.com/file/8i66d5ur249o31f/Intergalactic_Emotional_Breakdown.zip/file">Intergalactic
+            Emotional Breakdown</a> - Lucien <br> <a href="https://iwpo.isocodes.org/">I wanna play online</a> -
+          QuentinJanuel <br> 01-22 <br> <a
+            href="http://www.mediafire.com/file/7p5eszdivmduw3s/I_wanna_be_the_twilight_tree%2528%25E4%25B8%2580%25E8%2588%25AC%25E5%2585%25AC%25E9%2596%258B%25E7%2594%25A8%2529.zip/file">
+            I wanna be the twilight tree(一般公開版)</a> - くりっち <br> 01-21 <br> <a
+            href="https://www.mediafire.com/file/5bmsyjyy42jq7m5/I_wanna_be_the_Math_Major_KR_Side.zip/file">I wanna be
+            the Math Major KR Side</a> - Grade 12 Student <br> 01-20 <br> <a
+            href="https://drive.google.com/open?id=1sw-R8HHNxXtURDmHwyn8nMYIwFLfShgF">I Wanna Be The I Wanna Star 4</a>
+          - Dengol, Biogom, Domiki <br> 01-19 <br> <a
+            href="http://www.mediafire.com/file/12ff26w9f855jxt/2010_Needle_Hole_ver2.0.zip/file">2010 Needle Hole</a> -
+          dono <br></div>
+        <h3>Updates</h3>
+        <div class="releases"> 01-24 <br> <a
+            href="http://www.mediafire.com/file/ck2reksrw6ter6g/Spring_is_Coming.zip/file">Spring is Coming</a> - Mosna
+          <br> <a href="http://www.mediafire.com/file/1ldp9emig4jvdue/I_wanna_go_home.exe/file">I wanna go home</a> -
+          NotPAjime <br> 01-20 <br> <a
+            href="http://www.mediafire.com/file/12ff26w9f855jxt/2010_Needle_Hole_ver2.0.zip/file">2010 Needle Hole</a> -
+          dono <br> 01-19 <br> <a href="https://www.mediafire.com/folder/zrk42ycdu1sii/Find_my_Answer">Find My Answer
+            v0.9</a> - Irkara, Luner, Xp, Koithi, Tw, Lucien, Lxyvee, wymcaT <br> 01-18 <br> <a
+            href="https://www.mediafire.com/file/ddlngiboviqsmvt/I_Wanna_Nonamed_Spike_1.4.zip/file">I Wanna Nonamed
+            Spike</a> - PDplayer ,Whiteshadow ,Medley ,Soap ,Frozenapple ,rkdehdtls121 <br> 01-24 <br> <a
+            href="https://mega.nz/#!zNxCAQpI!Q3Zh5q15az6SVjITEueBU4fIz5dRvu6d-LAS6Nas8co">I wanna be the Krypton</a> -
+          infern0man1, Thenadertwo <br></div>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

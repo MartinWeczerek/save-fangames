@@ -163,6 +163,10 @@ routeHomepage: function(req, res) {
   });
 },
 
+routeOffline: function(req, res) {
+  res.status(200).send(dotsloc('offline',{},res.locals.locale));
+},
+
 routeContactAdmin: function(req, res) {
   res.status(200).send(dotsloc('base',{
     content:'<div id="contactadminroot"></div>',

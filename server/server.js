@@ -125,9 +125,11 @@ app.use(function (err, req, res, next) {
 
 // Register routes.
 const routes = require('./routes.js');
+app.get ('/*',                routes.routeOffline);
+/*
 app.get ('/',                 routes.routeHomepage);
 // TODO: cache separate versions of page for each locale?
-app.get ('/list/:order',      /*mcache(60*10),*/ routes.routeFullList);
+app.get ('/list/:order',      routes.routeFullList);
 app.get ('/list',             function(req,res){res.redirect('/list/alpha');});
 app.get ('/mygames',          routes.routeMyGamesPage);
 app.get ('/submit',           routes.routeSubmitPage);
@@ -162,7 +164,7 @@ app.post('/admin/users',      routes.routeAdminUsers);
 app.post('/admin/ipbans',     routes.routeAdminIPBans);
 
 app.get ('/games',            routes.routeGamesData);
-
+*/
 // Start the server.
 const server = app.listen(config.port, function() {
   const host = server.address().address;
